@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estudos | Simulador (A1–C2 + NI)</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <div class="app grid">
+    <header class="grid pan">
+      <header>
+        <h1>📚 Estudos | Simulador</h1>
+        <div class="toolbar">
+          <span class="badge" id="badge-count">0 itens</span>
+          <span class="badge" id="badge-due">0 devidos hoje</span>
+          <button class="ghost" id="btn-export">Exportar</button>
+          <label class="pill" for="importer" style="cursor:pointer">
+            Importar JSON
+            <input id="importer" type="file" accept="application/json" style="display:none">
+          </label>
+          <button class="ghost" id="btn-reset" title="Limpar tudo">Zerar</button>
+        </div>
+      </header>
+      <section>
+        <div class="kpi">
+          <div><div class="small">Acertos (hoje)</div><div class="val ok" id="kpi-hit">0</div></div>
+          <div><div class="small">Erros (hoje)</div><div class="val bad" id="kpi-miss">0</div></div>
+          <div><div class="small">Sessões</div><div class="val" id="kpi-sessions">0</div></div>
+          <div><div class="small">SRS Média (ease)</div><div class="val" id="kpi-ease">2.50</div></div>
+        </div>
+      </section>
+    </header>
+
+    <div class="grid" style="grid-template-columns: 1.2fr 1fr; align-items:start">
+      <!-- CADASTRO -->
+      <article class="pan">
+        <header>
+          <h2>Cadastro rápido</h2>
+          <div class="right-actions">
+            <select id="filter-level" class="pill">
+              <option value="">Todos níveis</option>
+              <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
+              <option>C1</option><option>C2</option><option>NI</option>
+            </select>
+            <select id="filter-status" class="pill">
+              <option value="">Todos status</option>
+              <option value="due">Devidos</option>
+              <option value="new">Novos</option>
+              <option value="learning">Aprendendo</option>
+              <option value="review">Revisão</option>
+            </select>
+            <input id="search" class="pill" placeholder="Buscar palavra/nota…"/>
+          </div>
+        </header>
+        <section>
+          <div class="row">
+            <div class="grow"><label>Termo</label><input id="inp-termo" placeholder="ex.: although"/></div>
+            <div class="grow"><label>Tradução</label><input id="inp-trad" placeholder="ex.: embora"/></div>
+            <div>
+              <label>Nível (CEFR)</label>
+              <select id="inp-level">
+                <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
+                <option>C1</option><option>C2</option><option selected>NI</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="grow"><label>Exemplo</label><input id="inp-ex" placeholder="ex.: Although it was late, he kept working."/></div>
+            <div class="grow"><label>Notas</label><input id="inp-notas" placeholder="mnemônicos, sinônimos etc."/></div>
+            <div style="display:flex;align-items:flex-end">
+              <button id="btn-add" class="success">Adicionar</button>
+            </div>
+          </div>
+          <p class="footer-note">
+            Dica: você pode importar uma lista .json com campos: termo, traducao, level, exemplo, notas.
+          </p>
+          <div class="sep"></div>
+          <table>
+            <thead>
+              <tr>
+                <th>Termo</th><th>Tradução</th><th>Nível</th><th>Status</th><th>Próx. revisão</th><th class="right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-lista"></tbody>
+          </table>
+        </section>
+      </article>
+
+      <!-- ESTUDO -->
+      <aside class="pan">
+        <header>
+          <h2>Estudo</h2>
+          <div class="tabs" id="mode-tabs">
+            <div class="tab active" data-mode="flash">Flashcards</div>
+            <div class="tab" data-mode="quiz">Quiz</div>
+            <div class="tab" data-mode="digitar">Digitação</div>
+          </div>
+        </header>
+        <section>
+          <div class="row" style="justify-content:space-between">
+            <div class="row">
+              <label class="pill"><input id="chk-only-due" type="checkbox"/> Apenas devidos</label>
+              <label class="pill"><input id="chk-rand" type="checkbox" checked/> Embaralhar</label>
+            </div>
+            <div class="row">
+              <button id="btn-new-session" class="primary">Nova sessão</button>
+            </div>
+          </div>
+
+          <div id="study-area" class="grid" style="margin-top:10px">
+            <!-- Flashcards -->
+            <div id="ui-flash" class="">
+              <div class="card" id="flash-card">
+                <div class="front huge" id="flash-front">—</div>
+                <div class="back muted" id="flash-back">Clique para revelar</div>
+                <div class="small" id="flash-extra"></div>
+              </div>
+              <div class="row" style="justify-content:center;margin-top:10px">
+                <button id="btn-hard">Difícil</button>
+                <button id="btn-good" class="success">Bom</button>
+                <button id="btn-easy" class="primary">Fácil</button>
+              </div>
+            </div>
+
+            <!-- Quiz -->
+            <div id="ui-quiz" class="hidden">
+              <div class="card">
+                <div class="small">Traduza:</div>
+                <div class="huge" id="quiz-q">—</div>
+              </div>
+              <div class="grid" style="grid-template-columns:1fr;gap:8px" id="quiz-opts"></div>
+            </div>
+
+            <!-- Digitação -->
+            <div id="ui-dig" class="hidden">
+              <div class="card">
+                <div class="small">Digite a tradução de:</div>
+                <div class="huge" id="dig-q">—</div>
+              </div>
+              <div class="row" style="align-items:flex-end">
+                <div class="grow"><label>Resposta</label><input id="dig-a" placeholder="sua resposta"/></div>
+                <button id="dig-check" class="primary">Verificar</button>
+              </div>
+              <div class="small" id="dig-feedback"></div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="small muted" style="text-align:center;margin:12px 0 24px">
+      Feito para o Will • Progresso salvo em <code>localStorage</code> • Algoritmo SRS simplificado (ease/interval/nextDue)
+    </footer>
+  </div>
+  <script src="home.js"></script>
+</body>
+</html>
