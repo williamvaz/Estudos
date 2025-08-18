@@ -1,0 +1,88 @@
+[
+{
+"Nome": "CONCACAF",
+"Formato": "Fase de Grupos",
+"Premio 1": 43,
+"Premio 2": 41,
+"Premio 3": 39,
+"Premio 4": 37,
+"Premio quartas": 31,
+"Premio oitavas": 23,
+"Premio fase de grupos": -18
+},
+{
+"Nome": "CONMEBOL",
+"Formato": "Fase de Grupos",
+"Premio 1": 38,
+"Premio 2": 30,
+"Premio 3": 22,
+"Premio 4": 14,
+"Premio quartas": -2,
+"Premio fase de grupos": -26
+},
+{
+"Nome": "OFC",
+"Formato": "Fase de Grupos",
+"Premio 1": 35,
+"Premio 2": 30,
+"Premio 3": 25,
+"Premio 4": 20,
+"Premio quartas": 5,
+"Premio fase de grupos": -23
+},
+{
+"Nome": "AFC",
+"Formato": "Fase de Grupos",
+"Premio 1": 39,
+"Premio 2": 37,
+"Premio 3": 35,
+"Premio 4": 33,
+"Premio quartas": 27,
+"Premio oitavas": 19,
+"Premio fase de grupos": -8
+},
+{
+"Nome": "CAF",
+"Formato": "Fase de Grupos",
+"Premio 1": 41,
+"Premio 2": 40,
+"Premio 3": 39,
+"Premio 4": 38,
+"Premio quartas": 35,
+"Premio oitavas": 31,
+"Premio fase de grupos": -21
+},
+{
+"Nome": "UEFA",
+"Formato": "Fase de Grupos",
+"Premio 1": 38,
+"Premio 2": 37,
+"Premio 3": 36,
+"Premio 4": 35,
+"Premio quartas": 32,
+"Premio oitavas": 28,
+"Premio fase de grupos": -19
+},
+{
+"Nome": "Copa do Mundo",
+"Formato": "Fase de Grupos",
+"Premio 1": 78,
+"Premio 2": 73,
+"Premio 3": 68,
+"Premio 4": 63,
+"Premio quartas": 48,
+"Premio oitavas": 28,
+"Premio fase de grupos": -38
+},
+{
+"Nome": "Copa das Confederações",
+"Formato": "Fase de Grupos",
+"Premio 1": 40,
+"Premio 2": 30,
+"Premio 3": 20,
+"Premio 4": 10,
+"Premio fase de grupos": -25
+}
+]
+
+

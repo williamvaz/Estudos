@@ -34,16 +34,16 @@
       </div>
       <div class="kpi-grid">
         <div class="kpi">
-          <div class="kpi-title">Times cadastrados</div>
-          <div class="kpi-value" id="kpi-teams">0</div>
+          <div class="kpi-title">Palavras com nível ≥ 1</div>
+          <div class="kpi-value" id="kpi-words-l1">0</div>
         </div>
         <div class="kpi">
-          <div class="kpi-title">Jogadores</div>
-          <div class="kpi-value" id="kpi-players">0</div>
+          <div class="kpi-title">Time com maior score</div>
+          <div class="kpi-rich" id="kpi-top-team">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-title">Palavras</div>
-          <div class="kpi-value" id="kpi-words">0</div>
+          <div class="kpi-title">Time com menor score</div>
+          <div class="kpi-rich" id="kpi-bottom-team">—</div>
         </div>
       </div>
     </section>
@@ -52,39 +52,72 @@
     <section id="view-play" class="view">
       <header class="section-head">
         <h2>Jogar</h2>
-        <p class="muted">Criar campeonatos, fases, rebaixamento, artilharia… (estrutura pronta pra ligar depois)</p>
+        <p class="muted">Crie um campeonato e jogue partidas vinculadas ao seu estudo de palavras.</p>
       </header>
 
       <div class="card-grid">
         <div class="card">
-          <h3>Novo Campeonato</h3>
-          <p class="muted">Monte um campeonato personalizado. Em breve conectamos regras e geração automática de tabelas.</p>
-          <div class="row">
+          <h3>Novo campeonato</h3>
+          <div class="row wrap">
             <div class="field">
-              <label>Nome</label>
-              <input id="cmp-nome" placeholder="Copa dos Estudiosos">
-            </div>
-            <div class="field">
-              <label>Times participantes</label>
-              <input id="cmp-times" type="number" min="2" max="64" value="8">
-            </div>
-            <div class="field">
-              <label>Formato</label>
-              <select id="cmp-formato">
-                <option>Pontos corridos</option>
-                <option>Mata-mata</option>
-                <option>Fase de grupos + mata-mata</option>
+              <label>Tipo</label>
+              <select id="cmp-type">
+                <option>CONCACAF</option>
+                <option>CONMEBOL</option>
+                <option>OFC</option>
+                <option>AFC</option>
+                <option>CAF</option>
+                <option>UEFA</option>
+                <option>Copa das Confederações</option>
+                <option>Copa do Mundo</option>
               </select>
             </div>
+            <div class="field">
+              <label>Edição</label>
+              <input id="cmp-edition" type="number" min="1" value="1">
+            </div>
+            <div class="field grow">
+              <label>Seu time</label>
+              <select id="cmp-userteam"></select>
+            </div>
           </div>
-          <button id="cmp-criar" class="primary">Criar (stub)</button>
+          <div class="row wrap">
+            <button id="btn-start-tournament" class="primary">Iniciar campeonato</button>
+            <button id="btn-history" class="ghost">Histórico de campeonatos</button>
+          </div>
           <div id="cmp-feedback" class="small muted"></div>
         </div>
 
         <div class="card">
-          <h3>Campeonatos salvos</h3>
-          <ul id="cmp-list" class="list"></ul>
+          <h3>Grupos e próxima partida</h3>
+          <div id="groups-wrap" class="groups-wrap muted small">Nenhum campeonato em andamento.</div>
+          <div id="next-match" class="next-match"></div>
+          <div class="row">
+            <button id="btn-start-match" class="success" disabled>Iniciar partida</button>
+          </div>
         </div>
+      </div>
+
+      <div id="panel-review" class="card" style="display:none">
+        <h3>Revisão rápida</h3>
+        <p class="muted">Marque se lembrou. Cada acerto concede +1,5 p.p. na chance de gol/min do seu time nesta partida.</p>
+        <div id="review-list" class="review-list"></div>
+        <div class="row">
+          <button id="btn-finish-review" class="primary">Concluir revisão e jogar</button>
+        </div>
+      </div>
+
+      <div id="panel-sim" class="card" style="display:none">
+        <h3>Simulação da partida</h3>
+        <div id="sim-log" class="sim-log"></div>
+        <div class="row">
+          <button id="btn-next" class="primary">Avançar</button>
+        </div>
+      </div>
+
+      <div id="panel-history" class="card" style="display:none">
+        <h3>Histórico de campeonatos</h3>
+        <div id="history-list" class="history-list"></div>
       </div>
     </section>
 
@@ -92,54 +125,38 @@
     <section id="view-teams" class="view">
       <header class="section-head">
         <h2>Situação de times</h2>
-        <p class="muted">Selecione o país à esquerda. À direita você vê os troféus/medalhas e a lista de jogadores.</p>
+        <p class="muted">Selecione o país à esquerda. À direita: score, estrelas, medalhas e atributos.</p>
       </header>
 
       <div class="split">
         <aside class="left">
           <div class="field">
             <label>País</label>
-            <div class="country-list" id="country-list">
-              <!-- preenchido pelo JS -->
-            </div>
+            <div class="country-list" id="country-list"></div>
           </div>
         </aside>
 
         <main class="right">
-          <div class="team-head">
-            <div class="team-flag" id="team-flag">🏳️</div>
-            <div>
-              <h3 id="team-name">Selecione um país</h3>
-              <div class="muted small" id="team-meta">—</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h4>Galeria de troféus e medalhas</h4>
-            <div class="trophy-row" id="trophy-row">
-              <!-- JS insere ícones/contagens -->
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="row between">
-              <h4>Jogadores</h4>
-              <div class="row">
-                <input id="player-search" class="pill" placeholder="Buscar jogador…">
+          <div class="team-hero">
+            <img id="hero-flag" class="hero-flag" alt="Bandeira">
+            <div class="hero-info">
+              <h3><span id="hero-code">—</span> <span id="hero-name">Selecione um país</span></h3>
+              <div class="score-line">
+                <strong id="hero-score">—</strong>
+                <div id="hero-stars" class="stars">☆☆☆☆☆</div>
               </div>
+              <div class="score-bar"><div id="hero-score-fill"></div></div>
             </div>
-            <table class="table">
-              <thead>
-                <tr>
-                <th>Termo</th>
-                <th>Nível</th>
-                <th>Descrição</th>
-                <th>Próx. revisão</th> <!-- NOVA COLUNA -->
-                <th class="right">Ações</th>
-                </tr>
-            </thead>
-              <tbody id="player-tbody"></tbody>
-            </table>
+          </div>
+
+          <div class="card">
+            <h4>Medalhas por campeonato</h4>
+            <div class="trophies-wrap" id="trophies-wrap"></div>
+          </div>
+
+          <div class="card">
+            <h4>Atributos da seleção</h4>
+            <div id="attr-list" class="attr-list"></div>
           </div>
         </main>
       </div>

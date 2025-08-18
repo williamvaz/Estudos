@@ -46,10 +46,13 @@ body{
 .kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
 .kpi{
   background:#0f1427; border:1px solid rgba(255,255,255,.08);
-  border-radius:12px; padding:12px
+  border-radius:12px; padding:12px; min-height:92px;
 }
 .kpi-title{color:var(--muted);font-size:.9rem}
 .kpi-value{font-size:1.8rem;font-weight:800}
+.kpi-rich{font-size:1rem;line-height:1.2}
+.kpi-rich .flag{width:20px;height:14px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:6px}
+.kpi-rich .stars{font-size:0.95rem;margin-left:6px;opacity:.9}
 
 .section-head{margin-bottom:10px}
 .muted{color:var(--muted)}
@@ -99,16 +102,46 @@ input,select{
 .country-item.active{border-color:#22c55e;background:rgba(34,197,94,.12)}
 
 .right .card + .card{margin-top:12px}
-.team-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.team-flag{font-size:28px}
 
-.trophy-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-.trophy{
-  display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
-  background:#0c1224
-}
-.trophy .count{font-weight:800}
+/* --- Team hero --- */
+.team-hero{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.hero-flag{width:160px;height:110px;object-fit:cover;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.hero-info h3{margin:.2rem 0 6px 0;font-size:1.7rem}
+.score-line{display:flex;gap:10px;align-items:center}
+.stars{letter-spacing:2px}
+.score-bar{width:100%;height:10px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+#hero-score-fill{height:100%;width:50%;background:linear-gradient(90deg,#ffd700,#ffa500)}
 
+/* --- medals & attrs --- */
+.trophies-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.trophy-chip{display:flex;gap:8px;align-items:center;background:#0b1230;
+  padding:8px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px}
+.trophy-chip small{opacity:.85}
+
+.attr-list{display:grid;gap:12px}
+.attr{background:rgba(0,0,0,.15);padding:10px 12px;border-radius:12px}
+.attr-head{display:flex;justify-content:space-between;margin-bottom:8px}
+.attr-bar{height:10px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+.attr-fill{height:100%;background:linear-gradient(90deg,#4ade80,#22c55e)}
+
+/* --- groups & match --- */
+.groups-wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.group{background:#0f1427;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
+.group h4{margin:.2rem 0 .4rem 0}
+.group ul{margin:0;padding-left:18px}
+.next-match{margin-top:6px;font-weight:600}
+.versus{display:flex;align-items:center;gap:8px}
+.versus img{width:28px;height:20px;object-fit:cover;border-radius:3px}
+
+/* --- review & sim --- */
+.review-list{display:grid;gap:10px;margin-top:8px}
+.review-item{display:flex;gap:12px;align-items:center;background:#0f1427;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
+.review-item .term{font-weight:700}
+.sim-log{max-height:280px;overflow:auto;background:#0f1427;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;white-space:pre-wrap}
+
+/* --- words table overrides --- */
 .table{width:100%;border-collapse:separate;border-spacing:0 8px}
 .table th{color:var(--muted);text-align:left;font-size:.9rem;padding:0 8px}
 .table td{background:#0f1427;border:1px solid rgba(255,255,255,.08);padding:10px 8px}
@@ -116,7 +149,4 @@ input,select{
 .table td:last-child{border-radius:0 10px 10px 0}
 .right{text-align:right}
 
-.table td.due {
-  color: #c9f;
-  font-weight: 600;
-}
+.table td.due { color:#c9f; font-weight:600; }
