@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estudos Futebol • Seleções</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="selecoes.css">
+  <style>
+    .container { max-width: 980px; margin: 0 auto; padding: 12px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { text-align: left; font-weight: 700; padding: 10px 12px; }
+    tbody td { padding: 10px 12px; border-top: 1px solid rgba(255,255,255,.08); }
+    .right { text-align: right; }
+    .flag { width: 32px; height: 22px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset; }
+    .callout { background:#1a2d1f; border:1px solid #284b34; padding:10px 12px; border-radius:12px; margin:12px 0; }
+    .warn { background:#391a1a; border-color:#6a3333; color:#ffdede; }
+    .btn  { padding:10px 14px; border-radius:10px; background:#1f8b4c; color:#fff; border:none; cursor:pointer; }
+    .btn:active { transform: translateY(1px); }
+    .top-actions { display:flex; gap:8px; align-items:center; }
+  </style>
+</head>
+<body class="is-mobile">
+  <header class="topbar">
+    <div class="brand">
+      <span class="ball">🌍</span>
+      <h1>Lista de Seleções</h1>
+      <a class="back small" href="home.html" style="margin-left:auto">← Início</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="top-actions">
+      <p class="muted">Bandeiras e score</p>
+      <button id="btn-recarregar" class="btn" style="margin-left:auto">Recarregar</button>
+      <button id="btn-escolher" class="btn" style="background:#2b5b94">Escolher Selecoes.json</button>
+      <input id="file-input" type="file" accept=".json,application/json" style="display:none">
+    </section>
+
+    <div id="erro" class="callout warn" style="display:none"></div>
+
+    <div class="table-wrap card">
+      <table id="sel-table">
+        <thead>
+          <tr>
+            <th>Flag</th>
+            <th data-sort="name" class="sortable">Seleção</th>
+            <th data-sort="score" class="right sortable">Score</th>
+          </tr>
+        </thead>
+        <tbody id="sel-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // ---------- utils ----------
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const LKEY_STATE  = 'team_state_v2';
+    const LKEY_MEDALS = 'team_medals_v1';
+
+    const getAllState = () => JSON.parse(localStorage.getItem(LKEY_STATE)  || '{}');
+    const setAllState = (m) => localStorage.setItem(LKEY_STATE, JSON.stringify(m));
+    const getMedals   = () => JSON.parse(localStorage.getItem(LKEY_MEDALS) || '{}');
+    const setMedals   = (m) => localStorage.setItem(LKEY_MEDALS, JSON.stringify(m));
+
+    function ensureTeamState(map, team) {
+      if (!map[team.code]) {
+        map[team.code] = {
+          score: 250,
+          attributes: { ataque:50, defesa:50, meio:50, velocidade:50, entrosamento:50 }
+        };
+      }
+      const a = map[team.code].attributes;
+      const soma = a.ataque + a.defesa + a.meio + a.velocidade + a.entrosamento;
+      map[team.code].score = clamp(soma, 1, 500);
+    }
+    function ensureMedalSlots(medals, team, tourLabel){
+      medals[team.code] ||= {};
+      const keyCont = tourLabel || (team.tournament || 'Continental');
+      const ensure = k => (medals[team.code][k] ||= { ouro:0, prata:0, bronze:0 });
+      ensure(keyCont); ensure('Confederações'); ensure('Mundial');
+    }
+
+    function normalizeSelecoes(raw){
+      return (raw||[]).map(s => ({
+        code: s.code || s.sigla || s.id || s.codigo,
+        name: s.name || s.nome,
+        flag: s.flag || s.flagPath || s.img || s.bandeira || `Flags/${(s.nome||s.name)}.jpg`,
+        confed: s.confed || s.conf || s.continente || s.federacao,
+        tournament: s.Tournament || s.tournament || s.confed || 'Continental'
+      })).filter(s => s.code && s.name);
+    }
+
+    // ---------- carregamento ----------
+    async function fetchSelecoes() {
+      const r = await fetch('Selecoes.json', { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      return normalizeSelecoes(await r.json());
+    }
+    async function pickSelecoes() {
+      return new Promise((resolve, reject) => {
+        const input = document.getElementById('file-input');
+        input.onchange = async () => {
+          const f = input.files?.[0];
+          if (!f) return reject(new Error('Nenhum arquivo selecionado'));
+          try {
+            const json = JSON.parse(await f.text());
+            resolve(normalizeSelecoes(json));
+          } catch (e) { reject(new Error('Arquivo inválido')); }
+        };
+        input.click();
+      });
+    }
+
+    // ---------- estado da página ----------
+    let DATA = [];
+    let sortKey = 'name';
+    let sortDir = 1;
+
+    function composeRow(s){
+      return `<tr>
+        <td><img class="flag" src="${s.flag}" alt="${s.name}" onerror="this.style.visibility='hidden'"></td>
+        <td>${s.name}</td>
+        <td class="right">${s.state.score}</td>
+      </tr>`;
+    }
+    function renderTable(){
+      const tbody = document.getElementById('sel-tbody');
+      const k = sortKey, d = sortDir;
+      const get = s => k==='name'
+        ? s.name.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase()
+        : s.state.score;
+      tbody.innerHTML = [...DATA].sort((a,b)=>{
+        const A = get(a), B = get(b);
+        if (A < B) return -1*d;
+        if (A > B) return  1*d;
+        return 0;
+      }).map(composeRow).join('');
+    }
+    function bindSort(){
+      document.querySelectorAll('#sel-table thead th.sortable').forEach(th=>{
+        th.addEventListener('click', ()=>{
+          const key = th.getAttribute('data-sort');
+          if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+          document.querySelectorAll('#sel-table thead th.sortable').forEach(x=>x.classList.remove('asc','desc'));
+          th.classList.add(sortDir===1?'asc':'desc');
+          renderTable();
+        });
+      });
+    }
+
+    function showErr(msg){
+      const box = document.getElementById('erro');
+      box.textContent = msg;
+      box.style.display = '';
+    }
+    function clearErr(){
+      const box = document.getElementById('erro');
+      box.style.display = 'none';
+    }
+
+    async function loadAndRender(loader){
+      clearErr();
+      let selecoes;
+      try {
+        selecoes = await loader();
+      } catch (e) {
+        showErr('Não consegui carregar Selecoes.json automaticamente. Você pode clicar em “Escolher Selecoes.json”.');
+        throw e;
+      }
+      // merge com localStorage
+      const stateMap = getAllState();
+      const medalMap = getMedals();
+      selecoes.forEach(s => {
+        ensureTeamState(stateMap, s);
+        ensureMedalSlots(medalMap, s, s.tournament);
+      });
+      localStorage.setItem(LKEY_STATE, JSON.stringify(stateMap));
+      localStorage.setItem(LKEY_MEDALS, JSON.stringify(medalMap));
+
+      DATA = selecoes.map(s => ({ ...s, state: stateMap[s.code] }));
+      renderTable();
+    }
+
+    // boot
+    (async function init(){
+      bindSort();
+      // tenta via fetch; se falhar (file://), mostra o erro e deixa o botão de escolher
+      try {
+        await loadAndRender(fetchSelecoes);
+      } catch (_) { /* avisa no UI, já tratado */ }
+
+      document.getElementById('btn-recarregar').addEventListener('click', ()=> loadAndRender(fetchSelecoes));
+      document.getElementById('btn-escolher').addEventListener('click', async ()=>{
+        try { await loadAndRender(pickSelecoes); }
+        catch (e) { showErr(e.message); }
+      });
+    })();
+  </script>
+</body>
+</html>

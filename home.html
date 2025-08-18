@@ -5,73 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b3b22" />
   <title>Estudos Futebol • Início</title>
-
-  <!-- CSS base da Home (os módulos terão seus próprios CSS) -->
-  <link rel="preload" href="home.css" as="style">
   <link rel="stylesheet" href="home.css">
-
-  <!-- Fonte opcional do sistema; mantenho leve para mobile -->
-  <meta name="format-detection" content="telephone=no" />
 </head>
 <body class="is-mobile">
-  <noscript>Ative o JavaScript para usar o app.</noscript>
-
   <div class="app">
-    <!-- Topbar -->
-    <header class="topbar" role="banner">
+    <header class="topbar">
       <div class="brand">
         <span class="ball" aria-hidden="true">⚽</span>
         <h1 class="brand-title">Estudos Futebol</h1>
       </div>
     </header>
 
-    <!-- Conteúdo principal -->
-    <main id="home" class="home" role="main">
-      <section class="hero" aria-labelledby="home-title">
-        <h2 id="home-title">Bem-vindo!</h2>
+    <main class="home">
+      <section class="hero">
+        <h2>Bem-vindo!</h2>
         <p class="muted">Escolha um modo para começar</p>
       </section>
 
-      <!-- Grid de ações -->
       <section class="menu-grid" aria-label="Ações principais">
-        <!-- Jogar -->
-        <button class="menu-card" type="button" data-target="jogar" aria-describedby="desc-jogar">
-          <div class="icon" aria-hidden="true">🏆</div>
-          <div class="title">Jogar</div>
-          <div class="descr" id="desc-jogar">Inicie um campeonato</div>
-        </button>
+        <a class="menu-card" href="campeonato.html">
+          <div class="icon">🏆</div><div class="title">Jogar</div>
+          <div class="descr">Inicie um campeonato</div>
+        </a>
 
-        <!-- Seleções -->
-        <button class="menu-card" type="button" data-target="selecoes" aria-describedby="desc-selecoes">
-          <div class="icon" aria-hidden="true">🌍</div>
-          <div class="title">Lista de Seleções</div>
-          <div class="descr" id="desc-selecoes">Bandeiras, score e atributos</div>
-        </button>
+        <a class="menu-card" href="selecoes.html">
+          <div class="icon">🌍</div><div class="title">Lista de Seleções</div>
+          <div class="descr">Bandeiras, score e atributos</div>
+        </a>
 
-        <!-- Palavras -->
-        <button class="menu-card" type="button" data-target="palavras" aria-describedby="desc-palavras">
-          <div class="icon" aria-hidden="true">📚</div>
-          <div class="title">Lista de Palavras</div>
-          <div class="descr" id="desc-palavras">Seu banco para revisão</div>
-        </button>
+        <a class="menu-card" href="palavras.html">
+          <div class="icon">📚</div><div class="title">Lista de Palavras</div>
+          <div class="descr">Seu banco para revisão</div>
+        </a>
 
-        <!-- Histórico -->
-        <button class="menu-card" type="button" data-target="historico" aria-describedby="desc-historico">
-          <div class="icon" aria-hidden="true">📜</div>
-          <div class="title">Histórico de Edições</div>
-          <div class="descr" id="desc-historico">Anfitriões e campeões</div>
-        </button>
+        <a class="menu-card" href="edicoes.html">
+          <div class="icon">📜</div><div class="title">Histórico de Edições</div>
+          <div class="descr">Anfitriões e campeões</div>
+        </a>
       </section>
     </main>
 
-    <!-- Rodapé enxuto -->
-    <footer class="foot muted small" role="contentinfo">
+    <footer class="foot muted small">
       <span>v1 • otimizado para Samsung S23 (retrato)</span>
     </footer>
   </div>
-
-  <!-- JS base da Home (os módulos terão seus próprios JS) -->
-<script src="selecoes.js" defer></script>
 </body>
 </html>
-

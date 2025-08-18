@@ -1,34 +1,33 @@
-// selecoes.js — View "Lista de Seleções" (tabela mínima + navegação da Home)
+// selecoes.js — View "Lista de Seleções"
+// - Esconde a Home quando aberto
+// - Tabela com 3 colunas: Flag | Seleção | Score
+// - Carrega Selecoes.json (com fallback via file picker quando rodando em file://)
+
 (() => {
-  // ---------- helpers ----------
-  const $ = (sel, root = document) => root.querySelector(sel);
+  // ----- utils -----
+  const $ = sel => document.querySelector(sel);
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const LKEY_STATE  = 'team_state_v2';
   const LKEY_MEDALS = 'team_medals_v1';
 
-  // Monta/garante estado persistido
-  function getAllState() {
-    try { return JSON.parse(localStorage.getItem(LKEY_STATE) || '{}'); }
-    catch { return {}; }
-  }
-  function setAllState(m) {
-    localStorage.setItem(LKEY_STATE, JSON.stringify(m));
-  }
+  // persitência de estado (score/atributos)
+  const getAllState = () => JSON.parse(localStorage.getItem(LKEY_STATE)  || '{}');
+  const setAllState = (m) => localStorage.setItem(LKEY_STATE, JSON.stringify(m));
+  const getMedals   = () => JSON.parse(localStorage.getItem(LKEY_MEDALS) || '{}');
+  const setMedals   = (m) => localStorage.setItem(LKEY_MEDALS, JSON.stringify(m));
+
   function ensureTeamState(map, team) {
     if (!map[team.code]) {
       map[team.code] = {
         score: 250,
-        attributes: { ataque: 50, defesa: 50, meio: 50, velocidade: 50, entrosamento: 50 }
+        attributes: { ataque:50, defesa:50, meio:50, velocidade:50, entrosamento:50 }
       };
     }
     const a = map[team.code].attributes;
     const soma = a.ataque + a.defesa + a.meio + a.velocidade + a.entrosamento;
-    map[team.code].score = clamp(soma, 1, 500);
+    if (map[team.code].score !== soma) map[team.code].score = clamp(soma, 1, 500);
   }
 
-  // Medalhas (mantido para compatibilidade, embora não usadas nesta tabela)
-  function getMedals() { try { return JSON.parse(localStorage.getItem(LKEY_MEDALS) || '{}'); } catch { return {}; } }
-  function setMedals(m) { localStorage.setItem(LKEY_MEDALS, JSON.stringify(m)); }
   function ensureMedalSlots(medals, team, tourLabel){
     medals[team.code] ||= {};
     const keyCont = tourLabel || (team.tournament || 'Continental');
@@ -36,14 +35,71 @@
     ensure(keyCont); ensure('Confederações'); ensure('Mundial');
   }
 
-  // Carrega e normaliza Selecoes.json
-  async function loadSelecoes() {
-    // Observação: abrir via file:// pode bloquear fetch. Ideal é servir com um servidor local (ex: Live Server).
-    const resp = await fetch('Selecoes.json', { cache: 'no-store' });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const raw = await resp.json();
+  // ----- montagem da view -----
+  function hideHome() {
+    $('.hero')?.classList.add('is-hidden');
+    $('.menu-grid')?.classList.add('is-hidden');
+  }
+  function showHome() {
+    $('.hero')?.classList.remove('is-hidden');
+    $('.menu-grid')?.classList.remove('is-hidden');
+  }
 
-    return raw.map(s => ({
+  function ensureSelecoesView() {
+    let view = $('#view-selecoes');
+    if (view) return view;
+
+    view = document.createElement('section');
+    view.id = 'view-selecoes';
+    view.className = 'selecoes-view';
+
+    view.innerHTML = `
+      <header class="block">
+        <h2 class="title">Lista de Seleções</h2>
+        <p class="muted">Bandeiras e score</p>
+      </header>
+
+      <div id="sel-error" class="callout warn" style="display:none"></div>
+
+      <div class="table-wrap">
+        <table id="sel-table" class="table compact">
+          <thead>
+            <tr>
+              <th>Flag</th>
+              <th data-sort="name" class="sortable">Seleção</th>
+              <th data-sort="score" class="right sortable">Score</th>
+            </tr>
+          </thead>
+          <tbody id="sel-tbody"></tbody>
+        </table>
+      </div>
+
+      <div id="picker" class="picker" style="display:none">
+        <p class="muted small" style="margin: 12px 0">
+          O navegador bloqueou a leitura direta do arquivo (abrindo via <code>file://</code>).<br>
+          Clique abaixo e escolha <strong>Selecoes.json</strong> para carregar.
+        </p>
+        <button type="button" class="btn" id="btn-choose">Escolher Selecoes.json</button>
+        <input type="file" id="file-input" accept=".json,application/json" style="display:none" />
+      </div>
+    `;
+    // injeta logo depois da Home
+    const main = $('#home') || document.body;
+    main.parentNode.insertBefore(view, main.nextSibling);
+    return view;
+  }
+
+  // ----- carregamento de dados -----
+  async function loadSelecoesViaFetch() {
+    // tenta fetch normal (funciona quando rodando em http:// ou https://)
+    const res = await fetch('Selecoes.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const raw = await res.json();
+    return normalizeSelecoes(raw);
+  }
+
+  function normalizeSelecoes(raw) {
+    return (raw || []).map(s => ({
       code: s.code || s.sigla || s.id || s.codigo,
       name: s.name || s.nome,
       flag: s.flag || s.flagPath || s.img || s.bandeira || `Flags/${(s.nome||s.name)}.jpg`,
@@ -52,46 +108,51 @@
     })).filter(s => s.code && s.name);
   }
 
-  // ---------- view / UI ----------
-  // Template da view com apenas 3 colunas
-  function viewTemplate() {
-    return `
-      <section id="view-selecoes" class="selecoes">
-        <header class="section-head">
-          <h2>Lista de Seleções</h2>
-          <p class="muted small">Bandeiras, score e atributos</p>
-        </header>
-
-        <div class="card">
-          <div class="table-wrap">
-            <table id="sel-table">
-              <thead>
-                <tr>
-                  <th class="left col-flag">Flag</th>
-                  <th class="left" data-sort="name" title="Ordenar por Seleção">Seleção</th>
-                  <th class="right" data-sort="score" title="Ordenar por Score">Score</th>
-                </tr>
-              </thead>
-              <tbody id="sel-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    `;
+  function enableManualPicker(onLoaded) {
+    const picker = $('#picker');
+    const btn = $('#btn-choose');
+    const input = $('#file-input');
+    picker.style.display = '';
+    btn.onclick = () => input.click();
+    input.onchange = async () => {
+      const f = input.files?.[0];
+      if (!f) return;
+      try {
+        const text = await f.text();
+        const json = JSON.parse(text);
+        onLoaded(normalizeSelecoes(json));
+        picker.style.display = 'none';
+      } catch (e) {
+        showError('Arquivo inválido. Escolha um Selecoes.json válido.');
+      }
+    };
   }
 
-  // Estado da view
-  let DATA = [];
+  function showError(msg) {
+    const c = $('#sel-error');
+    c.textContent = msg;
+    c.style.display = '';
+  }
+
+  async function loadSelecoes() {
+    try {
+      return await loadSelecoesViaFetch();
+    } catch (e) {
+      // falhou (provável file://). Oferece seletor manual.
+      enableManualPicker(selecoes => mountSelecoesInternal(selecoes));
+      throw e;
+    }
+  }
+
+  // ----- renderização -----
+  let data = [];
   let sortKey = 'name';
   let sortDir = 1; // 1 asc, -1 desc
 
   function composeRow(s) {
-    const safeFlag = s.flag || '';
     return `
       <tr data-code="${s.code}">
-        <td class="col-flag">
-          <img class="flag" src="${safeFlag}" alt="${s.name}" onerror="this.style.visibility='hidden'">
-        </td>
+        <td><img class="flag" src="${s.flag}" alt="${s.name}" /></td>
         <td>${s.name}</td>
         <td class="right">${s.state.score}</td>
       </tr>
@@ -100,80 +161,38 @@
 
   function renderTable() {
     const tbody = $('#sel-tbody');
-    const k = sortKey;
-    const d = sortDir;
-
-    const getVal = (s) => {
-      if (k === 'name') {
-        return s.name.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
-      }
-      // k === 'score'
-      return s.state.score;
-    };
-
-    const rows = [...DATA].sort((a,b)=>{
-      const A = getVal(a), B = getVal(b);
+    const k = sortKey, d = sortDir;
+    const get = s => (k === 'name'
+      ? s.name.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase()
+      : s.state.score);
+    const rows = [...data].sort((a,b)=>{
+      const A = get(a), B = get(b);
       if (A < B) return -1*d;
       if (A > B) return  1*d;
       return 0;
     }).map(composeRow).join('');
-
     tbody.innerHTML = rows;
   }
 
   function bindSort() {
-    document.querySelectorAll('#sel-table thead th[data-sort]').forEach(th => {
-      th.addEventListener('click', () => {
+    document.querySelectorAll('#sel-table thead th.sortable').forEach(th=>{
+      th.addEventListener('click', ()=>{
         const key = th.getAttribute('data-sort');
+        if (!key) return;
         if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
-
-        document.querySelectorAll('#sel-table thead th[data-sort]')
-          .forEach(x => x.classList.remove('asc','desc'));
+        document.querySelectorAll('#sel-table thead th.sortable').forEach(x=>x.classList.remove('asc','desc'));
         th.classList.add(sortDir === 1 ? 'asc' : 'desc');
-
         renderTable();
       });
     });
   }
 
-  // ---------- navegação ----------
-  function hideHome() {
-    // Esconde hero, grid e rodapé enquanto a view está ativa
-    $('.hero')?.classList.add('hidden');
-    $('.menu-grid')?.classList.add('hidden');
-    $('.foot')?.classList.add('hidden');
-  }
-  function showHome() {
-    $('.hero')?.classList.remove('hidden');
-    $('.menu-grid')?.classList.remove('hidden');
-    $('.foot')?.classList.remove('hidden');
-  }
-
-  function mountSelecoesInternal(mainEl) {
-    // Evita montar duas vezes
-    if ($('#view-selecoes')) return;
-
-    // Esconde Home e injeta a view
+  // ----- bootstrap -----
+  async function mountSelecoesInternal(selecoes){
     hideHome();
-    mainEl.insertAdjacentHTML('beforeend', viewTemplate());
+    ensureSelecoesView();
 
-    // Sobe título da topbar (opcional)
-    const brand = $('.brand-title');
-    if (brand) brand.textContent = 'Estudos Futebol';
-
-    // Carrega dados + renderiza
-    initSelecoes().catch(err => {
-      console.error(err);
-      // Em caso de erro, ainda assim não mostramos a Home
-      $('#sel-tbody')?.insertAdjacentHTML('beforebegin',
-        `<p class="muted small">Não foi possível carregar as seleções.</p>`);
-    });
-  }
-
-  async function initSelecoes() {
-    const selecoes = await loadSelecoes();
-
-    // Preparar estados/medalhas
+    // prepara estados e medalhas
     const stateMap = getAllState();
     const medalMap = getMedals();
     selecoes.forEach(s => {
@@ -183,27 +202,39 @@
     setAllState(stateMap);
     setMedals(medalMap);
 
-    // Junta dados para a view
-    DATA = selecoes.map(s => ({ ...s, state: stateMap[s.code] }));
-
+    // dados mesclados
+    data = selecoes.map(s => ({ ...s, state: stateMap[s.code] }));
     bindSort();
     renderTable();
   }
 
-  // ---------- boot ----------
-  document.addEventListener('DOMContentLoaded', () => {
-    // Botão do card "Lista de Seleções"
-    const btnSelecoes = document.querySelector('[data-target="selecoes"]');
-    const main = $('main');
-
-    if (btnSelecoes && main) {
-      btnSelecoes.addEventListener('click', () => mountSelecoesInternal(main));
+  async function initSelecoes(){
+    hideHome();
+    ensureSelecoesView();
+    try {
+      const selecoes = await loadSelecoes();
+      await mountSelecoesInternal(selecoes);
+    } catch (e) {
+      // já mostramos o picker; também exibimos um aviso discreto no console
+      console.warn('Falha ao carregar Selecoes.json via fetch. Use o seletor manual.', e);
+      showError('Não consegui ler Selecoes.json automaticamente. Use o botão acima para carregar o arquivo.');
     }
+  }
 
-    // Se quiser abrir direto pela âncora #selecoes (ex.: home.html#selecoes)
-    if (location.hash === '#selecoes' && main) {
-      mountSelecoesInternal(main);
-    }
+  // Entradas:
+  // 1) Clique no card "Lista de Seleções"
+  document.addEventListener('click', (ev) => {
+    const btn = ev.target.closest?.('button[data-target="selecoes"]');
+    if (!btn) return;
+    ev.preventDefault();
+    initSelecoes();
+  });
+
+  // 2) Se já existe um título "Lista de Seleções" na página (ex. navegação direta),
+  //    inicializa automaticamente.
+  window.addEventListener('DOMContentLoaded', () => {
+    // se quiser iniciar automaticamente ao abrir a página, descomente a linha:
+    // initSelecoes();
   });
 
 })();
