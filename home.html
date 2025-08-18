@@ -2,219 +2,56 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Estudos Futebol • Simulador</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Estudos Futebol • Início</title>
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <span class="ball">⚽</span>
+        <span class="ball" aria-hidden="true">⚽</span>
         <h1>Estudos Futebol</h1>
       </div>
-      <nav class="mainmenu">
-        <button class="menu-btn" data-view="menu">Início</button>
-        <button class="menu-btn" data-view="play">Jogar</button>
-        <button class="menu-btn" data-view="teams">Ver situação de times</button>
-        <button class="menu-btn" data-view="words">Ver banco de palavras</button>
-      </nav>
     </header>
 
-    <!-- VIEW: MENU PRINCIPAL -->
-    <section id="view-menu" class="view active">
-      <div class="hero">
-        <h2>Bem-vindo, Will!</h2>
-        <p>Escolha um modo para começar:</p>
-        <div class="hero-actions">
-          <button class="primary" data-view="play">⚽ Jogar</button>
-          <button class="primary" data-view="teams">📈 Situação de times</button>
-          <button class="primary" data-view="words">📚 Banco de palavras</button>
-        </div>
-      </div>
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="kpi-title">Palavras com nível ≥ 1</div>
-          <div class="kpi-value" id="kpi-words-l1">0</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-title">Time com maior score</div>
-          <div class="kpi-rich" id="kpi-top-team">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-title">Time com menor score</div>
-          <div class="kpi-rich" id="kpi-bottom-team">—</div>
-        </div>
-      </div>
-    </section>
+    <main class="home">
+      <section class="hero">
+        <h2>Bem-vindo!</h2>
+        <p class="muted">Escolha um modo para começar</p>
+      </section>
 
-    <!-- VIEW: JOGAR -->
-    <section id="view-play" class="view">
-      <header class="section-head">
-        <h2>Jogar</h2>
-        <p class="muted">Crie um campeonato e jogue partidas vinculadas ao seu estudo de palavras.</p>
-      </header>
+      <section class="menu-grid" aria-label="Ações principais">
+        <button class="menu-card" data-target="play">
+          <div class="icon">🏆</div>
+          <div class="title">Jogar</div>
+          <div class="descr">Inicie um campeonato</div>
+        </button>
 
-      <div class="card-grid">
-        <div class="card">
-          <h3>Novo campeonato</h3>
-          <div class="row wrap">
-            <div class="field">
-              <label>Tipo</label>
-              <select id="cmp-type">
-                <option>CONCACAF</option>
-                <option>CONMEBOL</option>
-                <option>OFC</option>
-                <option>AFC</option>
-                <option>CAF</option>
-                <option>UEFA</option>
-                <option>Copa das Confederações</option>
-                <option>Copa do Mundo</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Edição</label>
-              <input id="cmp-edition" type="number" min="1" value="1">
-            </div>
-            <div class="field grow">
-              <label>Seu time</label>
-              <select id="cmp-userteam"></select>
-            </div>
-          </div>
-          <div class="row wrap">
-            <button id="btn-start-tournament" class="primary">Iniciar campeonato</button>
-            <button id="btn-history" class="ghost">Histórico de campeonatos</button>
-          </div>
-          <div id="cmp-feedback" class="small muted"></div>
-        </div>
+        <button class="menu-card" data-target="selecoes">
+          <div class="icon">🌍</div>
+          <div class="title">Lista de Seleções</div>
+          <div class="descr">Bandeiras, score e atributos</div>
+        </button>
 
-        <div class="card">
-          <h3>Grupos e próxima partida</h3>
-          <div id="groups-wrap" class="groups-wrap muted small">Nenhum campeonato em andamento.</div>
-          <div id="next-match" class="next-match"></div>
-          <div class="row">
-            <button id="btn-start-match" class="success" disabled>Iniciar partida</button>
-          </div>
-        </div>
-      </div>
+        <button class="menu-card" data-target="palavras">
+          <div class="icon">📚</div>
+          <div class="title">Lista de Palavras</div>
+          <div class="descr">Seu banco para revisão</div>
+        </button>
 
-      <div id="panel-review" class="card" style="display:none">
-        <h3>Revisão rápida</h3>
-        <p class="muted">Marque se lembrou. Cada acerto concede +1,5 p.p. na chance de gol/min do seu time nesta partida.</p>
-        <div id="review-list" class="review-list"></div>
-        <div class="row">
-          <button id="btn-finish-review" class="primary">Concluir revisão e jogar</button>
-        </div>
-      </div>
+        <button class="menu-card" data-target="historico">
+          <div class="icon">📜</div>
+          <div class="title">Histórico de Edições</div>
+          <div class="descr">Anfitriões e campeões</div>
+        </button>
+      </section>
+    </main>
 
-      <div id="panel-sim" class="card" style="display:none">
-        <h3>Simulação da partida</h3>
-        <div id="sim-log" class="sim-log"></div>
-        <div class="row">
-          <button id="btn-next" class="primary">Avançar</button>
-        </div>
-      </div>
-
-      <div id="panel-history" class="card" style="display:none">
-        <h3>Histórico de campeonatos</h3>
-        <div id="history-list" class="history-list"></div>
-      </div>
-    </section>
-
-    <!-- VIEW: TIMES -->
-    <section id="view-teams" class="view">
-      <header class="section-head">
-        <h2>Situação de times</h2>
-        <p class="muted">Selecione o país à esquerda. À direita: score, estrelas, medalhas e atributos.</p>
-      </header>
-
-      <div class="split">
-        <aside class="left">
-          <div class="field">
-            <label>País</label>
-            <div class="country-list" id="country-list"></div>
-          </div>
-        </aside>
-
-        <main class="right">
-          <div class="team-hero">
-            <img id="hero-flag" class="hero-flag" alt="Bandeira">
-            <div class="hero-info">
-              <h3><span id="hero-code">—</span> <span id="hero-name">Selecione um país</span></h3>
-              <div class="score-line">
-                <strong id="hero-score">—</strong>
-                <div id="hero-stars" class="stars">☆☆☆☆☆</div>
-              </div>
-              <div class="score-bar"><div id="hero-score-fill"></div></div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h4>Medalhas por campeonato</h4>
-            <div class="trophies-wrap" id="trophies-wrap"></div>
-          </div>
-
-          <div class="card">
-            <h4>Atributos da seleção</h4>
-            <div id="attr-list" class="attr-list"></div>
-          </div>
-        </main>
-      </div>
-    </section>
-
-    <!-- VIEW: PALAVRAS -->
-    <section id="view-words" class="view">
-      <header class="section-head">
-        <h2>Banco de palavras</h2>
-        <div class="row wrap">
-          <select id="w-filter-level" class="pill">
-            <option value="">Todos níveis</option>
-            <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
-            <option>C1</option><option>C2</option><option>NI</option>
-          </select>
-          <input id="w-search" class="pill" placeholder="Buscar termo/descrição…">
-          <button id="w-export" class="ghost">Exportar JSON</button>
-          <label class="pill" for="w-import" style="cursor:pointer">Importar JSON
-            <input id="w-import" type="file" accept="application/json" style="display:none">
-          </label>
-        </div>
-      </header>
-
-      <div class="card">
-        <div class="row">
-          <div class="field grow">
-            <label>Termo</label>
-            <input id="w-term" placeholder="ex.: although">
-          </div>
-          <div class="field grow">
-            <label>Nível (CEFR)</label>
-            <select id="w-level">
-              <option>A1</option><option>A2</option><option>B1</option><option>B2</option>
-              <option>C1</option><option>C2</option><option selected>NI</option>
-            </select>
-          </div>
-          <div class="field grow">
-            <label>Descrição (Oxford/definição)</label>
-            <input id="w-def" placeholder="ex.: Used to contrast two clauses…">
-          </div>
-          <div class="field">
-            <label>&nbsp;</label>
-            <button id="w-add" class="success">Adicionar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Termo</th><th>Nível</th><th>Descrição</th><th class="right">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="w-tbody"></tbody>
-        </table>
-      </div>
-    </section>
+    <footer class="foot muted small">
+      <span>v1 • feito para mobile (S23 retrato)</span>
+    </footer>
   </div>
 
   <script src="home.js"></script>
