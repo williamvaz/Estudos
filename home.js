@@ -1,4 +1,4 @@
-// home.js – Estrutura base (tema futebol) + dados de exemplo
+// home.js – Estrutura base (tema futebol) + dados de exemplo + SRS palavras
 (function(){
   // ----- Estado & helpers -----
   const VIEWS = ['menu','play','teams','words'];
@@ -153,29 +153,55 @@
       });
   }
 
-  // ----- VIEW: WORDS -----
+  // ----- VIEW: WORDS + SRS -----
   const WORDS_KEY = 'estudos_words_bank_v1';
   function loadWords(){
     try{
       const raw = localStorage.getItem(WORDS_KEY);
-      if(raw) return JSON.parse(raw);
+      if(raw) return JSON.parse(raw).map(ensureSRS);
     }catch(e){}
     // seed inicial
     return [
-      {id:id(), term:'although', level:'C1', def:'used to say something that contrasts with another',},
-      {id:id(), term:'dog', level:'A1', def:'a common animal kept by people for pleasure or to guard places',},
-      {id:id(), term:'accountability', level:'C2', def:'the fact of being responsible for your decisions or actions',},
-    ];
+      {id:id(), term:'although', level:'C1', def:'used to say something that contrasts with another'},
+      {id:id(), term:'dog', level:'A1', def:'a common animal kept by people for pleasure or to guard places'},
+      {id:id(), term:'accountability', level:'C2', def:'the fact of being responsible for your decisions or actions'},
+    ].map(ensureSRS);
   }
   function saveWords(arr){ localStorage.setItem(WORDS_KEY, JSON.stringify(arr)); }
   let words = loadWords();
+
+  function today(){ return new Date().toISOString().slice(0,10); }
+  function ensureSRS(w){
+    if(!w.ease) w.ease=2.5;
+    if(!w.interval) w.interval=0;
+    if(!w.streak) w.streak=0;
+    if(!w.nextDue) w.nextDue=today();
+    return w;
+  }
+  function isDue(w){ return !w.nextDue || w.nextDue <= today(); }
+
+  function applySRS(w, grade){
+    if(grade<3){
+      w.streak=0;
+      w.ease=Math.max(1.3, w.ease-0.2);
+      w.interval=0.5;
+    } else {
+      w.streak++;
+      w.ease=Math.min(3.0, w.ease+(grade===4?0.15:0.05));
+      w.interval=w.interval<1?1:Math.round(w.interval*w.ease);
+    }
+    const next=new Date();
+    next.setDate(next.getDate()+Math.max(1,Math.round(w.interval)));
+    w.nextDue=next.toISOString().slice(0,10);
+    saveWords(words);
+  }
 
   $('#w-add').addEventListener('click', ()=>{
     const term = $('#w-term').value.trim();
     const level = $('#w-level').value;
     const def = $('#w-def').value.trim();
     if(!term || !def){ alert('Informe termo e descrição.'); return; }
-    words.push({id:id(), term, level, def});
+    words.push(ensureSRS({id:id(), term, level, def}));
     saveWords(words);
     $('#w-term').value=''; $('#w-def').value='';
     renderWords();
@@ -188,27 +214,32 @@
     a.click(); URL.revokeObjectURL(a.href);
   });
 
-  $('#w-import').addEventListener('change', async (e)=>{
-    const f = e.target.files[0]; if(!f) return;
-    try{
-      const txt = await f.text();
-      const arr = JSON.parse(txt);
-      if(!Array.isArray(arr)) throw 0;
-      // aceita chaves {term/termo, level/cefr, def/descricao}
-      const mapped = arr.map(x=>({
-        id:id(),
-        term: x.term || x.termo || '',
-        level: (x.level || x.cefr || 'NI').toUpperCase(),
-        def: x.def || x.descricao || x.description || ''
-      })).filter(x=>x.term && x.def);
-      words = words.concat(mapped);
-      saveWords(words);
-      renderWords();
-      updateKPIs();
-      alert(`Importados ${mapped.length} itens.`);
-    }catch{ alert('JSON inválido.'); }
-    e.target.value='';
-  });
+$('#w-import').addEventListener('change', async (e)=>{
+  const f = e.target.files[0]; if(!f) return;
+  try{
+    const txt = await f.text();
+    const arr = JSON.parse(txt);
+    if(!Array.isArray(arr)) throw 0;
+    // aceita vários formatos: {term}, {word}, {termo}
+    const mapped = arr.map(x=>ensureSRS({
+      id: id(),
+      term: x.term || x.word || x.termo || '',
+      level: (x.level || x.cefr || 'NI').toUpperCase(),
+      def: x.def || x.descricao || x.description || x.definition || '',
+      pos: x.pos || '',
+      url: x.definition_url || '',
+      audio: x.voice_url || ''
+    })).filter(x=>x.term && x.def);
+    words = words.concat(mapped);
+    saveWords(words);
+    renderWords();
+    updateKPIs();
+    alert(`Importados ${mapped.length} itens.`);
+  }catch{ 
+    alert('JSON inválido.'); 
+  }
+  e.target.value='';
+});
 
   $('#w-filter-level').addEventListener('input', renderWords);
   $('#w-search').addEventListener('input', renderWords);
@@ -220,11 +251,13 @@
     words
       .filter(w => (lvl? w.level===lvl : true) && (!q || w.term.toLowerCase().includes(q) || w.def.toLowerCase().includes(q)))
       .forEach(w=>{
+        const due = isDue(w) ? "Hoje" : w.nextDue;
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><b>${esc(w.term)}</b></td>
           <td><span class="pill">${w.level}</span></td>
           <td>${esc(w.def)}</td>
+          <td class="due">${due}</td>
           <td class="right">
             <button class="ghost" data-act="edit" data-id="${w.id}">Editar</button>
             <button class="ghost" data-act="del" data-id="${w.id}" style="border-color:#ef4444;color:#ef9999">Excluir</button>
@@ -233,7 +266,6 @@
         tbody.appendChild(tr);
       });
 
-    // ações
     tbody.querySelectorAll('button').forEach(b=> b.addEventListener('click', onWordAction));
   }
 
@@ -248,7 +280,7 @@
       const term = prompt('Termo', w.term); if(term==null) return;
       const level = (prompt('Nível (A1–C2/NI)', w.level)||w.level).toUpperCase();
       const def = prompt('Descrição/definição', w.def)||w.def;
-      words[ix] = {...w, term, level, def};
+      words[ix] = ensureSRS({...w, term, level, def});
       saveWords(words); renderWords();
     }
   }
@@ -259,7 +291,8 @@
 
   // Inicial
   show('menu');
-  renderCountries();   // pré-render para primeira visita
+  renderCountries();
   renderWords();
 
 })();
+

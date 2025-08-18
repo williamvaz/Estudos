@@ -115,3 +115,8 @@ input,select{
 .table td:first-child{border-radius:10px 0 0 10px}
 .table td:last-child{border-radius:0 10px 10px 0}
 .right{text-align:right}
+
+.table td.due {
+  color: #c9f;
+  font-weight: 600;
+}
