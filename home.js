@@ -1,314 +1,265 @@
-// home.js — Lógica principal do simulador de estudos (A1–C2 + NI)
+// home.js – Estrutura base (tema futebol) + dados de exemplo
 (function(){
-  const KEY='estudos_words_v1';
-  /** @type {Array<Word>} */
-  let banco = load();
-  let session = {mode:'flash', queue:[], idx:0, hits:0, miss:0};
+  // ----- Estado & helpers -----
+  const VIEWS = ['menu','play','teams','words'];
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-  /**
-   * @typedef {Object} Word
-   * @property {string} id
-   * @property {string} termo
-   * @property {string} traducao
-   * @property {string} level // A1..C2, NI
-   * @property {string} exemplo
-   * @property {string} notas
-   * @property {number} ease // 1.3–3.0
-   * @property {number} interval // em dias
-   * @property {string} nextDue // ISO date (YYYY-MM-DD)
-   * @property {number} streak // acertos seguidos
-   * @property {'new'|'learning'|'review'} status
-   */
-
-  /* ---------- Util ---------- */
-  const $=sel=>document.querySelector(sel);
-  const el={
-    badgeCount:$('#badge-count'), badgeDue:$('#badge-due'),
-    tbody:$('#tbody-lista'),
-    inp:{ termo:$('#inp-termo'), trad:$('#inp-trad'), level:$('#inp-level'), ex:$('#inp-ex'), notas:$('#inp-notas') },
-    filter:{ level:$('#filter-level'), status:$('#filter-status'), search:$('#search') },
-    export:$('#btn-export'), importer:$('#importer'), reset:$('#btn-reset'),
-    tabs:$('#mode-tabs'), chkDue:$('#chk-only-due'), chkRand:$('#chk-rand'), newSession:$('#btn-new-session'),
-    kpi:{hit:$('#kpi-hit'), miss:$('#kpi-miss'), sessions:$('#kpi-sessions'), ease:$('#kpi-ease')},
-    flash:{card:$('#flash-card'), front:$('#flash-front'), back:$('#flash-back'), extra:$('#flash-extra'), hard:$('#btn-hard'), good:$('#btn-good'), easy:$('#btn-easy')},
-    quiz:{q:$('#quiz-q'), opts:$('#quiz-opts')},
-    dig:{q:$('#dig-q'), a:$('#dig-a'), check:$('#dig-check'), fb:$('#dig-feedback')},
-    ui:{flash:$('#ui-flash'), quiz:$('#ui-quiz'), dig:$('#ui-dig')}
-  };
-
-  function today(){ return new Date().toISOString().slice(0,10); }
-  function daysFromNow(d){
-    const x=new Date();
-    x.setDate(x.getDate()+d);
-    return x.toISOString().slice(0,10);
+  function show(view){
+    VIEWS.forEach(v => $('#view-'+v).classList.toggle('active', v===view));
   }
-  function isDue(word){ return !word.nextDue || word.nextDue<=today(); }
-  function save(){ localStorage.setItem(KEY, JSON.stringify(banco)); }
-  function load(){
+  $$('.menu-btn, .hero .primary').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const v = e.currentTarget.getAttribute('data-view');
+      if(v) show(v);
+      if(v==='teams') renderCountries();
+      if(v==='menu') updateKPIs();
+      if(v==='words') renderWords();
+    });
+  });
+
+  // ----- MOCK: Times / Países -----
+  const countries = [
+    {
+      code:'BR', flag:'🇧🇷', name:'Brasil',
+      trophies:{ league:10, cup:6, continental:3, world:2, medals:8 },
+      players:[
+        {name:'Rafael Silva', pos:'GOL', age:28, overall:84},
+        {name:'Carlos Lima', pos:'ZAG', age:31, overall:82},
+        {name:'João Pedro', pos:'MEI', age:24, overall:85},
+        {name:'Marcos Araújo', pos:'ATA', age:26, overall:88}
+      ]
+    },
+    {
+      code:'AR', flag:'🇦🇷', name:'Argentina',
+      trophies:{ league:8, cup:5, continental:4, world:3, medals:5 },
+      players:[
+        {name:'Luciano Díaz', pos:'GOL', age:27, overall:83},
+        {name:'S. Fernández', pos:'ZAG', age:29, overall:81},
+        {name:'Tomás Ibarra', pos:'MEI', age:25, overall:86},
+        {name:'E. Benítez', pos:'ATA', age:23, overall:87}
+      ]
+    },
+    {
+      code:'ES', flag:'🇪🇸', name:'Espanha',
+      trophies:{ league:7, cup:6, continental:3, world:1, medals:7 },
+      players:[
+        {name:'Álvaro Ruiz', pos:'GOL', age:30, overall:82},
+        {name:'P. Martín', pos:'ZAG', age:28, overall:84},
+        {name:'Iñigo Soto', pos:'MEI', age:24, overall:85},
+        {name:'D. Moreno', pos:'ATA', age:27, overall:86}
+      ]
+    }
+  ];
+  let currentCountry = null;
+
+  // ----- MENU KPIs -----
+  function updateKPIs(){
+    const teams = countries.length;
+    const players = countries.reduce((n,c)=> n + c.players.length, 0);
+    const words = loadWords().length;
+    $('#kpi-teams').textContent = teams;
+    $('#kpi-players').textContent = players;
+    $('#kpi-words').textContent = words;
+  }
+  updateKPIs();
+
+  // ----- VIEW: PLAY (stub campeonatos) -----
+  const cmpList = [];
+  $('#cmp-criar')?.addEventListener('click', ()=>{
+    const nome = $('#cmp-nome').value.trim() || 'Campeonato sem nome';
+    const times = Math.max(2, Math.min(64, +$('#cmp-times').value||8));
+    const formato = $('#cmp-formato').value;
+    const novo = { id: crypto.randomUUID?.() || String(Date.now()), nome, times, formato, createdAt: new Date().toISOString() };
+    cmpList.push(novo);
+    $('#cmp-feedback').textContent = `Criado: ${nome} (${times} times • ${formato}).`;
+    renderCmpList();
+  });
+  function renderCmpList(){
+    const ul = $('#cmp-list'); ul.innerHTML = '';
+    if(!cmpList.length){ ul.innerHTML = '<li class="muted">Nenhum campeonato salvo (stub).</li>'; return; }
+    cmpList.forEach(c=>{
+      const li = document.createElement('li');
+      li.textContent = `${c.nome} — ${c.times} times • ${c.formato}`;
+      ul.appendChild(li);
+    });
+  }
+  renderCmpList();
+
+  // ----- VIEW: TEAMS -----
+  function renderCountries(){
+    const list = $('#country-list');
+    list.innerHTML = '';
+    countries.forEach(c=>{
+      const item = document.createElement('div');
+      item.className = 'country-item';
+      item.innerHTML = `<span>${c.flag}</span><span>${c.name}</span>`;
+      item.addEventListener('click', ()=>{
+        currentCountry = c;
+        $$('.country-item').forEach(x=>x.classList.remove('active'));
+        item.classList.add('active');
+        renderTeamPanel();
+      });
+      list.appendChild(item);
+    });
+    if(!currentCountry && countries[0]){ // pré-seleciona
+      currentCountry = countries[0];
+      setTimeout(()=> list.firstChild?.classList.add('active'), 0);
+      renderTeamPanel();
+    }
+  }
+
+  function renderTeamPanel(){
+    if(!currentCountry) return;
+    $('#team-flag').textContent = currentCountry.flag;
+    $('#team-name').textContent = currentCountry.name;
+    $('#team-meta').textContent = `Código: ${currentCountry.code}`;
+
+    const t = currentCountry.trophies || {};
+    const row = $('#trophy-row'); row.innerHTML = '';
+    const parts = [
+      {icon:'🏆', label:'Liga', val:t.league||0},
+      {icon:'🥇', label:'Copa', val:t.cup||0},
+      {icon:'🌍', label:'Continental', val:t.continental||0},
+      {icon:'🌎', label:'Mundial', val:t.world||0},
+      {icon:'🎖️', label:'Medalhas', val:t.medals||0},
+    ];
+    parts.forEach(p=>{
+      const div = document.createElement('div');
+      div.className='trophy';
+      div.innerHTML = `<span>${p.icon}</span><span>${p.label}</span><span class="count">${p.val}</span>`;
+      row.appendChild(div);
+    });
+
+    renderPlayers();
+  }
+
+  $('#player-search')?.addEventListener('input', renderPlayers);
+  function renderPlayers(){
+    const q = ($('#player-search')?.value || '').toLowerCase().trim();
+    const tbody = $('#player-tbody'); tbody.innerHTML = '';
+    if(!currentCountry){ return; }
+    currentCountry.players
+      .filter(p => !q || p.name.toLowerCase().includes(q) || p.pos.toLowerCase().includes(q))
+      .forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.name}</td>
+          <td>${p.pos}</td>
+          <td>${p.age}</td>
+          <td>${p.overall}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+  }
+
+  // ----- VIEW: WORDS -----
+  const WORDS_KEY = 'estudos_words_bank_v1';
+  function loadWords(){
     try{
-      const raw=localStorage.getItem(KEY);
+      const raw = localStorage.getItem(WORDS_KEY);
       if(raw) return JSON.parse(raw);
     }catch(e){}
-    // seed com 6 exemplos
+    // seed inicial
     return [
-      mk('although','embora','C1','Although it was late, he kept working.','Conjunção contrastiva'),
-      mk('dog','cachorro','A1','The dog is friendly.',''),
-      mk('accountability','responsabilização','C2','We value accountability.','política corporativa'),
-      mk('sturdy','robusto','B2','A sturdy table.','sin.: solid'),
-      mk('albeit','embora (formal)','C2','He was making progress, albeit slowly.','sin.: although'),
-      mk('wholesome','saudável','B2','A wholesome meal.','')
+      {id:id(), term:'although', level:'C1', def:'used to say something that contrasts with another',},
+      {id:id(), term:'dog', level:'A1', def:'a common animal kept by people for pleasure or to guard places',},
+      {id:id(), term:'accountability', level:'C2', def:'the fact of being responsible for your decisions or actions',},
     ];
   }
-  function mk(termo,traducao,level='NI',exemplo='',notas=''){
-    const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id_'+Math.random().toString(36).slice(2));
-    return {id, termo, traducao, level, exemplo, notas, ease:2.5, interval:0, nextDue:today(), streak:0, status:'new'};
-  }
+  function saveWords(arr){ localStorage.setItem(WORDS_KEY, JSON.stringify(arr)); }
+  let words = loadWords();
 
-  /* ---------- Render Lista ---------- */
-  function render(){
-    const q = (el.filter.search.value||'').toLowerCase().trim();
-    const lvl = el.filter.level.value; const st = el.filter.status.value;
-    const data = banco
-      .filter(w =>
-        (lvl? w.level===lvl : true) &&
-        (st? (st==='due'? isDue(w) : w.status===st) : true) &&
-        (!q || w.termo.toLowerCase().includes(q) || w.traducao.toLowerCase().includes(q) || (w.notas||'').toLowerCase().includes(q))
-      )
-      .sort((a,b)=> (a.nextDue||'').localeCompare(b.nextDue||''));
-
-    el.tbody.innerHTML = data.map(w=>{
-      const due=isDue(w); const dueTxt= w.nextDue ? w.nextDue : '—';
-      return `<tr>
-        <td><b>${esc(w.termo)}</b><div class="small muted">${esc(w.exemplo||'')}</div></td>
-        <td>${esc(w.traducao)}</td>
-        <td><span class="tag">${w.level}</span></td>
-        <td>${tagStatus(w)}</td>
-        <td class="due">${due? 'Hoje' : dueTxt}</td>
-        <td class="right">
-          <button data-act="now" data-id="${w.id}" class="ghost">Estudar</button>
-          <button data-act="edit" data-id="${w.id}">Editar</button>
-          <button data-act="del" data-id="${w.id}" style="color:#fca5a5;border-color:#fca5a5">Excluir</button>
-        </td>
-      </tr>`;
-    }).join('');
-
-    el.badgeCount.textContent = `${banco.length} itens`;
-    el.badgeDue.textContent = `${banco.filter(isDue).length} devidos hoje`;
-
-    // actions
-    el.tbody.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',onListAction));
-
-    // KPIs
-    const avgEase = (banco.reduce((s,w)=>s+w.ease,0)/(banco.length||1)).toFixed(2);
-    el.kpi.ease.textContent = avgEase;
-  }
-  function tagStatus(w){
-    const map={new:'Novos', learning:'Aprendendo', review:'Revisão'}; const lbl=map[w.status]||w.status;
-    return `<span class="tag">${lbl}</span> <span class="small muted">(${w.streak}✓)</span>`;
-  }
-  function esc(s){return (s||'').replace(/[&<>\"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
-
-  /* ---------- CRUD ---------- */
-  $('#btn-add').addEventListener('click', ()=>{
-    const t=el.inp.termo.value.trim(); const tr=el.inp.trad.value.trim();
-    if(!t||!tr){alert('Informe termo e tradução'); return}
-    banco.push(mk(t,tr,el.inp.level.value,el.inp.ex.value.trim(),el.inp.notas.value.trim()));
-    save(); clearInputs(); render();
+  $('#w-add').addEventListener('click', ()=>{
+    const term = $('#w-term').value.trim();
+    const level = $('#w-level').value;
+    const def = $('#w-def').value.trim();
+    if(!term || !def){ alert('Informe termo e descrição.'); return; }
+    words.push({id:id(), term, level, def});
+    saveWords(words);
+    $('#w-term').value=''; $('#w-def').value='';
+    renderWords();
+    updateKPIs();
   });
-  function clearInputs(){
-    for(const k in el.inp){ el.inp[k].value = (k==='level'?'NI':''); }
-  }
 
-  function onListAction(ev){
-    const id=ev.currentTarget.getAttribute('data-id'); const act=ev.currentTarget.getAttribute('data-act');
-    const ix=banco.findIndex(w=>w.id===id); if(ix<0) return;
-    if(act==='del'){
-      if(confirm('Excluir item?')){ banco.splice(ix,1); save(); render(); }
-    }
-    if(act==='edit'){
-      const w=banco[ix];
-      const termo=prompt('Termo', w.termo); if(termo==null) return;
-      const traducao=prompt('Tradução', w.traducao); if(traducao==null) return;
-      const level=(prompt('Nível (A1–C2/NI)', w.level)||w.level).toUpperCase();
-      const exemplo=prompt('Exemplo', w.exemplo||'')||'';
-      const notas=prompt('Notas', w.notas||'')||'';
-      banco[ix]={...w, termo, traducao, level, exemplo, notas}; save(); render();
-    }
-    if(act==='now'){
-      startSession(session.mode, [banco[ix]]);
-    }
-  }
-
-  /* ---------- Import/Export/Reset ---------- */
-  el.export.addEventListener('click', ()=>{
-    const blob=new Blob([JSON.stringify(banco,null,2)], {type:'application/json'});
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='estudos_export.json'; a.click(); URL.revokeObjectURL(a.href);
+  $('#w-export').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(words,null,2)], {type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='words_export.json';
+    a.click(); URL.revokeObjectURL(a.href);
   });
-  el.importer.addEventListener('change', async (e)=>{
-    const file=e.target.files[0]; if(!file) return;
-    const txt=await file.text();
+
+  $('#w-import').addEventListener('change', async (e)=>{
+    const f = e.target.files[0]; if(!f) return;
     try{
-      const arr=JSON.parse(txt); if(!Array.isArray(arr)) throw 0;
-      const mapped=arr.map(x=> mk(
-        x.termo||x.term||'',
-        x.traducao||x.translation||'',
-        (x.level||x.cefr||'NI').toUpperCase(),
-        x.exemplo||x.example||'',
-        x.notas||x.notes||''
-      )).filter(w=>w.termo && w.traducao);
-      banco=banco.concat(mapped); save(); render(); alert(`Importados ${mapped.length} itens.`);
+      const txt = await f.text();
+      const arr = JSON.parse(txt);
+      if(!Array.isArray(arr)) throw 0;
+      // aceita chaves {term/termo, level/cefr, def/descricao}
+      const mapped = arr.map(x=>({
+        id:id(),
+        term: x.term || x.termo || '',
+        level: (x.level || x.cefr || 'NI').toUpperCase(),
+        def: x.def || x.descricao || x.description || ''
+      })).filter(x=>x.term && x.def);
+      words = words.concat(mapped);
+      saveWords(words);
+      renderWords();
+      updateKPIs();
+      alert(`Importados ${mapped.length} itens.`);
     }catch{ alert('JSON inválido.'); }
     e.target.value='';
   });
-  el.reset.addEventListener('click',()=>{ if(confirm('Apagar TODOS os dados?')){ banco=[]; save(); render(); }});
 
-  /* ---------- Filtros ---------- */
-  [el.filter.level, el.filter.status, el.filter.search].forEach(x=>x.addEventListener('input', render));
+  $('#w-filter-level').addEventListener('input', renderWords);
+  $('#w-search').addEventListener('input', renderWords);
 
-  /* ---------- Tabs de modo ---------- */
-  el.tabs.addEventListener('click', (e)=>{
-    const t=e.target.closest('.tab'); if(!t) return;
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    setMode(t.dataset.mode);
-  });
-  function setMode(m){ session.mode=m; showUI(m); }
-  function showUI(m){
-    el.ui.flash.classList.toggle('hidden', m!=='flash');
-    el.ui.quiz.classList.toggle('hidden', m!=='quiz');
-    el.ui.dig.classList.toggle('hidden', m!=='digitar');
-  }
+  function renderWords(){
+    const lvl = $('#w-filter-level').value;
+    const q = ($('#w-search').value || '').toLowerCase().trim();
+    const tbody = $('#w-tbody'); tbody.innerHTML = '';
+    words
+      .filter(w => (lvl? w.level===lvl : true) && (!q || w.term.toLowerCase().includes(q) || w.def.toLowerCase().includes(q)))
+      .forEach(w=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${esc(w.term)}</b></td>
+          <td><span class="pill">${w.level}</span></td>
+          <td>${esc(w.def)}</td>
+          <td class="right">
+            <button class="ghost" data-act="edit" data-id="${w.id}">Editar</button>
+            <button class="ghost" data-act="del" data-id="${w.id}" style="border-color:#ef4444;color:#ef9999">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-  /* ---------- Sessão ---------- */
-  el.newSession.addEventListener('click', ()=>{
-    const pool = banco.filter(w=> el.chkDue.checked ? isDue(w) : true);
-    startSession(session.mode, pool);
-  });
-
-  function startSession(mode, pool){
-    if(!pool.length){ alert('Sem itens no conjunto selecionado.'); return; }
-    let q = [...pool];
-    if(el.chkRand && el.chkRand.checked) q = shuffle(q);
-    session.queue=q; session.idx=0; session.hits=0; session.miss=0;
-    addSessionCount();
-    if(mode==='flash') setupFlash();
-    if(mode==='quiz') setupQuiz();
-    if(mode==='digitar') setupDig();
-    updateKPIs();
+    // ações
+    tbody.querySelectorAll('button').forEach(b=> b.addEventListener('click', onWordAction));
   }
 
-  function updateKPIs(){ el.kpi.hit.textContent=session.hits; el.kpi.miss.textContent=session.miss; }
-  function addSessionCount(){
-    const k='estudos_sessions_count';
-    const n=+(localStorage.getItem(k)||0)+1; localStorage.setItem(k,n);
-    el.kpi.sessions.textContent=n;
-  }
-
-  /* ---------- Flashcards ---------- */
-  let flipped=false; let current=null;
-  function setupFlash(){
-    nextFlash();
-    el.flash.card.onclick=()=>flip();
-    el.flash.hard.onclick=()=>grade(1);
-    el.flash.good.onclick=()=>grade(3);
-    el.flash.easy.onclick=()=>grade(4);
-  }
-  function nextFlash(){
-    current=session.queue[session.idx%session.queue.length];
-    renderFlash(current,false);
-  }
-  function renderFlash(w,show){
-    flipped=!!show;
-    el.flash.front.textContent=w.termo;
-    el.flash.back.textContent= show? w.traducao : 'Clique para revelar';
-    el.flash.extra.textContent = show? (w.exemplo||w.notas||'') : '';
-  }
-  function flip(){ if(!current) return; flipped=!flipped; renderFlash(current,flipped); }
-  function grade(qual){
-    if(!current) return;
-    const ok = (qual>=3);
-    if(ok) session.hits++; else session.miss++;
-    applySRS(current, qual);
-    session.idx++; if(session.idx>=session.queue.length) session.idx=0;
-    save(); render(); updateKPIs(); nextFlash();
-  }
-
-  /* ---------- Quiz ---------- */
-  function setupQuiz(){
-    if(session.queue.length<2){ alert('Adicione mais itens para usar o quiz.'); return; }
-    quizNext();
-  }
-  function quizNext(){
-    current = session.queue[session.idx%session.queue.length];
-    el.quiz.q.textContent=current.termo;
-    const opts=makeQuizOptions(current); el.quiz.opts.innerHTML='';
-    opts.forEach(txt=>{
-      const b=document.createElement('button');
-      b.textContent=txt;
-      b.onclick=()=>quizPick(txt);
-      el.quiz.opts.appendChild(b);
-    });
-  }
-  function makeQuizOptions(correct){
-    const pool = shuffle(banco.filter(w=>w.id!==correct.id)).slice(0,3).map(w=>w.traducao);
-    const arr=[...pool, correct.traducao]; return shuffle(arr);
-  }
-  function quizPick(txt){
-    const ok = (txt===current.traducao);
-    applySRS(current, ok?3:1);
-    if(ok) session.hits++; else session.miss++;
-    session.idx++; save(); render(); updateKPIs(); quizNext();
-  }
-
-  /* ---------- Digitação ---------- */
-  function setupDig(){ current = session.queue[0]; renderDig(current); }
-  function renderDig(w){
-    el.dig.q.textContent=w.termo;
-    el.dig.a.value='';
-    el.dig.fb.textContent='';
-  }
-  el.dig.check.addEventListener('click', ()=>{
-    if(!current) return;
-    const ans=el.dig.a.value.trim().toLowerCase();
-    const target=current.traducao.trim().toLowerCase();
-    const ok = ans===target;
-    el.dig.fb.textContent = ok? '✔ Correto!' : `✘ Correto: ${current.traducao}`;
-    if(ok) session.hits++; else session.miss++;
-    applySRS(current, ok?3:1);
-    session.idx++;
-    current=session.queue[session.idx%session.queue.length];
-    save(); render(); updateKPIs(); renderDig(current);
-  });
-
-  /* ---------- SRS (SM-2 lite) ---------- */
-  function applySRS(w, grade){
-    // grade: 1=hard/erro, 3=good, 4=easy
-    const q=grade;
-    if(q<3){
-      w.streak=0;
-      w.ease=Math.max(1.3, w.ease-0.2);
-      w.interval = 0.5; // meia-diária ~ amanhã
-    }else{
-      w.streak=(w.streak||0)+1;
-      w.ease = Math.min(3.0, w.ease + (q===4?0.15:0.05));
-      if(w.interval<1) w.interval=1; else w.interval = Math.round(w.interval * w.ease);
+  function onWordAction(e){
+    const id = e.currentTarget.getAttribute('data-id');
+    const act = e.currentTarget.getAttribute('data-act');
+    const ix = words.findIndex(w=>w.id===id); if(ix<0) return;
+    if(act==='del'){
+      if(confirm('Excluir palavra?')){ words.splice(ix,1); saveWords(words); renderWords(); updateKPIs(); }
+    }else if(act==='edit'){
+      const w = words[ix];
+      const term = prompt('Termo', w.term); if(term==null) return;
+      const level = (prompt('Nível (A1–C2/NI)', w.level)||w.level).toUpperCase();
+      const def = prompt('Descrição/definição', w.def)||w.def;
+      words[ix] = {...w, term, level, def};
+      saveWords(words); renderWords();
     }
-    const days = Math.max(1, Math.round(w.interval));
-    w.nextDue = daysFromNow(days);
-    w.status = w.streak===0? 'learning' : 'review';
   }
 
-  /* ---------- Helpers ---------- */
-  function shuffle(a){
-    for(let i=a.length-1;i>0;i--){
-      const j=Math.floor(Math.random()* (i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
-  }
+  // ----- Utils -----
+  function id(){ return crypto.randomUUID?.() || ('id_'+Math.random().toString(36).slice(2)); }
+  function esc(s){ return (s||'').replace(/[&<>\"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
 
-  // Inicialização
-  render();
-  el.kpi.sessions.textContent = +(localStorage.getItem('estudos_sessions_count')||0);
+  // Inicial
+  show('menu');
+  renderCountries();   // pré-render para primeira visita
+  renderWords();
 
 })();
