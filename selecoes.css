@@ -1,0 +1,44 @@
+/* selecoes.css — layout mobile S23 (retrato) */
+:root{
+  --bg:#0b1222; --panel:rgba(255,255,255,.05); --line:rgba(255,255,255,.12);
+  --text:#e8f2ff; --muted:#9fb3cc; --soft:16px; --shadow:0 8px 24px rgba(0,0,0,.35);
+}
+
+#view-selecoes .card{
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--line); border-radius:var(--soft); box-shadow:var(--shadow); padding:12px;
+}
+
+.table-wrap{overflow:auto; border-radius:12px}
+.sel-table{width:100%; border-collapse:separate; border-spacing:0 6px; min-width:720px}
+.sel-table thead th{
+  text-align:left; font-size:.9rem; color:var(--muted); padding:6px 10px; white-space:nowrap;
+  user-select:none; cursor:pointer;
+}
+.sel-table thead th.col-flag{cursor:default}
+.sel-table tbody td{padding:10px; background:#0f172a; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.sel-table tbody tr{transition:filter .12s, transform .06s}
+.sel-table tbody tr:hover{filter:brightness(1.05)}
+.sel-table .right{text-align:right}
+.sel-table img.flag{width:28px;height:20px;object-fit:cover;border-radius:3px; display:block}
+
+.bottom-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px}
+@media (min-width: 820px){ .bottom-grid{grid-template-columns:1.2fr .8fr} }
+
+.sel-hero{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center}
+.sel-hero .hero-left{display:flex; align-items:center; gap:10px}
+.sel-hero .flag{width:42px;height:30px; border-radius:4px; object-fit:cover}
+
+.medals h4{margin:0 0 8px}
+.medals-box{display:grid; gap:10px}
+.medals-row{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:10px; border:1px solid var(--line); border-radius:12px; background:#0c1224;
+}
+.medals-row .title{font-weight:700}
+.badges{display:flex; gap:6px}
+.badge{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
+  background:#0b1222; border:1px solid var(--line); font-weight:700
+}
+.badge small{opacity:.85}
