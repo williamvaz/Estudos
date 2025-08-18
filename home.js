@@ -62,7 +62,6 @@
     $('#kpi-players').textContent = players;
     $('#kpi-words').textContent = wordsCount;
   }
-  updateKPIs();
 
   // ----- VIEW: PLAY (stub campeonatos) -----
   const cmpList = [];
@@ -102,7 +101,7 @@
       });
       list.appendChild(item);
     });
-    if(!currentCountry && countries[0]){ // pré-seleciona
+    if(!currentCountry && countries[0]){ 
       currentCountry = countries[0];
       setTimeout(()=> list.firstChild?.classList.add('active'), 0);
       renderTeamPanel();
@@ -168,7 +167,7 @@
         pos: x.pos || '',
         url: x.definition_url || '',
         audio: x.voice_url || '',
-        new: true // marca como "nova"
+        new: true 
       }));
     } catch (e) {
       console.error("Erro ao carregar words.json", e);
@@ -186,17 +185,16 @@
 
   function saveWords(arr){ localStorage.setItem(WORDS_KEY, JSON.stringify(arr)); }
 
-  let words = loadWords();
+  let words = [];
 
-  if (words.length === 0) {
-    loadWordsFromFile().then(arr => {
-      if (arr.length) {
-        words = arr;
-        saveWords(words);
-        renderWords();
-        updateKPIs();
-      }
-    });
+  async function initWords(){
+    words = loadWords();
+    if(words.length === 0){
+      words = await loadWordsFromFile();
+      saveWords(words);
+    }
+    renderWords();
+    updateKPIs();
   }
 
   function today(){ return new Date().toISOString().slice(0,10); }
@@ -204,7 +202,7 @@
     if(!w.ease) w.ease=2.5;
     if(!w.interval) w.interval=0;
     if(!w.streak) w.streak=0;
-    if(!w.nextDue) w.nextDue=null; // só vira data quando revisado
+    if(!w.nextDue) w.nextDue=null; 
     return w;
   }
   function isDue(w){ return !w.nextDue || w.nextDue <= today(); }
@@ -320,6 +318,6 @@
   // Inicial
   show('menu');
   renderCountries();
-  renderWords();
+  initWords();
 
 })();
