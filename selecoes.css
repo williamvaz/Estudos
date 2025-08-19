@@ -64,3 +64,27 @@ a:hover {
   color: #ddd;              /* opcional: muda levemente no hover */
   text-decoration: underline; /* se quiser sublinhar no hover */
 }
+
+/*-------------------------------------------------- */
+
+.country-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 250px;
+  background: #1a2d1f;
+  border: 1px solid #284b34;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  color: #fff;
+}
+
+.country-box .flag-box {
+  width: 48px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-top: 10px;
+}

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,20 +8,79 @@
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="selecoes.css">
   <style>
-    .container { max-width: 980px; margin: 0 auto; padding: 12px; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    thead th { text-align: left; font-weight: 700; padding: 10px 12px; }
-    tbody td { padding: 10px 12px; border-top: 1px solid rgba(255,255,255,.08); }
-    .right { text-align: right; }
-    .flag { width: 32px; height: 22px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset; }
-    .callout { background:#1a2d1f; border:1px solid #284b34; padding:10px 12px; border-radius:12px; margin:12px 0; }
-    .warn { background:#391a1a; border-color:#6a3333; color:#ffdede; }
-    .btn  { padding:10px 14px; border-radius:10px; background:#1f8b4c; color:#fff; border:none; cursor:pointer; }
-    .btn:active { transform: translateY(1px); }
-    .top-actions { display:flex; gap:8px; align-items:center; }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      text-align: left;
+      font-weight: 700;
+      padding: 10px 12px;
+    }
+
+    tbody td {
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .flag {
+      width: 32px;
+      height: 22px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .2) inset;
+    }
+
+    .callout {
+      background: #1a2d1f;
+      border: 1px solid #284b34;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin: 12px 0;
+    }
+
+    .warn {
+      background: #391a1a;
+      border-color: #6a3333;
+      color: #ffdede;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #1f8b4c;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
   </style>
 </head>
+
 <body class="is-mobile">
   <header class="topbar">
     <div class="brand">
@@ -54,6 +114,16 @@
     </div>
   </main>
 
+  <div id="country-box" class="country-box">
+    <h3 id="box-name">Selecione um país</h3>
+    <p><strong>Torneio:</strong> <span id="box-tournament">-</span></p>
+    <p><strong>Score:</strong> <span id="box-score">-</span></p>
+    <img id="box-flag" src="" alt="Bandeira" class="flag-box">
+  </div>
+
+
+
   <script src="selecoes.js"></script>
 </body>
+
 </html>

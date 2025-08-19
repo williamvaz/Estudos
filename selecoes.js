@@ -29,22 +29,19 @@
       1,
       9999
     );
-    // adiciona state no próprio item
     team.state = state[team.code];
   }
 
   function normalizeSelecoes(raw) {
-    return (raw || [])
-      .map((s) => {
-        const name = s.Team;
-        return {
-          code: slugify(name),
-          name,
-          flag: s.Path,
-          tournament: s.Tournament,
-        };
-      })
-      .filter((s) => s.code && s.name);
+    return (raw || []).map((s) => {
+      const name = s.Team;
+      return {
+        code: slugify(name),
+        name,
+        flag: s.Path,
+        tournament: s.Tournament,
+      };
+    }).filter((s) => s.code && s.name);
   }
 
   // JSON embutido
@@ -1163,15 +1160,16 @@
 
   const selecoes = normalizeSelecoes(rawSelecoes);
   const state = loadState();
-  selecoes.forEach((s) => ensureTeamState(state, s));
+  selecoes.forEach(s => ensureTeamState(state, s));
   saveState(state);
 
   let sortKey = "name",
-    sortDir = 1;
+      sortDir = 1;
+
   const tbody = document.getElementById("sel-tbody");
 
   function composeRow(s) {
-    return `<tr>
+    return `<tr data-code="${s.code}">
       <td><img class="flag" src="${s.flag}" alt="${s.name}" onerror="this.style.visibility='hidden'"></td>
       <td>${s.name}</td>
       <td>${s.state.score}</td>
@@ -1181,24 +1179,22 @@
   function renderTable() {
     const get = (s) =>
       sortKey === "name"
-        ? s.name
-            .normalize("NFD")
-            .replace(/\p{Diacritic}/gu, "")
-            .toLowerCase()
+        ? s.name.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
         : s.state.score;
+
     tbody.innerHTML = [...selecoes]
       .sort((a, b) => {
-        const A = get(a),
-          B = get(b);
+        const A = get(a), B = get(b);
         if (A < B) return -1 * sortDir;
         if (A > B) return 1 * sortDir;
         return 0;
       })
       .map(composeRow)
       .join("");
+
+    bindRowClick();
   }
 
-  // sort
   document.querySelectorAll("#sel-table thead th.sortable").forEach((th) => {
     th.addEventListener("click", () => {
       const key = th.getAttribute("data-sort");
@@ -1207,13 +1203,31 @@
         sortKey = key;
         sortDir = 1;
       }
-      document
-        .querySelectorAll("#sel-table thead th.sortable")
-        .forEach((x) => x.classList.remove("asc", "desc"));
+      document.querySelectorAll("#sel-table thead th.sortable")
+        .forEach(x => x.classList.remove("asc", "desc"));
       th.classList.add(sortDir === 1 ? "asc" : "desc");
       renderTable();
     });
   });
 
+  function bindRowClick() {
+    const rows = document.querySelectorAll('#sel-tbody tr');
+    rows.forEach(row => {
+      row.addEventListener('click', () => {
+        const code = row.getAttribute('data-code');
+        const data = selecoes.find(s => s.code === code);
+        if (!data) return;
+
+        document.getElementById('box-name').textContent = data.name;
+        document.getElementById('box-tournament').textContent = data.tournament;
+        document.getElementById('box-score').textContent = data.state.score;
+        const flagEl = document.getElementById('box-flag');
+        flagEl.src = data.flag;
+        flagEl.alt = data.name;
+      });
+    });
+  }
+
   renderTable();
+
 })();
