@@ -50,3 +50,17 @@ body {
 #sel-table th {
   color: white;
 }
+
+a {
+  color: #fff;              /* branco */
+  text-decoration: none;    /* tira o sublinhado */
+}
+
+a:visited {
+  color: #fff;              /* mantém branco mesmo após visitar */
+}
+
+a:hover {
+  color: #ddd;              /* opcional: muda levemente no hover */
+  text-decoration: underline; /* se quiser sublinhar no hover */
+}
