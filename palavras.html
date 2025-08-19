@@ -71,6 +71,57 @@
 
     .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
     .nowrap { white-space:nowrap; }
+
+    /* ——— Compactação geral no S23 ——— */
+html { font-size: 15px; }                /* base menor */
+@media (max-width: 390px){ html{ font-size:14px; } }
+
+.topbar h1 { font-size: 1.05rem; }       /* título menor */
+.stat-value { font-size: 1.15rem; }      /* números dos cards menores */
+.stat-label { font-size: .8rem; }
+
+/* ——— Tabela mais compacta e sem corte ——— */
+#words-table { font-size: .95rem; }
+#words-table th, #words-table td {
+  padding: 6px 8px;            /* menos padding */
+  white-space: normal;
+  word-break: break-word;
+  overflow: visible;           /* evita "comer" os controles de áudio */
+}
+
+/* Rebalanceia larguras p/ dar mais espaço ao áudio */
+#words-table th:nth-child(1), #words-table td:nth-child(1) { width: 40%; } /* Word  */
+#words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; } /* Level */
+#words-table th:nth-child(3), #words-table td:nth-child(3) { width: 20%; } /* Definition */
+#words-table th:nth-child(4), #words-table td:nth-child(4) { width: 26%; } /* Voice */
+
+/* Link compacto e com reticências se grande */
+#words-table td a {
+  display:inline-block; max-width:100%;
+  overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ——— Áudio: tamanho seguro e sempre clicável ——— */
+#words-table audio {
+  display:block;
+  width: 100%;
+  max-width: 180px;   /* antes 220px; reduz pra caber no S23 */
+  height: 32px;       /* botão de play mais confortável */
+}
+@media (min-width: 560px){
+  #words-table audio { max-width: 220px; }
+}
+
+/* Telas muito estreitas: ainda mais compacto */
+@media (max-width: 420px){
+  #words-table { font-size: .9rem; }
+  #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 44%; }
+  #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; }
+  #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 18%; }
+  #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; }
+  #words-table audio { max-width: 160px; }
+}
+
   </style>
 </head>
 <body class="is-mobile">
