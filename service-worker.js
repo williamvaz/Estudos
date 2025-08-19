@@ -1,6 +1,6 @@
 const CACHE = 'estudos-v1';
 const ASSETS = [
-  '/', '/index.html', '/styles.css', '/install-pwa.js',
+  '/', '/home.html', '/styles.css', '/install-pwa.js',
   '/manifest.webmanifest', '/Icone.webp'
 ];
 
