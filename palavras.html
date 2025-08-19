@@ -19,21 +19,28 @@
     .grid { display:grid; gap:12px; }
     .header-row { display:flex; align-items:center; gap:12px; }
     .spacer { flex:1 }
-    .pill { padding:6px 10px; border-radius:999px; background:#1a2d1f; border:1px solid #284b34; }
     .input { width: 260px; background:#0f1f15; color:#fff; border:1px solid #284b34; border-radius:10px; padding:10px 12px; }
+
+    /* --- stat cards --- */
+    .stats { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; }
+    @media (min-width: 560px) { .stats { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+    .stat { display:flex; flex-direction:column; gap:4px; padding:10px 12px;
+            border-radius:12px; background:#102618; border:1px solid #284b34; }
+    .stat-label { font-size:.85rem; opacity:.8; }
+    .stat-value { font-size:1.4rem; font-weight:700; }
 
     /* -------- tabela responsiva sem scroll horizontal -------- */
     .table-wrap { overflow-x: visible; }
 
-    #words-table {               /* [!] tabela agora é #words-table */
+    #words-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;       /* colunas obedecem as larguras abaixo */
+      table-layout: fixed;     /* colunas obedecem as larguras abaixo */
     }
     #words-table th, #words-table td {
       padding: 8px 10px;
-      white-space: normal;       /* permite quebrar linhas */
-      word-break: break-word;    /* evita estouro em URLs longas */
+      white-space: normal;     /* permite quebrar linhas */
+      word-break: break-word;  /* evita estouro em URLs longas */
     }
     /* Larguras (ajuste se quiser) */
     #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 38%; } /* Word */
@@ -61,6 +68,9 @@
       #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; }
       #words-table audio { max-width: 180px; }
     }
+
+    .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
+    .nowrap { white-space:nowrap; }
   </style>
 </head>
 <body class="is-mobile">
@@ -73,6 +83,7 @@
   </header>
 
   <main class="container grid">
+    <!-- filtros -->
     <section class="card">
       <h2 style="margin:0 0 8px">Banco de palavras</h2>
       <div class="header-row" style="margin-top:8px">
@@ -82,8 +93,30 @@
       </div>
     </section>
 
+    <!-- stats -->
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-label">Palavras em nível ≥ 1</div>
+        <div class="stat-value" id="stat-total-1plus">0</div>
+      </div>
+      <!-- espaço pra futuros cards -->
+      <div class="stat">
+        <div class="stat-label">Palavras em nível ≥ 4</div>
+        <div class="stat-value" id="stat-total-4plus">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Palavras em nível ≥ 7</div>
+        <div class="stat-value" id="stat-total-7plus">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Palavras em nível ≥ 10</div>
+        <div class="stat-value" id="stat-total-10plus">0</div>
+      </div>
+    </section>
+
+    <!-- tabela -->
     <section class="card table-wrap">
-      <table id="words-table">   <!-- [!] deu o id que o CSS espera -->
+      <table id="words-table">
         <thead>
           <tr>
             <th>Word</th>
@@ -104,11 +137,7 @@
 
     // --------- utils ----------
     const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const addDays = (date, days) => {
-      const d = new Date(date);
-      d.setDate(d.getDate() + days);
-      return d.toISOString();
-    };
+    const addDays = (date, days) => { const d = new Date(date); d.setDate(d.getDate() + days); return d.toISOString(); };
     function loadProgress() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); } catch { return {}; } }
     function saveProgress(m) { localStorage.setItem(LKEY, JSON.stringify(m)); }
 
@@ -152,12 +181,15 @@
     // --------- rendering ----------
     function renderCount() {
       const n = Object.values(PROG).filter(x => (x?.level || 0) >= 1).length;
-      const pill = document.getElementById('count-pill');
-      pill.textContent = `${n} palavra${n===1?'':'s'} no nível 1+`;
+      const el = document.getElementById('stat-total-1plus');
+      if (el) el.textContent = n.toString();
     }
+
     function renderTable(filterText = '') {
       const q = filterText.trim().toLowerCase();
       const tbody = document.getElementById('tb');
+      if (!tbody) return;
+
       const rows = WORDS
         .filter(w => (PROG[w.word]?.level || 0) >= 1)
         .filter(w => !q || w.word.toLowerCase().includes(q))
@@ -165,7 +197,7 @@
         .map(w => {
           const lvl = PROG[w.word]?.level ?? 0;
           const def = w.definition_url ? `<a href="${w.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
-          const voc = w.voice_url ? `<audio controls preload="none"><source src="${w.voice_url}" type="audio/ogg"></audio>` : '';
+          const voc = w.voice_url ? `<audio controls preload="none"><source src="${w.voice_url}"></audio>` : '';
           return `<tr>
             <td class="nowrap">${w.word}</td>
             <td class="right"><span class="badge">L${lvl}</span></td>
@@ -173,6 +205,7 @@
             <td>${voc}</td>
           </tr>`;
         }).join('');
+
       tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
     }
 
@@ -183,11 +216,13 @@
           fetch('words.json',   { cache:'no-store' }),
           fetch('memorias.json',{ cache:'no-store' })
         ]);
+
         if (wordsRes.status === 'fulfilled' && wordsRes.value.ok) {
           WORDS = normalizeWords(await wordsRes.value.json());
         } else {
           WORDS = [];
         }
+
         if (memRes.status === 'fulfilled' && memRes.value.ok) {
           DAYS_BY_LEVEL = parseMemories(await memRes.value.json());
         }
@@ -203,8 +238,8 @@
         saveProgress(PROG);
       }
 
-      renderCount();      // <- atualiza o número no pill
-      renderTable();      // <- renderiza a grade
+      renderCount();
+      renderTable();
 
       document.getElementById('search').addEventListener('input', (e) => {
         renderTable(e.target.value);
