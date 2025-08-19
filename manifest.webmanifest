@@ -1,0 +1,13 @@
+{
+  "name": "English Cup",
+  "short_name": "English Cup",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1f1212",
+  "theme_color": "#4a2a2a",
+  "scope": "/",
+  "icons": [
+    { "src": "Icone.webp", "sizes": "192x192", "type": "image/webp", "purpose": "any" },
+    { "src": "Icone.webp", "sizes": "512x512", "type": "image/webp", "purpose": "any" }
+  ]
+}

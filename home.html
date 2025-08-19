@@ -5,7 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b3b22" />
   <title>Estudos Futebol • Início</title>
+
+  <!-- Ícones -->
+  <link rel="icon" type="image/webp" href="Icone.webp" />
+  <link rel="apple-touch-icon" href="Icone.webp" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Copa English">
+
   <link rel="stylesheet" href="home.css">
+  <style>
+    /* Banner de instalação (bem simples) */
+    .install-banner{
+      position: fixed; inset: auto 0 0 0; display:none;
+      background:#12382a; color:#fff; padding:12px 16px;
+      box-shadow: 0 -6px 20px rgba(0,0,0,.3); z-index: 9999;
+      font: 600 15px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .install-banner .row{display:flex; gap:12px; align-items:center; justify-content:space-between;}
+    .install-banner button{
+      border:0; padding:10px 14px; border-radius:10px; cursor:pointer;
+    }
+    .install{background:#2fd47a; color:#092015; font-weight:700;}
+    .fechar{background:#2a2a2a; color:#fff;}
+    @media (display-mode: standalone) {
+      .install-banner{display:none !important;}
+    }
+  </style>
 </head>
 <body class="is-mobile">
   <div class="app">
@@ -16,29 +45,85 @@
       </div>
     </header>
 
-      <section class="menu-grid" aria-label="Ações principais">
-        <a class="menu-card" href="campeonato.html">
-          <div class="icon">🏆</div><div class="title">Jogar</div>
-          <div class="descr">Inicie um campeonato</div>
-        </a>
+    <section class="menu-grid" aria-label="Ações principais">
+      <a class="menu-card" href="campeonato.html">
+        <div class="icon">🏆</div><div class="title">Jogar</div>
+        <div class="descr">Inicie um campeonato</div>
+      </a>
 
-        <a class="menu-card" href="selecoes.html">
-          <div class="icon">🌍</div><div class="title">Lista de Seleções</div>
-          <div class="descr">Bandeiras, score e atributos</div>
-        </a>
+      <a class="menu-card" href="selecoes.html">
+        <div class="icon">🌍</div><div class="title">Lista de Seleções</div>
+        <div class="descr">Bandeiras, score e atributos</div>
+      </a>
 
-        <a class="menu-card" href="palavras.html">
-          <div class="icon">📚</div><div class="title">Lista de Palavras</div>
-          <div class="descr">Seu banco para revisão</div>
-        </a>
+      <a class="menu-card" href="palavras.html">
+        <div class="icon">📚</div><div class="title">Lista de Palavras</div>
+        <div class="descr">Seu banco para revisão</div>
+      </a>
 
-        <a class="menu-card" href="edicoes.html">
-          <div class="icon">📜</div><div class="title">Histórico de Edições</div>
-          <div class="descr">Anfitriões e campeões</div>
-        </a>
-      </section>
-    </main>
-
+      <a class="menu-card" href="edicoes.html">
+        <div class="icon">📜</div><div class="title">Histórico de Edições</div>
+        <div class="descr">Anfitriões e campeões</div>
+      </a>
+    </section>
   </div>
+
+  <!-- Banner de instalação -->
+  <div id="installBanner" class="install-banner" role="dialog" aria-live="polite" aria-label="Instalar aplicativo">
+    <div class="row">
+      <div>Instalar “Copa English” na tela inicial?</div>
+      <div>
+        <button class="fechar" id="btnFechar">Agora não</button>
+        <button class="install" id="btnInstalar">Instalar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Registra o Service Worker (necessário para PWA)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    }
+
+    // Lida com o prompt de instalação
+    let deferredPrompt = null;
+    const banner = document.getElementById('installBanner');
+    const btnInstalar = document.getElementById('btnInstalar');
+    const btnFechar = document.getElementById('btnFechar');
+
+    // Mostra o banner só em mobile e quando o navegador permitir instalar
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Evita mostrar de novo toda hora
+      const jaMostrado = localStorage.getItem('pwaPromptMostrado') === '1';
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (!jaMostrado && isMobile && !isStandalone) {
+        banner.style.display = 'block';
+      }
+    });
+
+    btnInstalar?.addEventListener('click', async () => {
+      localStorage.setItem('pwaPromptMostrado', '1');
+      banner.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        try {
+          const choice = await deferredPrompt.userChoice;
+          // opcional: console.log('User choice', choice.outcome);
+        } finally {
+          deferredPrompt = null;
+        }
+      }
+    });
+
+    btnFechar?.addEventListener('click', () => {
+      localStorage.setItem('pwaPromptMostrado', '1');
+      banner.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
