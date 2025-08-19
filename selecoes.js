@@ -878,8 +878,8 @@
     },
     {
       Tournament: "CAF",
-      Team: "Quénia",
-      Path: "Flags/Quénia.jpg",
+      Team: "Quênia",
+      Path: "Flags/Quênia.jpg",
     },
     {
       Tournament: "AFC",
