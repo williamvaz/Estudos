@@ -1,30 +1,346 @@
 <!doctype html>
 <html lang="pt-BR">
-
-  <!-- Ícones -->
-  <link rel="icon" type="image/webp" href="Icone.webp" />
-  <link rel="apple-touch-icon" href="Icone.webp" />
-  
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Estudos Futebol • Campeonato</title>
-  <link rel="stylesheet" href="home.css">
+<meta charset="utf-8" />
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>Revisão de Palavras • Pré‑Jogo</title>
+<style>
+  :root{ color-scheme:dark; --bg:#0e1b13; --panel:#112417; --line:#284b34; --mut:#b7c4bc; --txt:#fff; --pill:#173b26; }
+  *{ box-sizing:border-box }
+  body{
+    margin:0; background:
+      repeating-linear-gradient(90deg,#0f2a1b, #163d27 80px, #0f2a1b 160px),
+      var(--bg);
+    color:var(--txt); font:400 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+  }
+  a{ color:#fff }
+  .container{ max-width:900px; margin:0 auto; padding:12px }
+  .card{ background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px }
+  .topbar .brand{ display:flex; align-items:center; gap:10px; padding:10px }
+  h1{ font-size:18px; margin:0 }
+  h2{ font-size:16px; margin:0 0 8px }
+  .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+  .flex{ display:flex; gap:10px }
+  .grow{ flex:1 }
+  .muted{ color:var(--mut) }
+  .pill{ padding:6px 10px; border-radius:999px; background:var(--pill); border:1px solid var(--line); white-space:nowrap }
+  .grid{ display:grid; gap:12px }
+  .mini{ font-size:12px; opacity:.85 }
+  .kpi{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px }
+  .kpi .k{ background:rgba(0,0,0,.16); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:10px }
+  .k .t{ font-size:12px; color:var(--mut) }
+  .k .v{ font-size:20px; font-weight:700 }
+  .ctrl{ background:#0f1f15; border:1px solid var(--line); border-radius:10px; padding:8px 10px; color:#fff; min-width:0 }
+  .btn{ background:#1b5135; border:1px solid #2f7a53; border-radius:10px; padding:10px 12px; color:#fff; font-weight:600; cursor:pointer }
+  .btn:disabled{ opacity:.5; cursor:not-allowed }
+  .btn.secondary{ background:#29343a; border-color:#3a4a50 }
+  .card.word{
+    display:grid; gap:8px;
+    grid-template-columns: 1fr;
+  }
+  .word-main{ display:flex; align-items:center; justify-content:space-between; gap:10px }
+  .word-txt{ font-size:22px; font-weight:700 }
+  .badges{ display:flex; gap:8px; align-items:center }
+  .badge{ padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); font-size:12px }
+  .actions{ display:flex; gap:10px }
+  audio{ width:100%; max-width:420px; height:32px }
+  .table{ width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden }
+  .table th, .table td{ padding:8px 10px; border-top:1px solid rgba(255,255,255,.08); text-align:left; vertical-align:top }
+  .table th{ background:rgba(255,255,255,.05); font-weight:700 }
+  .center{ text-align:center }
+  .right{ text-align:right }
+  .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace }
+  @media (max-width:420px){
+    body{ font-size:13px }
+    .word-txt{ font-size:20px }
+    audio{ height:30px }
+  }
+</style>
 </head>
-<body class="is-mobile">
-  <header class="topbar">
-    <div class="brand">
-      <span class="ball">🏆</span>
-      <h1>Campeonato</h1>
-      <a class="back small" href="home.html" style="margin-left:auto">← Início</a>
-    </div>
-  </header>
+<body>
+<header class="topbar">
+  <div class="brand card">
+    <span style="font-size:20px">🎯</span>
+    <h1>Revisão de Palavras (Pré‑Jogo)</h1>
+    <span class="grow"></span>
+    <a class="mini" href="home.html">← Início</a>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Configurar campeonato</h2>
-      <p class="muted">Conteúdo a implementar.</p>
-    </section>
-  </main>
+<main class="container grid">
+
+  <section class="card">
+    <h2>Sessão</h2>
+    <div class="row" style="margin-top:6px">
+      <label class="mini">Inteligência
+        <input id="inp-int" class="ctrl" type="range" min="1" max="10" step="1" value="5"
+               oninput="document.getElementById('intVal').textContent=this.value">
+      </label>
+      <span id="intVal" class="pill">5</span>
+
+      <label class="mini">Entrosamento
+        <input id="inp-ent" class="ctrl" type="range" min="0" max="100" step="5" value="30"
+               oninput="document.getElementById('entVal').textContent=this.value">
+      </label>
+      <span id="entVal" class="pill">30</span>
+
+      <button id="btStart" class="btn">Começar revisão</button>
+      <span class="grow"></span>
+      <span class="pill mini">Prontas p/ revisão: <b id="dueCount">0</b></span>
+      <span class="pill mini">Em nível ≥ 1: <b id="lvlCount">0</b></span>
+    </div>
+  </section>
+
+  <section id="panel-review" class="card word" style="display:none">
+    <div class="word-main">
+      <div>
+        <div class="word-txt" id="wText">–</div>
+        <div class="mini muted"><a id="wDef" href="#" target="_blank" rel="noopener">definição</a></div>
+      </div>
+      <div class="badges">
+        <span class="badge" id="wCefr">CEFR</span>
+        <span class="badge">Nível <b id="wLevel">0</b></span>
+        <span class="badge mini">Restantes: <b id="wLeft">0</b></span>
+      </div>
+    </div>
+    <audio id="wAudio" controls preload="none"></audio>
+    <div class="actions">
+      <button id="btDontKnow" class="btn secondary">Não sei</button>
+      <button id="btKnow" class="btn">Sei</button>
+      <span class="grow"></span>
+      <button id="btEnd" class="btn secondary">Encerrar</button>
+    </div>
+  </section>
+
+  <section id="panel-summary" class="card" style="display:none">
+    <h2>Resumo</h2>
+    <p class="muted">Acertos: <b id="sumHit">0</b> • Erros: <b id="sumMiss">0</b></p>
+    <table class="table" id="sumTable">
+      <thead><tr><th>Word</th><th>Nível antes</th><th>Ação</th><th>Nível agora</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="row" style="margin-top:10px">
+      <a class="btn secondary" href="home.html">Voltar ao menu</a>
+      <button class="btn" onclick="restart()">Jogar outra (nova sessão)</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ---------------- config / storage --------------- */
+const LKEY = 'word_levels_v2'; // { [word]: { level:number, due:stringISO } }
+function loadProgress(){ try{ return JSON.parse(localStorage.getItem(LKEY)||'{}'); }catch{ return {}; } }
+function saveProgress(map){ localStorage.setItem(LKEY, JSON.stringify(map)); }
+
+/* ---------------- helpers --------------- */
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+const nowISO = () => new Date().toISOString();
+function addDaysISO(base, d){
+  const t = new Date(base);
+  t.setTime(t.getTime() + d*24*60*60*1000);
+  return t.toISOString();
+}
+// CEFR ordem p/ filtrar por “inteligência”
+const CEFR_ORDER = ['a1','a2','b1','b2','c1','c2'];
+
+/* words.json → { word, cefr, definition_url, voice_url } */
+function normalizeWords(raw){
+  return (raw||[]).map(w => ({
+    word: String(w.word||'').trim(),
+    cefr: String(w.level||'').toLowerCase(),
+    definition_url: w.definition_url||'',
+    voice_url: w.voice_url||''
+  })).filter(w => w.word);
+}
+
+/* memorias.json (seu formato): [{ "Nivel 0":0, "Nivel 1":0.01, ... }] */
+function parseMemories(raw){
+  const m = {};
+  try{
+    const obj = Array.isArray(raw) ? raw[0] : raw;
+    Object.keys(obj||{}).forEach(k=>{
+      const m1 = k.match(/nivel\s*(\d+)/i);
+      if(m1){ m[Number(m1[1])] = Number(obj[k]); }
+    });
+  }catch{}
+  // defaults mínimos se algo faltar
+  if(!m[1]) m[1]=0.01;
+  if(!m[2]) m[2]=1;
+  return m;
+}
+
+/* ---------------- state --------------- */
+let WORDS = [];            // catálogo
+let PROG  = {};            // progresso no localStorage
+let DAYS  = {};            // dias por nível
+let QUEUE = [];            // fila da sessão corrente
+let results = [];          // [{word, before, action, after}]
+let left = 0;
+
+/* ---------------- scheduling --------------- */
+// decide limite CEFR pela inteligência (1–10)
+// mapeamento simples: 1→a1, 3→a2, 5→b1, 7→b2, 9→c1, 10→c2
+function cefrMinFromIntelligence(intel){
+  if(intel>=10) return 'c2';
+  if(intel>=9)  return 'c1';
+  if(intel>=7)  return 'b2';
+  if(intel>=5)  return 'b1';
+  if(intel>=3)  return 'a2';
+  return 'a1';
+}
+// compara ordem CEFR
+const cefrIndex = c => Math.max(0, CEFR_ORDER.indexOf(String(c||'').toLowerCase()));
+const dueNow = (p) => (p?.level||0) >= 1 && (!p.due || new Date(p.due) <= new Date());
+
+function buildQueue(intel=5, entros=30){
+  const minCefr = cefrMinFromIntelligence(intel);
+  const minIdx  = cefrIndex(minCefr);
+  const want    = Math.max(1, Math.ceil(entros/10)); // entrosamento/10
+  // catálogo filtrado por “dificuldade” (CEFR mínimo)
+  const pool = WORDS.filter(w => cefrIndex(w.cefr) >= minIdx);
+
+  // 1) candidatos vencidos (nível ≥1 e due ≤ agora), ordena maior nível primeiro
+  const due = pool.filter(w => dueNow(PROG[w.word]))
+                  .sort((a,b) => (PROG[b.word]?.level||0) - (PROG[a.word]?.level||0));
+
+  // 2) se faltar, completa com nível 0 (ainda não estudadas)
+  let zeros = [];
+  if(due.length < want){
+    zeros = pool.filter(w => (PROG[w.word]?.level||0) === 0);
+  }
+  const q = [...due];
+  for(const w of zeros){
+    if(q.length >= want) break;
+    q.push(w);
+  }
+  // garante pelo menos alguma coisa
+  if(q.length === 0 && pool.length > 0) q.push(pool[Math.floor(Math.random()*pool.length)]);
+  return q;
+}
+
+/* ---------------- UI bindings --------------- */
+const elDue  = document.getElementById('dueCount');
+const elLvl1 = document.getElementById('lvlCount');
+const elPanelRev = document.getElementById('panel-review');
+const elPanelSum = document.getElementById('panel-summary');
+const els = {
+  wText:  document.getElementById('wText'),
+  wDef:   document.getElementById('wDef'),
+  wAudio: document.getElementById('wAudio'),
+  wCefr:  document.getElementById('wCefr'),
+  wLevel: document.getElementById('wLevel'),
+  wLeft:  document.getElementById('wLeft'),
+  sumHit: document.getElementById('sumHit'),
+  sumMiss:document.getElementById('sumMiss'),
+  sumBody:document.querySelector('#sumTable tbody'),
+};
+
+function refreshCounters(){
+  const all = Object.values(PROG);
+  const lvl1 = all.filter(p => (p?.level||0) >= 1).length;
+  const due = all.filter(p => (p?.level||0) >= 1 && dueNow(p)).length;
+  elDue.textContent  = due;
+  elLvl1.textContent = lvl1;
+}
+
+function showCard(idx){
+  const w = QUEUE[idx];
+  if(!w){ endSession(); return; }
+  els.wText.textContent = w.word;
+  els.wDef.href = w.definition_url || '#';
+  els.wAudio.src = w.voice_url || '';
+  els.wCefr.textContent = (w.cefr||'').toUpperCase();
+  els.wLevel.textContent = PROG[w.word]?.level||0;
+  left = QUEUE.length - idx;
+  els.wLeft.textContent = left;
+  // força preload do áudio sem bloquear UI
+  if(els.wAudio.src){ try{ els.wAudio.load(); }catch{} }
+}
+
+function applyAnswer(idx, know){
+  const w = QUEUE[idx];
+  const before = PROG[w.word]?.level||0;
+  let after;
+  if(know){
+    const newLevel = clamp(before+1, 1, 10);  // sobe 1 (min 1, máx 10)
+    PROG[w.word] = { level:newLevel, due: addDaysISO(nowISO(), DAYS[newLevel] ?? 1) };
+    after = newLevel;
+  }else{
+    PROG[w.word] = { level:1, due: addDaysISO(nowISO(), DAYS[1] ?? 0.01) }; // volta p/ 1
+    after = 1;
+  }
+  saveProgress(PROG);
+  results.push({ word:w.word, before, action: know?'Sei':'Não sei', after });
+  refreshCounters();
+}
+
+/* ---------------- session flow --------------- */
+let idx = 0;
+function startSession(){
+  results = [];
+  idx = 0;
+  const intel = Number(document.getElementById('inp-int').value||5);
+  const ent   = Number(document.getElementById('inp-ent').value||30);
+  QUEUE = buildQueue(intel, ent);
+  elPanelSum.style.display = 'none';
+  elPanelRev.style.display = '';
+  showCard(idx);
+}
+function nextCard(){
+  idx++;
+  if(idx >= QUEUE.length){ endSession(); }
+  else showCard(idx);
+}
+function endSession(){
+  elPanelRev.style.display = 'none';
+  // resumo
+  els.sumHit.textContent = results.filter(r=>r.action==='Sei').length;
+  els.sumMiss.textContent = results.filter(r=>r.action!=='Sei').length;
+  els.sumBody.innerHTML = results.map(r=>(
+    `<tr><td class="mono">${r.word}</td><td>${r.before}</td><td>${r.action}</td><td>${r.after}</td></tr>`
+  )).join('') || `<tr><td colspan="4" class="center muted">Sem ações nesta sessão.</td></tr>`;
+  elPanelSum.style.display = '';
+}
+function restart(){
+  refreshCounters();
+  elPanelSum.style.display='none';
+}
+
+/* ---------------- boot --------------- */
+(async function init(){
+  // pega jsons
+  try{
+    const [wRes, mRes] = await Promise.allSettled([
+      fetch('words.json',{cache:'no-store'}),
+      fetch('memorias.json',{cache:'no-store'}),
+    ]);
+    if(wRes.status==='fulfilled' && wRes.value.ok){
+      WORDS = normalizeWords(await wRes.value.json());
+    }
+    if(mRes.status==='fulfilled' && mRes.value.ok){
+      DAYS = parseMemories(await mRes.value.json());
+    }
+  }catch(e){ console.warn(e); }
+
+  // progresso salvo
+  PROG = loadProgress();
+
+  // exemplo inicial: garanta "house" pelo menos nível 1
+  if(!PROG['house'] || (PROG['house'].level||0) < 1){
+    PROG['house'] = { level:1, due:addDaysISO(nowISO(), DAYS[1] ?? 0.01) };
+    saveProgress(PROG);
+  }
+
+  refreshCounters();
+
+  // binds
+  document.getElementById('btStart').addEventListener('click', startSession);
+  document.getElementById('btEnd').addEventListener('click', endSession);
+  document.getElementById('btKnow').addEventListener('click', ()=>{ applyAnswer(idx, true); nextCard(); });
+  document.getElementById('btDontKnow').addEventListener('click', ()=>{ applyAnswer(idx, false); nextCard(); });
+})();
+</script>
 </body>
 </html>
