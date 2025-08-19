@@ -73,3 +73,17 @@ button{min-height:var(--touch); -webkit-tap-highlight-color: transparent;}
 @media (min-width:768px){
   .app{max-width:760px}
 }
+
+a {
+  color: #fff;              /* branco */
+  text-decoration: none;    /* tira o sublinhado */
+}
+
+a:visited {
+  color: #fff;              /* mantém branco mesmo após visitar */
+}
+
+a:hover {
+  color: #ddd;              /* opcional: muda levemente no hover */
+  text-decoration: underline; /* se quiser sublinhar no hover */
+}
