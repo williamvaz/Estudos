@@ -5,21 +5,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Estudos Futebol • Palavras</title>
   <link rel="stylesheet" href="home.css">
+  <style>
+    :root { color-scheme: dark; }
+    body { color: #fff; }
+    a { color: #fff; text-decoration: underline; }
+    .container { max-width: 980px; margin: 0 auto; padding: 12px; }
+    .card { background: rgba(0,0,0,.15); border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px; padding: 12px; }
+    .topbar .brand { display:flex; align-items:center; gap:10px; padding:12px; }
+    .topbar h1 { font-size: 1.25rem; margin:0; }
+    .small { font-size:.9rem; opacity:.8; }
+    .muted { opacity:.85; }
+    .grid { display:grid; gap:12px; }
+    .header-row { display:flex; align-items:center; gap:12px; }
+    .spacer { flex:1 }
+    .pill { padding:6px 10px; border-radius:999px; background:#1a2d1f; border:1px solid #284b34; }
+    .input { width: 260px; background:#0f1f15; color:#fff; border:1px solid #284b34; border-radius:10px; padding:10px 12px; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; }
+    thead th { text-align:left; padding:10px 12px; font-weight:700; }
+    tbody td { padding:10px 12px; border-top:1px solid rgba(255,255,255,.08); }
+    .right { text-align:right; }
+    .nowrap { white-space:nowrap; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
+    .hint { font-size:.95rem; opacity:.9; }
+  </style>
 </head>
 <body class="is-mobile">
   <header class="topbar">
-    <div class="brand">
-      <span class="ball">📚</span>
+    <div class="brand card">
+      <span style="font-size:20px">📚</span>
       <h1>Lista de Palavras</h1>
-      <a class="back small" href="home.html" style="margin-left:auto">← Início</a>
+      <a class="small" href="home.html" style="margin-left:auto">← Início</a>
     </div>
   </header>
 
-  <main class="container">
+  <main class="container grid">
     <section class="card">
-      <h2>Banco de palavras</h2>
-      <p class="muted">Integraremos com <code>words.json</code> e <code>memorias.json</code>.</p>
+      <h2 style="margin:0 0 8px">Banco de palavras</h2>
+      <p class="hint" id="summary">
+        Integrar com <span class="mono">words.json</span> e <span class="mono">memorias.json</span>.
+        <span class="pill" id="count-pill">Carregando…</span>
+      </p>
+      <div class="header-row" style="margin-top:8px">
+        <input id="search" class="input" type="search" placeholder="Buscar palavra (ex.: house)" />
+        <div class="spacer"></div>
+        <span class="small muted">Mostrando apenas palavras com nível ≥ 1</span>
+      </div>
+    </section>
+
+    <section class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Word</th>
+            <th class="right">Level</th>
+            <th>Definition</th>
+            <th>Voice</th>
+          </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
     </section>
   </main>
+
+  <script>
+    // --------- config / keys ----------
+    const LKEY = 'word_levels_v1'; // { [word]: { level:number, due:stringISO } }
+    // Fallback de espaçamento (dias) por nível, caso memorias.json não exista
+    const DEFAULT_DAYS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30, 6: 60 };
+
+    // --------- utils ----------
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const addDays = (date, days) => {
+      const d = new Date(date);
+      d.setDate(d.getDate() + days);
+      return d.toISOString();
+    };
+
+    function loadProgress() {
+      try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); }
+      catch { return {}; }
+    }
+    function saveProgress(m) { localStorage.setItem(LKEY, JSON.stringify(m)); }
+
+    function normalizeWords(raw) {
+      // words.json: { word, level (A1/B2 etc), pos, definition_url, voice_url }
+      return (raw || []).map(w => ({
+        word: String(w.word || '').trim(),
+        cefr: String(w.level || '').toLowerCase(), // a1, b2...
+        definition_url: w.definition_url || '',
+        voice_url: w.voice_url || ''
+      })).filter(w => w.word);
+    }
+
+    function parseMemories(raw) {
+      // Aceita formatos comuns: [{level:1, days:1}], [{nivel:1,dias:1}], ou { "1":1, "2":3, ... }
+      const days = { ...DEFAULT_DAYS };
+      if (!raw) return days;
+
+      if (Array.isArray(raw)) {
+        raw.forEach(r => {
+          const lvl = Number(r.level ?? r.nivel);
+          const d   = Number(r.days  ?? r.dias);
+          if (lvl >= 1 && isFinite(d)) days[lvl] = d;
+        });
+      } else if (typeof raw === 'object') {
+        Object.keys(raw).forEach(k => {
+          const lvl = Number(k);
+          const d = Number(raw[k]);
+          if (lvl >= 1 && isFinite(d)) days[lvl] = d;
+        });
+      }
+      return days;
+    }
+
+    function setLevel(progress, daysByLevel, word, newLevel) {
+      const lvl = clamp(Number(newLevel) || 0, 0, 99);
+      if (lvl <= 0) {
+        progress[word] = { level: 0, due: null };
+      } else {
+        const offset = daysByLevel[lvl] ?? DEFAULT_DAYS[lvl] ?? 1;
+        progress[word] = { level: lvl, due: addDays(new Date(), offset) };
+      }
+    }
+
+    // --------- state ----------
+    let WORDS = [];              // words.json normalizado
+    let PROG = {};               // localStorage progress
+    let DAYS_BY_LEVEL = { ...DEFAULT_DAYS };
+
+    // --------- rendering ----------
+    function renderCount() {
+      const n = Object.values(PROG).filter(x => (x?.level || 0) >= 1).length;
+      const pill = document.getElementById('count-pill');
+      pill.textContent = `${n} palavra${n===1?'':'s'} no nível 1+`;
+    }
+
+    function renderTable(filterText = '') {
+      const q = filterText.trim().toLowerCase();
+      const tbody = document.getElementById('tb');
+
+      // junta dados (apenas nível >=1)
+      const rows = WORDS
+        .filter(w => (PROG[w.word]?.level || 0) >= 1)
+        .filter(w => !q || w.word.toLowerCase().includes(q))
+        .sort((a,b) => a.word.localeCompare(b.word))
+        .map(w => {
+          const lvl = PROG[w.word]?.level ?? 0;
+          const def = w.definition_url ? `<a href="${w.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
+          const voc = w.voice_url ? `<audio controls preload="none" style="height:28px"><source src="${w.voice_url}" type="audio/ogg"></audio>` : '';
+          return `<tr>
+            <td class="nowrap">${w.word}</td>
+            <td class="right"><span class="badge">L${lvl}</span></td>
+            <td>${def}</td>
+            <td>${voc}</td>
+          </tr>`;
+        }).join('');
+
+      tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
+    }
+
+    // --------- boot ----------
+    (async function init() {
+      // carrega JSONs
+      try {
+        const [wordsRes, memRes] = await Promise.allSettled([
+          fetch('words.json', { cache:'no-store' }),
+          fetch('memorias.json', { cache:'no-store' })
+        ]);
+
+        if (wordsRes.status === 'fulfilled' && wordsRes.value.ok) {
+          WORDS = normalizeWords(await wordsRes.value.json());
+        } else {
+          console.warn('Falha ao carregar words.json');
+          WORDS = [];
+        }
+
+        if (memRes.status === 'fulfilled' && memRes.value.ok) {
+          DAYS_BY_LEVEL = parseMemories(await memRes.value.json());
+        } else {
+          DAYS_BY_LEVEL = { ...DEFAULT_DAYS };
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      // progresso do localStorage
+      PROG = loadProgress();
+
+      // inicial: garanta "house" em nível 1
+      if (!PROG['house'] || (PROG['house'].level||0) < 1) {
+        setLevel(PROG, DAYS_BY_LEVEL, 'house', 1);
+        saveProgress(PROG);
+      }
+
+      // render inicial
+      renderCount();
+      renderTable();
+
+      // busca
+      document.getElementById('search').addEventListener('input', (e) => {
+        renderTable(e.target.value);
+      });
+    })();
+  </script>
 </body>
 </html>
