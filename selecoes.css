@@ -42,3 +42,11 @@
   background:#0b1222; border:1px solid var(--line); font-weight:700
 }
 .badge small{opacity:.85}
+
+body {
+  color: white;
+}
+#sel-table td, 
+#sel-table th {
+  color: white;
+}
