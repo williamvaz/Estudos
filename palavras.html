@@ -30,6 +30,54 @@
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
     .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
     .hint { font-size:.95rem; opacity:.9; }
+
+    /* Tabela responsiva sem scroll horizontal */
+.table-wrap { overflow-x: visible; }
+
+#words-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;          /* colunas obedecem as larguras abaixo */
+}
+
+#words-table th, #words-table td {
+  padding: 8px 10px;            /* um pouco menor pra caber mais */
+  white-space: normal;          /* permite quebrar linhas */
+  word-break: break-word;       /* evita estouro em URLs longas */
+}
+
+/* Larguras (ajuste se quiser) */
+#words-table th:nth-child(1), #words-table td:nth-child(1) { width: 38%; } /* Word */
+#words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; } /* Level */
+#words-table th:nth-child(3), #words-table td:nth-child(3) { width: 24%; } /* Definition */
+#words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; } /* Voice */
+
+/* Link da definição ocupa a célula sem estourar */
+#words-table td a {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Player de áudio reduzido pra caber em telas pequenas */
+#words-table audio {
+  width: 100%;
+  max-width: 220px;
+  height: 28px;
+}
+
+/* Ainda mais compacto em telas muito estreitas */
+@media (max-width: 420px) {
+  #words-table th, #words-table td { padding: 6px 8px; }
+  #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 42%; }
+  #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 16%; }
+  #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 22%; }
+  #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; }
+  #words-table audio { max-width: 180px; }
+}
+
   </style>
 </head>
 <body class="is-mobile">
