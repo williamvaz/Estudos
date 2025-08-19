@@ -21,63 +21,46 @@
     .spacer { flex:1 }
     .pill { padding:6px 10px; border-radius:999px; background:#1a2d1f; border:1px solid #284b34; }
     .input { width: 260px; background:#0f1f15; color:#fff; border:1px solid #284b34; border-radius:10px; padding:10px 12px; }
-    .table-wrap { overflow-x:auto; }
-    table { width:100%; border-collapse:collapse; }
-    thead th { text-align:left; padding:10px 12px; font-weight:700; }
-    tbody td { padding:10px 12px; border-top:1px solid rgba(255,255,255,.08); }
-    .right { text-align:right; }
-    .nowrap { white-space:nowrap; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
-    .hint { font-size:.95rem; opacity:.9; }
 
-    /* Tabela responsiva sem scroll horizontal */
-.table-wrap { overflow-x: visible; }
+    /* -------- tabela responsiva sem scroll horizontal -------- */
+    .table-wrap { overflow-x: visible; }
 
-#words-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;          /* colunas obedecem as larguras abaixo */
-}
+    #words-table {               /* [!] tabela agora é #words-table */
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;       /* colunas obedecem as larguras abaixo */
+    }
+    #words-table th, #words-table td {
+      padding: 8px 10px;
+      white-space: normal;       /* permite quebrar linhas */
+      word-break: break-word;    /* evita estouro em URLs longas */
+    }
+    /* Larguras (ajuste se quiser) */
+    #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 38%; } /* Word */
+    #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; } /* Level */
+    #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 24%; } /* Definition */
+    #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; } /* Voice */
 
-#words-table th, #words-table td {
-  padding: 8px 10px;            /* um pouco menor pra caber mais */
-  white-space: normal;          /* permite quebrar linhas */
-  word-break: break-word;       /* evita estouro em URLs longas */
-}
-
-/* Larguras (ajuste se quiser) */
-#words-table th:nth-child(1), #words-table td:nth-child(1) { width: 38%; } /* Word */
-#words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; } /* Level */
-#words-table th:nth-child(3), #words-table td:nth-child(3) { width: 24%; } /* Definition */
-#words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; } /* Voice */
-
-/* Link da definição ocupa a célula sem estourar */
-#words-table td a {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-
-/* Player de áudio reduzido pra caber em telas pequenas */
-#words-table audio {
-  width: 100%;
-  max-width: 220px;
-  height: 28px;
-}
-
-/* Ainda mais compacto em telas muito estreitas */
-@media (max-width: 420px) {
-  #words-table th, #words-table td { padding: 6px 8px; }
-  #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 42%; }
-  #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 16%; }
-  #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 22%; }
-  #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; }
-  #words-table audio { max-width: 180px; }
-}
-
+    #words-table td a {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+    #words-table audio {
+      width: 100%;
+      max-width: 220px;
+      height: 28px;
+    }
+    @media (max-width: 420px) {
+      #words-table th, #words-table td { padding: 6px 8px; }
+      #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 42%; }
+      #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 16%; }
+      #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 22%; }
+      #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; }
+      #words-table audio { max-width: 180px; }
+    }
   </style>
 </head>
 <body class="is-mobile">
@@ -92,10 +75,6 @@
   <main class="container grid">
     <section class="card">
       <h2 style="margin:0 0 8px">Banco de palavras</h2>
-      <p class="hint" id="summary">
-        Integrar com <span class="mono">words.json</span> e <span class="mono">memorias.json</span>.
-        <span class="pill" id="count-pill">Carregando…</span>
-      </p>
       <div class="header-row" style="margin-top:8px">
         <input id="search" class="input" type="search" placeholder="Buscar palavra (ex.: house)" />
         <div class="spacer"></div>
@@ -104,7 +83,7 @@
     </section>
 
     <section class="card table-wrap">
-      <table>
+      <table id="words-table">   <!-- [!] deu o id que o CSS espera -->
         <thead>
           <tr>
             <th>Word</th>
@@ -121,7 +100,6 @@
   <script>
     // --------- config / keys ----------
     const LKEY = 'word_levels_v1'; // { [word]: { level:number, due:stringISO } }
-    // Fallback de espaçamento (dias) por nível, caso memorias.json não exista
     const DEFAULT_DAYS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30, 6: 60 };
 
     // --------- utils ----------
@@ -131,28 +109,20 @@
       d.setDate(d.getDate() + days);
       return d.toISOString();
     };
-
-    function loadProgress() {
-      try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); }
-      catch { return {}; }
-    }
+    function loadProgress() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); } catch { return {}; } }
     function saveProgress(m) { localStorage.setItem(LKEY, JSON.stringify(m)); }
 
     function normalizeWords(raw) {
-      // words.json: { word, level (A1/B2 etc), pos, definition_url, voice_url }
       return (raw || []).map(w => ({
         word: String(w.word || '').trim(),
-        cefr: String(w.level || '').toLowerCase(), // a1, b2...
+        cefr: String(w.level || '').toLowerCase(),
         definition_url: w.definition_url || '',
         voice_url: w.voice_url || ''
       })).filter(w => w.word);
     }
-
     function parseMemories(raw) {
-      // Aceita formatos comuns: [{level:1, days:1}], [{nivel:1,dias:1}], ou { "1":1, "2":3, ... }
       const days = { ...DEFAULT_DAYS };
       if (!raw) return days;
-
       if (Array.isArray(raw)) {
         raw.forEach(r => {
           const lvl = Number(r.level ?? r.nivel);
@@ -161,27 +131,22 @@
         });
       } else if (typeof raw === 'object') {
         Object.keys(raw).forEach(k => {
-          const lvl = Number(k);
-          const d = Number(raw[k]);
+          const lvl = Number(k), d = Number(raw[k]);
           if (lvl >= 1 && isFinite(d)) days[lvl] = d;
         });
       }
       return days;
     }
-
     function setLevel(progress, daysByLevel, word, newLevel) {
       const lvl = clamp(Number(newLevel) || 0, 0, 99);
-      if (lvl <= 0) {
-        progress[word] = { level: 0, due: null };
-      } else {
-        const offset = daysByLevel[lvl] ?? DEFAULT_DAYS[lvl] ?? 1;
-        progress[word] = { level: lvl, due: addDays(new Date(), offset) };
-      }
+      progress[word] = (lvl <= 0)
+        ? { level: 0, due: null }
+        : { level: lvl, due: addDays(new Date(), daysByLevel[lvl] ?? DEFAULT_DAYS[lvl] ?? 1) };
     }
 
     // --------- state ----------
-    let WORDS = [];              // words.json normalizado
-    let PROG = {};               // localStorage progress
+    let WORDS = [];
+    let PROG  = {};
     let DAYS_BY_LEVEL = { ...DEFAULT_DAYS };
 
     // --------- rendering ----------
@@ -190,12 +155,9 @@
       const pill = document.getElementById('count-pill');
       pill.textContent = `${n} palavra${n===1?'':'s'} no nível 1+`;
     }
-
     function renderTable(filterText = '') {
       const q = filterText.trim().toLowerCase();
       const tbody = document.getElementById('tb');
-
-      // junta dados (apenas nível >=1)
       const rows = WORDS
         .filter(w => (PROG[w.word]?.level || 0) >= 1)
         .filter(w => !q || w.word.toLowerCase().includes(q))
@@ -203,7 +165,7 @@
         .map(w => {
           const lvl = PROG[w.word]?.level ?? 0;
           const def = w.definition_url ? `<a href="${w.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
-          const voc = w.voice_url ? `<audio controls preload="none" style="height:28px"><source src="${w.voice_url}" type="audio/ogg"></audio>` : '';
+          const voc = w.voice_url ? `<audio controls preload="none"><source src="${w.voice_url}" type="audio/ogg"></audio>` : '';
           return `<tr>
             <td class="nowrap">${w.word}</td>
             <td class="right"><span class="badge">L${lvl}</span></td>
@@ -211,49 +173,39 @@
             <td>${voc}</td>
           </tr>`;
         }).join('');
-
       tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
     }
 
     // --------- boot ----------
     (async function init() {
-      // carrega JSONs
       try {
         const [wordsRes, memRes] = await Promise.allSettled([
-          fetch('words.json', { cache:'no-store' }),
-          fetch('memorias.json', { cache:'no-store' })
+          fetch('words.json',   { cache:'no-store' }),
+          fetch('memorias.json',{ cache:'no-store' })
         ]);
-
         if (wordsRes.status === 'fulfilled' && wordsRes.value.ok) {
           WORDS = normalizeWords(await wordsRes.value.json());
         } else {
-          console.warn('Falha ao carregar words.json');
           WORDS = [];
         }
-
         if (memRes.status === 'fulfilled' && memRes.value.ok) {
           DAYS_BY_LEVEL = parseMemories(await memRes.value.json());
-        } else {
-          DAYS_BY_LEVEL = { ...DEFAULT_DAYS };
         }
       } catch (e) {
-        console.error(e);
+        console.warn(e);
       }
 
-      // progresso do localStorage
       PROG = loadProgress();
 
-      // inicial: garanta "house" em nível 1
+      // garante "house" nível 1 na primeira execução
       if (!PROG['house'] || (PROG['house'].level||0) < 1) {
         setLevel(PROG, DAYS_BY_LEVEL, 'house', 1);
         saveProgress(PROG);
       }
 
-      // render inicial
-      renderCount();
-      renderTable();
+      renderCount();      // <- atualiza o número no pill
+      renderTable();      // <- renderiza a grade
 
-      // busca
       document.getElementById('search').addEventListener('input', (e) => {
         renderTable(e.target.value);
       });
