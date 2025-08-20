@@ -1,11 +1,10 @@
-// sw.js — simples App Shell + fallback de navegação
-const CACHE = 'estudos-v1';
+// /Estudos/sw.js
+const CACHE = 'estudos-v3'; // <-- mude a versão para forçar atualização
 const ASSETS = [
   './',
   './index.html',
-  './Icone.webp',
   './manifest.webmanifest',
-  // adicione aqui seus HTMLs da home:
+  './Icone.webp',
   './campeonato.html',
   './selecoes.html',
   './palavras.html',
@@ -19,26 +18,52 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    (async () => {
+      // limpa caches antigos
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+      // habilita navigation preload (opcional, ajuda desempenho)
+      if (self.registration.navigationPreload) {
+        await self.registration.navigationPreload.enable();
+      }
+      await self.clients.claim();
+    })()
   );
-  self.clients.claim();
 });
 
+// Fallback de navegação para App Shell (corrige 404 do GH Pages)
 self.addEventListener('fetch', (e) => {
   const req = e.request;
 
-  // 1) Navegações → sempre tentar rede, senão cair para index.html (SPA fallback)
+  // 1) Páginas/navegação
   if (req.mode === 'navigate') {
-    e.respondWith(
-      fetch(req).catch(() => caches.match('./index.html'))
-    );
+    e.respondWith((async () => {
+      try {
+        // usa preload se disponível
+        const preload = await e.preloadResponse;
+        if (preload) return handleNavResponse(preload);
+
+        const net = await fetch(req);
+        return handleNavResponse(net);
+      } catch {
+        // offline/erro de rede -> cai pro shell
+        return caches.match('./index.html');
+      }
+    })());
     return;
   }
 
-  // 2) Para estáticos → cache-first
+  // 2) Assets estáticos (cache-first)
   e.respondWith(
     caches.match(req).then(cached => cached || fetch(req))
   );
 });
+
+function handleNavResponse(resp) {
+  // GH Pages devolve 404.html com status 404; também podemos checar URL
+  const is404 = resp.status === 404 || resp.url.endsWith('/404.html');
+  if (is404) {
+    return caches.match('./index.html');
+  }
+  return resp;
+}
