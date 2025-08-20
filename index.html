@@ -16,10 +16,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Copa English">
 
-  <!-- CSS inline (unificado) -->
   <style>
     :root{
-      /* identidade visual */
       --turf:#0e2a12; --turf2:#144e1f; --line:#c8facc;
       --panel:#0f172a; --muted:#98a3b0; --text:#ecf2f7;
       --accent:#22c55e; --accent-2:#38bdf8; --danger:#ef4444;
@@ -69,14 +67,26 @@
     .menu-card .title{font-weight:800;font-size:1.05rem;margin-bottom:4px}
     .menu-card .descr{color:var(--muted);font-size:.92rem}
 
-    /* Acessibilidade dos links */
     a { color:#fff; text-decoration:none; }
     a:visited { color:#fff; }
-    a:hover { color:#ddd; text-decoration:underline; }/* (removido) banner de instalação estático — agora usamos um banner dinâmico criado via JS */
+    a:hover { color:#ddd; text-decoration:underline; }
 
-    /* Responsivo */
-    @media (max-width:360px){ .menu-grid{grid-template-columns:1fr} }
-    @media (min-width:768px){ .app{max-width:760px} }
+    /* Banner estilo "quer instalar?" */
+    .install-banner{
+      position: fixed; inset: auto 0 0 0; display:none;
+      background:#2b1b1b; color:#fff; padding:14px 16px;
+      box-shadow: 0 -6px 16px rgba(0,0,0,.35); z-index: 9999;
+      font: 500 15px/1.3 system-ui, sans-serif;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .install-banner .msg{flex:1}
+    .install-banner button{
+      border:0; padding:8px 14px; border-radius:10px; cursor:pointer;
+      font-weight:600; min-height:var(--touch);
+    }
+    .yes{background:#22c55e; color:#092015;}
+    .no{background:#444; color:#fff;}
+    @media (display-mode: standalone) { .install-banner{display:none !important;} }
   </style>
 </head>
 <body>
@@ -88,45 +98,42 @@
       </div>
     </header>
 
-    <!-- HOME: 4 botões/links para outras páginas (sem JS extra) -->
     <section class="menu-grid" aria-label="Ações principais">
-      <a class="menu-card" href="campeonato.html" aria-label="Jogar — iniciar um campeonato">
-        <div class="icon" aria-hidden="true">🏆</div><div class="title">Jogar</div>
+      <a class="menu-card" href="campeonato.html">
+        <div class="icon">🏆</div><div class="title">Jogar</div>
         <div class="descr">Inicie um campeonato</div>
       </a>
-
-      <a class="menu-card" href="selecoes.html" aria-label="Lista de seleções — bandeiras, score e atributos">
-        <div class="icon" aria-hidden="true">🌍</div><div class="title">Lista de Seleções</div>
+      <a class="menu-card" href="selecoes.html">
+        <div class="icon">🌍</div><div class="title">Lista de Seleções</div>
         <div class="descr">Bandeiras, score e atributos</div>
       </a>
-
-      <a class="menu-card" href="palavras.html" aria-label="Lista de palavras — banco para revisão">
-        <div class="icon" aria-hidden="true">📚</div><div class="title">Lista de Palavras</div>
+      <a class="menu-card" href="palavras.html">
+        <div class="icon">📚</div><div class="title">Lista de Palavras</div>
         <div class="descr">Seu banco para revisão</div>
       </a>
-
-      <a class="menu-card" href="edicoes.html" aria-label="Histórico de edições — anfitriões e campeões">
-        <div class="icon" aria-hidden="true">📜</div><div class="title">Histórico de Edições</div>
+      <a class="menu-card" href="edicoes.html">
+        <div class="icon">📜</div><div class="title">Histórico de Edições</div>
         <div class="descr">Anfitriões e campeões</div>
       </a>
     </section>
   </div>
-  <!-- (removido) banner estático: usamos criação dinâmica via JS -->
-<div>
-        <button class="fechar" id="btnFechar" type="button">Agora não</button>
-        <button class="install" id="btnInstalar" type="button">Instalar</button>
-      </div>
+
+  <!-- Banner pergunta instalação -->
+  <div id="installBanner" class="install-banner" role="dialog" aria-live="polite">
+    <div class="msg">Deseja instalar o “Copa English” como aplicativo?</div>
+    <div>
+      <button class="yes" id="btnYes">Sim</button>
+      <button class="no" id="btnNo">Agora não</button>
     </div>
   </div>
 
-  <!-- JS inline (unificado) -->
   <script>
     // Registro do Service Worker (ajuste o caminho se necessário)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').catch(console.error);
     }
 
-    // -------- Banner PWA dinâmico (baseado no seu snippet) --------
+    // -------- PWA: pergunta discreta se deseja instalar (sem botão chamativo) --------
     let deferredPrompt = null;
 
     function isStandalone(){
@@ -136,67 +143,82 @@
       return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
 
-    // cria banner simples
-    function createInstallBanner() {
-      if (document.getElementById('pwa-install')) return;
+    // cria uma barrinha simples, com pergunta e dois links (Sim / Agora não)
+    function createInstallAsk() {
+      if (document.getElementById('pwa-ask')) return;
 
       const bar = document.createElement('div');
-      bar.id = 'pwa-install';
+      bar.id = 'pwa-ask';
       Object.assign(bar.style, {
-        position:'fixed', left:'0', right:'0', bottom:'0', zIndex:'9999', display:'flex', gap:'12px',
-        alignItems:'center', justifyContent:'space-between', padding:'10px 14px',
-        borderTopLeftRadius:'10px', borderTopRightRadius:'10px', background:'#2b1b1b', color:'#fff',
-        boxShadow:'0 -6px 16px rgba(0,0,0,.35)', fontFamily:'system-ui, sans-serif'
+        position:'fixed', left:'12px', right:'12px', bottom:'12px', zIndex:'9999', display:'flex', gap:'10px',
+        alignItems:'center', justifyContent:'space-between', padding:'10px 12px',
+        borderRadius:'12px', background:'rgba(20,20,20,.9)', color:'#fff',
+        boxShadow:'0 6px 20px rgba(0,0,0,.35)', fontFamily:'system-ui, sans-serif', fontSize:'14px'
       });
 
-      const left = document.createElement('div');
-      Object.assign(left.style, { display:'flex', alignItems:'center', gap:'10px' });
-      left.innerHTML = `
-        <img src="Icone.webp" alt="Ícone" width="28" height="28" style="border-radius:6px">
-        <div>
-          <div style="font-weight:600">Instalar Estudos Futebol</div>
-          <div style="opacity:.8;font-size:12px">Use como app no seu S23</div>
-        </div>
-      `;
+      const text = document.createElement('div');
+      text.textContent = 'Adicionar “Copa English” à tela inicial?';
 
-      const btn = document.createElement('button');
-      btn.textContent = 'Instalar';
-      Object.assign(btn.style, { padding:'8px 14px', border:'none', borderRadius:'12px', fontWeight:'600', cursor:'pointer', background:'#7a4d4d', color:'#fff' });
+      const actions = document.createElement('div');
+      Object.assign(actions.style, { display:'flex', alignItems:'center', gap:'12px' });
 
-      const close = document.createElement('button');
-      close.textContent = 'X';
-      close.setAttribute('aria-label', 'Fechar');
-      Object.assign(close.style, { background:'transparent', border:'none', color:'#fff', fontSize:'16px', opacity:'.7' });
+      const yes = document.createElement('a');
+      yes.href = '#'; yes.textContent = 'Sim';
+      Object.assign(yes.style, { color:'#9BEBA7', fontWeight:'700' });
 
-      bar.append(left, btn, close);
+      const no = document.createElement('a');
+      no.href = '#'; no.textContent = 'Agora não';
+      Object.assign(no.style, { color:'#ddd', opacity:'.9' });
+
+      actions.append(yes, no);
+      bar.append(text, actions);
       document.body.appendChild(bar);
 
-      btn.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
+      yes.addEventListener('click', async (ev) => {
+        ev.preventDefault();
+        if (!deferredPrompt) { bar.remove(); return; }
         deferredPrompt.prompt();
         try { await deferredPrompt.userChoice; } finally {
           deferredPrompt = null;
           bar.remove();
           localStorage.setItem('pwaPromptMostrado','1');
+          localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
         }
       });
 
-      close.addEventListener('click', () => { bar.remove(); localStorage.setItem('pwaPromptMostrado','1'); });
+      no.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        bar.remove();
+        localStorage.setItem('pwaPromptMostrado','1');
+        localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
+      });
     }
 
-    // captura o evento e mostra o banner
+    // Decide quando perguntar novamente (ex.: a cada 7 dias)
+    function canAskAgain(days=7){
+      const last = Number(localStorage.getItem('pwaPromptLastAsk')||0);
+      if (!last) return true;
+      const diff = Date.now() - last;
+      return diff > days*24*60*60*1000;
+    }
+
+    // Captura o evento e mostra a pergunta discreta
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       const jaMostrado = localStorage.getItem('pwaPromptMostrado') === '1';
-      if (isMobile() && !isStandalone() && !jaMostrado) createInstallBanner();
+      if (isMobile() && !isStandalone() && (!jaMostrado || canAskAgain(7))) {
+        // mostra com pequeno atraso para não competir com a UI de entrada
+        setTimeout(createInstallAsk, 1200);
+      }
     });
 
-    // se já estiver instalado, não mostrar
+    // se já estiver instalado, não perguntar
     window.addEventListener('appinstalled', () => {
-      const bar = document.getElementById('pwa-install');
-      if (bar) bar.remove();
+      const ask = document.getElementById('pwa-ask');
+      if (ask) ask.remove();
       localStorage.setItem('pwaPromptMostrado','1');
+      localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
     });
   </script>
 </body>
