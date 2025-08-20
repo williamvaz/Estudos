@@ -238,121 +238,112 @@ html { font-size: 15px; }                /* base menor */
     </section>
   </main>
 
-  <script>
-    // --------- config / keys ----------
-    const LKEY = 'word_levels_v1'; // { [word]: { level:number, due:stringISO } }
-    const DEFAULT_DAYS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30, 6: 60 };
+<script>
+  // --------- config ----------
+  const LKEY = 'words_info'; // { [word]: { ...campos abaixo } }
 
-    // --------- utils ----------
-    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const addDays = (date, days) => { const d = new Date(date); d.setDate(d.getDate() + days); return d.toISOString(); };
-    function loadProgress() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); } catch { return {}; } }
-    function saveProgress(m) { localStorage.setItem(LKEY, JSON.stringify(m)); }
+  // --------- storage helpers ----------
+  const loadStore = () => {
+    try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); }
+    catch { return {}; }
+  };
+  const saveStore = (db) => localStorage.setItem(LKEY, JSON.stringify(db));
 
-    function normalizeWords(raw) {
-      return (raw || []).map(w => ({
+  // --------- normalização ----------
+  function normalizeWords(raw) {
+    return (raw || [])
+      .map(w => ({
         word: String(w.word || '').trim(),
-        cefr: String(w.level || '').toLowerCase(),
+        level: Number(w.level ?? 1),
+        pos: w.pos || '',
         definition_url: w.definition_url || '',
         voice_url: w.voice_url || ''
-      })).filter(w => w.word);
+      }))
+      .filter(w => w.word);
+  }
+
+  // Cria/atualiza o registro no localStorage com os campos solicitados
+  function ensureEntry(db, w) {
+    if (!db[w.word]) {
+      db[w.word] = {
+        word: w.word,
+        level: Number(w.level ?? 1),
+        pos: w.pos || '',
+        definition_url: w.definition_url || '',
+        voice_url: w.voice_url || '',
+        "Memoria": 0,
+        "Proxima revisão": 100000
+      };
+    } else {
+      // Mantém sincronizados os campos vindos do words.json (sem mexer na Memoria/Proxima revisão)
+      db[w.word].word = w.word;
+      if (w.level != null) db[w.word].level = Number(w.level);
+      if (w.pos != null) db[w.word].pos = w.pos;
+      if (w.definition_url != null) db[w.word].definition_url = w.definition_url;
+      if (w.voice_url != null) db[w.word].voice_url = w.voice_url;
     }
-    function parseMemories(raw) {
-      const days = { ...DEFAULT_DAYS };
-      if (!raw) return days;
-      if (Array.isArray(raw)) {
-        raw.forEach(r => {
-          const lvl = Number(r.level ?? r.nivel);
-          const d   = Number(r.days  ?? r.dias);
-          if (lvl >= 1 && isFinite(d)) days[lvl] = d;
-        });
-      } else if (typeof raw === 'object') {
-        Object.keys(raw).forEach(k => {
-          const lvl = Number(k), d = Number(raw[k]);
-          if (lvl >= 1 && isFinite(d)) days[lvl] = d;
-        });
-      }
-      return days;
-    }
-    function setLevel(progress, daysByLevel, word, newLevel) {
-      const lvl = clamp(Number(newLevel) || 0, 0, 99);
-      progress[word] = (lvl <= 0)
-        ? { level: 0, due: null }
-        : { level: lvl, due: addDays(new Date(), daysByLevel[lvl] ?? DEFAULT_DAYS[lvl] ?? 1) };
-    }
+  }
 
-    // --------- state ----------
-    let WORDS = [];
-    let PROG  = {};
-    let DAYS_BY_LEVEL = { ...DEFAULT_DAYS };
+  // --------- estado ---------
+  let DB = {};      // mapa salvo no localStorage
+  let WORDS = [];   // words.json normalizado (só pra render)
 
-    // --------- rendering ----------
-    function renderCount() {
-      const n = Object.values(PROG).filter(x => (x?.level || 0) >= 1).length;
-      const el = document.getElementById('stat-total-1plus');
-      if (el) el.textContent = n.toString();
-    }
+  // --------- UI ---------
+  function renderCount() {
+    const n = Object.values(DB).filter(x => Number(x.level || 0) >= 1).length;
+    const el = document.getElementById('stat-total-1plus');
+    if (el) el.textContent = String(n);
+  }
 
-    function renderTable(filterText = '') {
-      const q = filterText.trim().toLowerCase();
-      const tbody = document.getElementById('tb');
-      if (!tbody) return;
+  function renderTable(filterText = '') {
+    const q = (filterText || '').trim().toLowerCase();
+    const tbody = document.getElementById('tb');
+    if (!tbody) return;
 
-      const rows = WORDS
-        .filter(w => (PROG[w.word]?.level || 0) >= 1)
-        .filter(w => !q || w.word.toLowerCase().includes(q))
-        .sort((a,b) => a.word.localeCompare(b.word))
-        .map(w => {
-          const lvl = PROG[w.word]?.level ?? 0;
-          const def = w.definition_url ? `<a href="${w.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
-          const voc = w.voice_url ? `<audio controls preload="none"><source src="${w.voice_url}"></audio>` : '';
-          return `<tr>
-            <td class="nowrap">${w.word}</td>
-            <td class="right"><span class="badge">L${lvl}</span></td>
-            <td>${def}</td>
-            <td>${voc}</td>
-          </tr>`;
-        }).join('');
+    const rows = Object.values(DB)
+      .filter(item => Number(item.level || 0) >= 1)
+      .filter(item => !q || item.word.toLowerCase().includes(q))
+      .sort((a, b) => a.word.localeCompare(b.word))
+      .map(item => {
+        const def = item.definition_url ? `<a href="${item.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
+        const voc = item.voice_url ? `<audio controls preload="none"><source src="${item.voice_url}"></audio>` : '';
+        return `<tr>
+          <td class="nowrap">${item.word}</td>
+          <td class="right"><span class="badge">L${item.level ?? 0}</span></td>
+          <td>${def}</td>
+          <td>${voc}</td>
+        </tr>`;
+      }).join('');
 
-      tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
+    tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
+  }
+
+  // --------- boot ---------
+  (async function init() {
+    try {
+      const res = await fetch('words.json', { cache: 'no-store' });
+      WORDS = res.ok ? normalizeWords(await res.json()) : [];
+    } catch (e) {
+      console.warn('Falha ao carregar words.json', e);
+      WORDS = [];
     }
 
-    // --------- boot ----------
-    (async function init() {
-      try {
-        const [wordsRes, memRes] = await Promise.allSettled([
-          fetch('words.json',   { cache:'no-store' }),
-          fetch('memorias.json',{ cache:'no-store' })
-        ]);
+    // carrega o que já havia e garante as entradas mínimas
+    DB = loadStore();
+    WORDS.forEach(w => ensureEntry(DB, w));
+    saveStore(DB); // persiste após normalizar
 
-        if (wordsRes.status === 'fulfilled' && wordsRes.value.ok) {
-          WORDS = normalizeWords(await wordsRes.value.json());
-        } else {
-          WORDS = [];
-        }
+    // render
+    renderCount();
+    renderTable();
 
-        if (memRes.status === 'fulfilled' && memRes.value.ok) {
-          DAYS_BY_LEVEL = parseMemories(await memRes.value.json());
-        }
-      } catch (e) {
-        console.warn(e);
-      }
+    // busca
+    const search = document.getElementById('search');
+    if (search) {
+      search.addEventListener('input', (e) => renderTable(e.target.value));
+    }
+  })();
+</script>
 
-      PROG = loadProgress();
-
-      // garante "house" nível 1 na primeira execução
-      if (!PROG['house'] || (PROG['house'].level||0) < 1) {
-        setLevel(PROG, DAYS_BY_LEVEL, 'house', 1);
-        saveProgress(PROG);
-      }
-
-      renderCount();
-      renderTable();
-
-      document.getElementById('search').addEventListener('input', (e) => {
-        renderTable(e.target.value);
-      });
-    })();
-  </script>
 </body>
 </html>

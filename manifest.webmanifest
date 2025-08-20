@@ -1,13 +1,15 @@
 {
   "name": "Copa English",
   "short_name": "Copa English",
-  "start_url": "/Estudos/index.html?source=pwa",
+  "id": "/Estudos/",                     
+  "start_url": "/Estudos/index.html",    
   "scope": "/Estudos/",
   "display": "standalone",
+  "display_override": ["standalone"],    
   "background_color": "#0b3b22",
   "theme_color": "#0b3b22",
   "icons": [
-    { "src": "icone.webp", "sizes": "192x192", "type": "image/webp" },
-    { "src": "icone.webp", "sizes": "512x512", "type": "image/webp" }
+    { "src": "Icone-192.png", "sizes": "192x192", "type": "image/png", "purpose":"maskable any" },
+    { "src": "Icone-512.png", "sizes": "512x512", "type": "image/png", "purpose":"maskable any" }
   ]
 }
