@@ -1,15 +1,61 @@
 <!doctype html>
 <html lang="pt-BR">
-
-  <!-- Ícones -->
-  <link rel="icon" type="image/webp" href="icone.webp" />
-  <link rel="apple-touch-icon" href="icone.webp" />
-  
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Estudos Futebol • Edições</title>
-  <link rel="stylesheet" href="index.css">
+
+  <!-- ancora todos os caminhos relativos sob /Estudos/ (GitHub Pages) -->
+  <base href="/Estudos/">
+
+  <link rel="stylesheet" href="home.css" />
+  <style>
+    :root { color-scheme: dark; }
+    body { color:#fff; }
+
+    .container{ max-width:980px; margin:0 auto; padding:12px; }
+    .card{ background:rgba(0,0,0,.15); border:1px solid rgba(255,255,255,.08);
+           border-radius:14px; padding:12px; }
+
+    /* seletor */
+    .input{
+      background:#0f1f15; color:#fff; border:1px solid #284b34;
+      border-radius:10px; padding:8px 10px;
+    }
+    .small{ font-size:.9rem } .muted{ opacity:.8 }
+
+    /* tabela */
+    table{ width:100%; border-collapse:collapse; }
+    thead th{ text-align:left; font-weight:700; padding:10px 12px; }
+    tbody td{ padding:10px 12px; border-top:1px solid rgba(255,255,255,.08); }
+
+    /* flags + tooltip */
+    .flag{
+      width:34px; height:24px; object-fit:cover; border-radius:4px;
+      box-shadow:0 0 0 1px rgba(0,0,0,.25) inset; display:block;
+    }
+    .flag-tip{ position:relative; display:inline-block; }
+    .flag-tip::after{
+      content: attr(data-tip);
+      position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%);
+      background:#101e14; color:#fff; border:1px solid rgba(255,255,255,.18);
+      border-radius:8px; padding:6px 8px; font-size:.85rem; white-space:nowrap;
+      box-shadow:0 8px 24px rgba(0,0,0,.35);
+      opacity:0; pointer-events:none; transition:opacity .15s ease;
+    }
+    .flag-tip::before{
+      content:""; position:absolute; left:50%; bottom:100%; transform:translateX(-50%);
+      border:6px solid transparent; border-top-color:rgba(255,255,255,.18);
+      filter:drop-shadow(0 -1px 0 #101e14);
+      opacity:0; transition:opacity .15s ease;
+    }
+    .flag-tip:hover::after, .flag-tip:hover::before,
+    .flag-tip.show::after,  .flag-tip.show::before { opacity:1; }
+
+    /* topbar simples (caso seu home.css não tenha) */
+    .topbar .brand{ display:flex; align-items:center; gap:10px; padding:12px; }
+    .topbar h1{ font-size:1.25rem; margin:0; }
+  </style>
 </head>
 <body class="is-mobile">
   <header class="topbar">
@@ -21,10 +67,207 @@
   </header>
 
   <main class="container">
+    <!-- seletor de campeonato -->
+    <section class="card" style="margin-bottom:12px">
+      <label class="small" for="champSel">Campeonato</label>
+      <select id="champSel" class="input" style="min-width:240px"></select>
+      <span id="champInfo" class="small muted" style="margin-left:8px"></span>
+    </section>
+
+    <!-- tabela -->
     <section class="card">
-      <h2>Edições</h2>
-      <p class="muted">Aqui vamos listar anfitriões e campeões por campeonato (gera do app).</p>
+      <table id="ed-table">
+        <thead>
+          <tr>
+            <th style="width:14%">Edição</th>
+            <th style="width:29%">Anfitrião</th>
+            <th style="width:19%">1º</th>
+            <th style="width:19%">2º</th>
+            <th style="width:19%">3º</th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+          <tr><td colspan="5" class="muted">Carregando…</td></tr>
+        </tbody>
+      </table>
     </section>
   </main>
+
+  <script>
+    // ===== Campeonatos permitidos =====
+    const CHAMPS = [
+      'CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'
+    ];
+    const DEFAULT_CHAMP = 'COPA DO MUNDO';
+
+    // ===== Storage =====
+    const LKEY_DB  = 'edicoes';          // objeto { CHAMP: [edicoes...] }
+    const LKEY_SEL = 'edicoes:selected';  // seleção atual do usuário
+
+    const loadJSON = (k, fallback) => {
+      try { const v = JSON.parse(localStorage.getItem(k) || ''); return v ?? fallback; }
+      catch { return fallback; }
+    };
+    const saveJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+    // ===== Normalização / Validação =====
+    const isPlainObj = (x) => x && typeof x==='object' && !Array.isArray(x);
+
+    // Se vier legado (array direto), migra para { "COPA DO MUNDO": array }
+    function migrateIfLegacy(db){
+      if (Array.isArray(db)) return { [DEFAULT_CHAMP]: db };
+      return db;
+    }
+
+    function sanitizeEdition(ed){
+      return {
+        edicao: String(ed?.edicao ?? '').trim(),
+        anfitriao: String(ed?.anfitriao ?? '').trim(), // pode ser "Brasil" ou "Flags/Brasil.jpg"
+        1: String(ed?.['1'] ?? '').trim(),
+        2: String(ed?.['2'] ?? '').trim(),
+        3: String(ed?.['3'] ?? '').trim(),
+      };
+    }
+
+    function validateDB(raw){
+      let db = migrateIfLegacy(raw);
+      if (!isPlainObj(db)) db = {};
+      const out = {};
+      for (const key of CHAMPS) {
+        const arr = Array.isArray(db[key]) ? db[key] : [];
+        out[key] = arr.map(sanitizeEdition);
+      }
+      return out;
+    }
+
+    // ===== Helpers de bandeira/nome =====
+    function getFlagPath(val){
+      if (!val || typeof val !== 'string') return '';
+      return val.includes('/') ? val : `Flags/${val}.jpg`;
+    }
+    function getName(val){
+      if (!val) return '';
+      if (!val.includes('/')) return val;
+      const file = val.substring(val.lastIndexOf('/')+1).replace(/\.[^.]+$/,'');
+      try { return decodeURIComponent(file); } catch { return file; }
+    }
+    function esc(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function cellFlag(val){
+      const src  = getFlagPath(val);
+      const name = getName(val);
+      if (!src) return '—';
+      return `<span class="flag-tip" data-tip="${esc(name)}" tabindex="0" role="button" aria-label="${esc(name)}">
+        <img class="flag" src="${esc(src)}" alt="" loading="lazy">
+      </span>`;
+    }
+
+    // ===== UI: seletor de campeonato =====
+    function buildChampSelector(db){
+      const sel = document.getElementById('champSel');
+      const info = document.getElementById('champInfo');
+      if (!sel) return DEFAULT_CHAMP;
+
+      sel.innerHTML = CHAMPS.map(c => {
+        const n = (db[c] || []).length;
+        return `<option value="${esc(c)}">${c} ${n ? `(${n})` : ''}</option>`;
+      }).join('');
+
+      let cur = loadJSON(LKEY_SEL, DEFAULT_CHAMP);
+      if (!CHAMPS.includes(cur)) cur = DEFAULT_CHAMP;
+      sel.value = cur;
+
+      info.textContent = (db[cur] || []).length ? '' : 'Sem registros para este campeonato.';
+
+      sel.addEventListener('change', () => {
+        const val = sel.value;
+        const champ = CHAMPS.includes(val) ? val : DEFAULT_CHAMP;
+        saveJSON(LKEY_SEL, champ);
+        renderTable(db, champ);
+        info.textContent = (db[champ] || []).length ? '' : 'Sem registros para este campeonato.';
+      });
+
+      return cur;
+    }
+
+    // ===== Tabela =====
+    function renderTable(db, champ){
+      const tb = document.getElementById('tb');
+      const list = (db[champ] || []).slice();
+
+      if (!list.length){
+        tb.innerHTML = `<tr><td colspan="5" class="muted">Nenhuma edição registrada.</td></tr>`;
+        return;
+      }
+
+      // ordena desc se numérico
+      list.sort((a,b)=>{
+        const an = Number(a.edicao), bn = Number(b.edicao);
+        if (Number.isFinite(an) && Number.isFinite(bn)) return bn - an;
+        return String(b.edicao||'').localeCompare(String(a.edicao||'')); // aprox. desc
+      });
+
+      tb.innerHTML = list.map(ed => `
+        <tr>
+          <td>${esc(ed.edicao || '—')}</td>
+          <td>${cellFlag(ed.anfitriao)}</td>
+          <td>${cellFlag(ed['1'])}</td>
+          <td>${cellFlag(ed['2'])}</td>
+          <td>${cellFlag(ed['3'])}</td>
+        </tr>
+      `).join('');
+
+      // tooltip por clique (mobile)
+      tb.querySelectorAll('.flag-tip').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // fecha outras
+          tb.querySelectorAll('.flag-tip.show').forEach(o => { if (o!==el) o.classList.remove('show'); });
+          el.classList.toggle('show');
+        });
+      });
+    }
+
+    // fecha tooltips ao clicar fora / ESC
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.flag-tip')) {
+        document.querySelectorAll('.flag-tip.show').forEach(el => el.classList.remove('show'));
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.flag-tip.show').forEach(el => el.classList.remove('show'));
+      }
+    });
+
+    // ===== Boot =====
+    (function init(){
+      const raw = loadJSON(LKEY_DB, {});
+      const db  = validateDB(raw);
+      if (JSON.stringify(raw) !== JSON.stringify(db)) saveJSON(LKEY_DB, db);
+
+      const champ = buildChampSelector(db);
+      renderTable(db, champ);
+    })();
+
+    /* ===== Seed multi (use 1x para testar e depois comente) =====
+    */
+    const seed = {
+      "CONMEBOL": [
+        { edicao:"2024", anfitriao:"Brasil", "1":"Argentina", "2":"Colômbia", "3":"Uruguai" }
+      ],
+      "UEFA": [
+        { edicao:"2020", anfitriao:"Itália", "1":"Itália", "2":"Inglaterra", "3":"Espanha" }
+      ],
+      "COPA DO MUNDO": [
+        { edicao:"2018", anfitriao:"Rússia", "1":"França", "2":"Croácia", "3":"Bélgica" },
+        { edicao:"2022", anfitriao:"Catar",  "1":"Argentina", "2":"França", "3":"Croácia" }
+      ],
+      "CONCACAF": [], "CAF": [], "AFC": [], "OFC": [], "CONFEDERACOES": []
+    };
+    localStorage.setItem('edicoes', JSON.stringify(seed));
+    // location.reload();
+    
+  </script>
 </body>
 </html>
