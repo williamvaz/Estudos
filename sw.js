@@ -1,69 +1,68 @@
 // /Estudos/sw.js
-const CACHE = 'estudos-v3'; // <-- mude a versão para forçar atualização
-const ASSETS = [
+const CACHE = 'estudos-v5';
+const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icone.webp',
-  './campeonato.html',
+  './Icone-192.png', // garanta que existem com esses nomes
+  './Icone-512.png',
+  './icone.webp',    // opcional, se existir
   './selecoes.html',
   './palavras.html',
   './edicoes.html'
+  // NÃO liste ./campeonato.html enquanto não existir no repo
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    (async () => {
-      // limpa caches antigos
-      const keys = await caches.keys();
-      await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
-      // habilita navigation preload (opcional, ajuda desempenho)
-      if (self.registration.navigationPreload) {
-        await self.registration.navigationPreload.enable();
-      }
-      await self.clients.claim();
-    })()
-  );
-});
-
-// Fallback de navegação para App Shell (corrige 404 do GH Pages)
-self.addEventListener('fetch', (e) => {
-  const req = e.request;
-
-  // 1) Páginas/navegação
-  if (req.mode === 'navigate') {
-    e.respondWith((async () => {
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    // Precache resiliente (não quebra a instalação se faltar um arquivo)
+    for (const url of APP_SHELL) {
       try {
-        // usa preload se disponível
-        const preload = await e.preloadResponse;
-        if (preload) return handleNavResponse(preload);
+        await cache.add(new Request(url, { cache: 'reload' }));
+      } catch (err) {
+        console.warn('[SW] pulando', url, err);
+      }
+    }
+    await self.skipWaiting();
+  })());
+});
 
-        const net = await fetch(req);
-        return handleNavResponse(net);
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    if (self.registration.navigationPreload) {
+      await self.registration.navigationPreload.enable();
+    }
+    await self.clients.claim();
+  })());
+});
+
+// Navegação: network-first com fallback pro app shell
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+
+  if (req.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preload = await event.preloadResponse;
+        const net = preload || await fetch(req);
+
+        // GH Pages: trate 404 de navegação como SPA fallback
+        if (net.status === 404 || net.url.endsWith('/404.html')) {
+          const cached = await caches.match('./index.html');
+          return cached || Response.redirect('/Estudos/index.html', 302);
+        }
+        return net;
       } catch {
-        // offline/erro de rede -> cai pro shell
-        return caches.match('./index.html');
+        const cached = await caches.match('./index.html');
+        return cached || new Response('Offline', { status: 503 });
       }
     })());
     return;
   }
 
-  // 2) Assets estáticos (cache-first)
-  e.respondWith(
-    caches.match(req).then(cached => cached || fetch(req))
-  );
+  // Assets: cache-first
+  event.respondWith(caches.match(req).then(c => c || fetch(req)));
 });
-
-function handleNavResponse(resp) {
-  // GH Pages devolve 404.html com status 404; também podemos checar URL
-  const is404 = resp.status === 404 || resp.url.endsWith('/404.html');
-  if (is404) {
-    return caches.match('./index.html');
-  }
-  return resp;
-}
