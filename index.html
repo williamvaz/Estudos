@@ -4,10 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b3b22" />
+
   <title>Estudos Futebol • Início</title>
 
+  <!-- MUITO IMPORTANTE NO GITHUB PAGES -->
+  <!-- Garante que todos os caminhos relativos resolvam sob /Estudos/ -->
+  <base href="/Estudos/">
+
   <!-- Ícones -->
-  <link rel="icon" type="image/webp" href="Icone.webp" />
+  <link rel="icon" type="image/png" href="Icone.webp" />
   <link rel="apple-touch-icon" href="Icone.webp" />
 
   <!-- PWA -->
@@ -24,7 +29,6 @@
       --radius:16px; --soft:20px; --shadow:0 14px 36px rgba(0,0,0,.35);
       --touch:56px;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -35,7 +39,6 @@
         linear-gradient(180deg, rgba(34,197,94,.05), transparent 40%),
         repeating-linear-gradient(90deg, var(--turf) 0 56px, var(--turf2) 56px 112px);
     }
-
     .app{max-width:640px;margin:0 auto;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
     .topbar{
       display:flex;align-items:center;justify-content:center;
@@ -47,7 +50,6 @@
     .brand{display:flex;align-items:center;gap:10px}
     .brand h1{font-size:1.25rem;margin:0}
     .ball{font-size:26px}
-
     .menu-grid{
       display:grid; gap:14px;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -60,38 +62,44 @@
       background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
       box-shadow:var(--shadow);
       transition:transform .15s ease, filter .15s ease;
+      color:#fff; text-decoration:none;
     }
     .menu-card:active{transform:scale(.98)}
     .menu-card:hover{filter:brightness(1.05)}
     .menu-card .icon{font-size:28px;margin-bottom:8px}
     .menu-card .title{font-weight:800;font-size:1.05rem;margin-bottom:4px}
     .menu-card .descr{color:var(--muted);font-size:.92rem}
+    @media (max-width:360px){ .menu-grid{grid-template-columns:1fr} }
+    button{min-height:var(--touch); -webkit-tap-highlight-color: transparent;}
 
-    a { color:#fff; text-decoration:none; }
-    a:visited { color:#fff; }
-    a:hover { color:#ddd; text-decoration:underline; }
-
-    /* Banner estilo "quer instalar?" */
-    .install-banner{
-      position: fixed; inset: auto 0 0 0; display:none;
-      background:#2b1b1b; color:#fff; padding:14px 16px;
-      box-shadow: 0 -6px 16px rgba(0,0,0,.35); z-index: 9999;
-      font: 500 15px/1.3 system-ui, sans-serif;
-      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    /* Modal “padrão site” para instalar */
+    .pwa-modal-backdrop{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.45); z-index:10000;
     }
-    .install-banner .msg{flex:1}
-    .install-banner button{
-      border:0; padding:8px 14px; border-radius:10px; cursor:pointer;
-      font-weight:600; min-height:var(--touch);
+    .pwa-modal{
+      width:min(480px,calc(100% - 32px));
+      background:#12382a; color:#fff; border-radius:14px;
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+      padding:16px;
     }
-    .yes{background:#22c55e; color:#092015;}
-    .no{background:#444; color:#fff;}
-    @media (display-mode: standalone) { .install-banner{display:none !important;} }
+    .pwa-modal header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .pwa-modal header img{width:36px;height:36px;border-radius:9px}
+    .pwa-modal h3{margin:0;font-size:1.05rem}
+    .pwa-modal p{margin:.25rem 0 .75rem;color:#cfe9d7}
+    .pwa-modal .actions{display:flex;gap:10px;justify-content:flex-end}
+    .btn{border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700}
+    .btn-secondary{background:#2a2a2a;color:#fff}
+    .btn-primary{background:#2fd47a;color:#092015}
+    @media (display-mode: standalone) {
+      .pwa-modal-backdrop{display:none !important;}
+    }
   </style>
 </head>
-<body>
+<body class="is-mobile">
   <div class="app">
-    <header class="topbar" role="banner">
+    <header class="topbar">
       <div class="brand">
         <span class="ball" aria-hidden="true">⚽</span>
         <h1 class="brand-title">Copa English</h1>
@@ -118,108 +126,82 @@
     </section>
   </div>
 
-  <!-- Banner pergunta instalação -->
-  <div id="installBanner" class="install-banner" role="dialog" aria-live="polite">
-    <div class="msg">Deseja instalar o “Copa English” como aplicativo?</div>
-    <div>
-      <button class="yes" id="btnYes">Sim</button>
-      <button class="no" id="btnNo">Agora não</button>
+  <!-- Modal “Deseja instalar?” -->
+  <div id="pwaAsk" class="pwa-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pwaTitle">
+    <div class="pwa-modal">
+      <header>
+        <img src="Icone.webp" alt="" />
+        <h3 id="pwaTitle">Instalar “Copa English”?</h3>
+      </header>
+      <p>Fica mais rápido no seu S23 e abre em tela cheia.</p>
+      <div class="actions">
+        <button id="pwaNo" class="btn btn-secondary">Agora não</button>
+        <button id="pwaYes" class="btn btn-primary">Sim, instalar</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Registro do Service Worker (ajuste o caminho se necessário)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  // ====== PWA ======
+  // Registra o Service Worker no MESMO diretório do app (escopo /Estudos/)
+  if ('serviceWorker' in navigator) {
+    // usar caminho relativo para herdar escopo da pasta /Estudos/
+    navigator.serviceWorker.register('./sw.js').catch(console.error);
+  }
+
+  // Prompt nativo
+  let deferredPrompt = null;
+  const askEl = document.getElementById('pwaAsk');
+  const btnYes = document.getElementById('pwaYes');
+  const btnNo  = document.getElementById('pwaNo');
+
+  const KEY_HIDE = 'pwaAskHide'; // 1 = não mostrar por 7 dias
+  const KEY_TS   = 'pwaAskTs';
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  }
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+  function shouldShowAsk() {
+    const hide = localStorage.getItem(KEY_HIDE) === '1';
+    const ts = Number(localStorage.getItem(KEY_TS) || 0);
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    if (!hide) return true;
+    return (Date.now() - ts) > sevenDays; // volta a perguntar após 7 dias
+  }
+  function showAsk() {
+    askEl.style.display = 'flex';
+  }
+  function hideAsk(persist=false) {
+    askEl.style.display = 'none';
+    if (persist) {
+      localStorage.setItem(KEY_HIDE, '1');
+      localStorage.setItem(KEY_TS, String(Date.now()));
     }
+  }
 
-    // -------- PWA: pergunta discreta se deseja instalar (sem botão chamativo) --------
-    let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
 
-    function isStandalone(){
-      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // Só faz sentido em mobile, não instalado e respeitando "lembrar depois"
+    if (isMobile() && !isStandalone() && shouldShowAsk()) {
+      showAsk();
     }
-    function isMobile(){
-      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
+  });
 
-    // cria uma barrinha simples, com pergunta e dois links (Sim / Agora não)
-    function createInstallAsk() {
-      if (document.getElementById('pwa-ask')) return;
+  btnYes?.addEventListener('click', async () => {
+    hideAsk(true);
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    try { await deferredPrompt.userChoice; } finally { deferredPrompt = null; }
+  });
 
-      const bar = document.createElement('div');
-      bar.id = 'pwa-ask';
-      Object.assign(bar.style, {
-        position:'fixed', left:'12px', right:'12px', bottom:'12px', zIndex:'9999', display:'flex', gap:'10px',
-        alignItems:'center', justifyContent:'space-between', padding:'10px 12px',
-        borderRadius:'12px', background:'rgba(20,20,20,.9)', color:'#fff',
-        boxShadow:'0 6px 20px rgba(0,0,0,.35)', fontFamily:'system-ui, sans-serif', fontSize:'14px'
-      });
+  btnNo?.addEventListener('click', () => hideAsk(true));
 
-      const text = document.createElement('div');
-      text.textContent = 'Adicionar “Copa English” à tela inicial?';
-
-      const actions = document.createElement('div');
-      Object.assign(actions.style, { display:'flex', alignItems:'center', gap:'12px' });
-
-      const yes = document.createElement('a');
-      yes.href = '#'; yes.textContent = 'Sim';
-      Object.assign(yes.style, { color:'#9BEBA7', fontWeight:'700' });
-
-      const no = document.createElement('a');
-      no.href = '#'; no.textContent = 'Agora não';
-      Object.assign(no.style, { color:'#ddd', opacity:'.9' });
-
-      actions.append(yes, no);
-      bar.append(text, actions);
-      document.body.appendChild(bar);
-
-      yes.addEventListener('click', async (ev) => {
-        ev.preventDefault();
-        if (!deferredPrompt) { bar.remove(); return; }
-        deferredPrompt.prompt();
-        try { await deferredPrompt.userChoice; } finally {
-          deferredPrompt = null;
-          bar.remove();
-          localStorage.setItem('pwaPromptMostrado','1');
-          localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
-        }
-      });
-
-      no.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        bar.remove();
-        localStorage.setItem('pwaPromptMostrado','1');
-        localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
-      });
-    }
-
-    // Decide quando perguntar novamente (ex.: a cada 7 dias)
-    function canAskAgain(days=7){
-      const last = Number(localStorage.getItem('pwaPromptLastAsk')||0);
-      if (!last) return true;
-      const diff = Date.now() - last;
-      return diff > days*24*60*60*1000;
-    }
-
-    // Captura o evento e mostra a pergunta discreta
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const jaMostrado = localStorage.getItem('pwaPromptMostrado') === '1';
-      if (isMobile() && !isStandalone() && (!jaMostrado || canAskAgain(7))) {
-        // mostra com pequeno atraso para não competir com a UI de entrada
-        setTimeout(createInstallAsk, 1200);
-      }
-    });
-
-    // se já estiver instalado, não perguntar
-    window.addEventListener('appinstalled', () => {
-      const ask = document.getElementById('pwa-ask');
-      if (ask) ask.remove();
-      localStorage.setItem('pwaPromptMostrado','1');
-      localStorage.setItem('pwaPromptLastAsk', String(Date.now()));
-    });
+  window.addEventListener('appinstalled', () => hideAsk(true));
   </script>
 </body>
 </html>

@@ -1,13 +1,13 @@
 {
-  "name": "English Cup",
-  "short_name": "English Cup",
-  "start_url": "/index.html",
+  "name": "Copa English",
+  "short_name": "Copa English",
+  "start_url": "/Estudos/index.html",
+  "scope": "/Estudos/",
   "display": "standalone",
-  "background_color": "#1f1212",
-  "theme_color": "#4a2a2a",
-  "scope": "/",
+  "background_color": "#0b3b22",
+  "theme_color": "#0b3b22",
   "icons": [
-    { "src": "Icone.webp", "sizes": "192x192", "type": "image/webp", "purpose": "any" },
-    { "src": "Icone.webp", "sizes": "512x512", "type": "image/webp", "purpose": "any" }
+    { "src": "Icone.webp", "sizes": "192x192", "type": "image/png" },
+    { "src": "Icone.webp", "sizes": "512x512", "type": "image/png" }
   ]
 }
