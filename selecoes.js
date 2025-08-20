@@ -1336,8 +1336,8 @@ setupRadar();
               const v = Number(team.state?.[k] ?? 0);
               const zero = v === 0 ? 'is-zero' : '';
               return `
-                <div class="medal ${zero}" data-key="${k}" title="${k}">
-                  <img src="${imgFor(k)}" alt="${k}">
+                <div class="medal ${zero}" data-key="${k}">
+                  <img src="${imgFor(k)}" alt="" loading="lazy">
                   <div class="count">${v}</div>
                 </div>
               `;
@@ -1349,6 +1349,7 @@ setupRadar();
   `;
   mount.innerHTML = html;
 }
+
 
 
   renderTable();

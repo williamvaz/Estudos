@@ -112,33 +112,50 @@ a:hover {
   .radar-box{ width:250px; height:200px; }
 }
 
-/* === Quadro de medalhas === */
-.medal-board{
-  width: 260px;
-  background:#0f3a1d; color:#fff;
-  border-radius:18px; padding:14px 12px;
-  border:1px solid rgba(255,255,255,.15);
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  margin-top:12px;
+/* === Quadro de medalhas (revamp) === */
+.country-box .medal-board{
+  width:100%;
+  background:linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.06));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:12px 14px;
+  margin-top:10px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 6px 22px rgba(0,0,0,.25);
+  color:#fff;
 }
-.medal-row{margin:8px 0 14px}
+
+.medal-row{ margin:8px 0 12px }
 .medal-title{
-  text-align:center; font-weight:900; letter-spacing:.06em;
-  margin:4px 0 10px; font-size:14px;
+  text-align:center;
+  font-weight:900;
+  letter-spacing:.12em;
+  font-size:12px;
+  opacity:.9;
+  margin:4px 0 10px;
 }
+
 .medal-grid{
-  display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:10px; align-items:center; justify-items:center;
+  display:grid;
+  grid-template-columns: repeat(3, 56px);
+  gap:14px;
+  justify-content:center;
+  align-items:center;
 }
-.medal{
-  position:relative; width:58px; height:58px;
-  display:grid; place-items:center;
+
+.medal{ position:relative; width:56px; height:56px }
+.medal img{
+  width:100%; height:100%; display:block; object-fit:contain;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.35));
 }
-.medal img{width:58px; height:58px; display:block}
-.medal.is-zero img{filter:grayscale(1) brightness(.85) contrast(1.1); opacity:.9}
+.medal.is-zero img{ filter:grayscale(1) brightness(.85) contrast(1.05); opacity:.7 }
+
 .medal .count{
-  position:absolute; inset:0; display:grid; place-items:center;
-  font-weight:900; font-size:20px; line-height:1;
-  text-shadow:0 1px 2px rgba(0,0,0,.5), 0 0 8px rgba(0,0,0,.4);
+  position:absolute; right:-6px; bottom:-6px;
+  width:26px; height:26px; border-radius:50%;
+  display:grid; place-items:center;
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.55);
+  font-weight:800; font-size:14px; color:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.35);
 }
+
