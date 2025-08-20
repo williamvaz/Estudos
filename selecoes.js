@@ -23,12 +23,26 @@
   }
 
   function ensureTeamState(state, team) {
-    if (!state[team.code]) state[team.code] = { score: 250 };
-    state[team.code].score = clamp(
-      Number(state[team.code].score) || 250,
-      1,
-      9999
-    );
+    if (!state[team.code]) {
+    state[team.code] = { 
+    score: 250,
+    atk: 50,
+    dfs: 50,
+    mei: 50,
+    int: 50,
+    ent: 50
+   };
+    }
+
+  // garante que os valores estejam dentro dos limites
+  state[team.code].score = clamp(Number(state[team.code].score) || 250, 1, 500);
+  state[team.code].atk   = clamp(Number(state[team.code].atk)   || 50, 1, 100);
+  state[team.code].dfs   = clamp(Number(state[team.code].dfs)   || 50, 1, 100);
+  state[team.code].mei   = clamp(Number(state[team.code].mei)   || 50, 1, 100);
+  state[team.code].vel   = clamp(Number(state[team.code].vel)   || 50, 1, 100);
+  state[team.code].ent   = clamp(Number(state[team.code].ent)   || 50, 1, 100);
+
+    // liga o estado ao objeto time
     team.state = state[team.code];
   }
 
