@@ -2,12 +2,12 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=0.1, shrink-to-fit=yes">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=0.1, shrink-to-fit=yes">
   <title>Estudos Futebol • Palavras</title>
   <link rel="stylesheet" href="home.css">
 
-    <!-- Ícones -->
+  <!-- Ícones -->
   <link rel="icon" type="image/webp" href="icone.webp" />
   <link rel="apple-touch-icon" href="icone.webp" />
 
@@ -41,141 +41,45 @@
     #words-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;     /* colunas obedecem as larguras abaixo */
+      table-layout: fixed;
+      font-size: .95rem;
     }
     #words-table th, #words-table td {
-      padding: 8px 10px;
-      white-space: normal;     /* permite quebrar linhas */
-      word-break: break-word;  /* evita estouro em URLs longas */
+      padding: 6px 8px;
+      white-space: normal;
+      word-break: break-word;
+      overflow: visible;
     }
-    /* Larguras (ajuste se quiser) */
-    #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 45%; } /* Word */
-    #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 25%; } /* Definition */
-    #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 30%; } /* Voice */
+    /* Larguras */
+    #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 45%; } /* Word  */
+    #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 15%; } /* Level */
+    #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 20%; } /* Definition */
+    #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; } /* Voice */
 
     #words-table td a {
-      display: inline-block;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display:inline-block; max-width:100%;
+      overflow:hidden; text-overflow:ellipsis;
       vertical-align: middle;
     }
     #words-table audio {
+      display:block;
       width: 100%;
-      max-width: 220px;
-      height: 28px;
+      max-width: 180px;
+      height: 32px;
     }
-    @media (max-width: 420px) {
-      #words-table th, #words-table td { padding: 6px 8px; }
-      #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 42%; }
-      #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 16%; }
-      #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 22%; }
-      #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; }
-      #words-table audio { max-width: 180px; }
+    @media (min-width: 560px){
+      #words-table audio { max-width: 220px; }
     }
 
     .badge { padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
     .nowrap { white-space:nowrap; }
 
-    /* ——— Compactação geral no S23 ——— */
-html { font-size: 15px; }                /* base menor */
-@media (max-width: 390px){ html{ font-size:14px; } }
-
-.topbar h1 { font-size: 1.05rem; }       /* título menor */
-.stat-value { font-size: 1.15rem; }      /* números dos cards menores */
-.stat-label { font-size: .8rem; }
-
-/* ——— Tabela mais compacta e sem corte ——— */
-#words-table { font-size: .95rem; }
-#words-table th, #words-table td {
-  padding: 6px 8px;            /* menos padding */
-  white-space: normal;
-  word-break: break-word;
-  overflow: visible;           /* evita "comer" os controles de áudio */
-}
-
-/* Rebalanceia larguras p/ dar mais espaço ao áudio */
-#words-table th:nth-child(1), #words-table td:nth-child(1) { width: 45%; } /* Word  */
-#words-table th:nth-child(2), #words-table td:nth-child(2) { width: 25%; } /* Definition */
-#words-table th:nth-child(3), #words-table td:nth-child(3) { width: 30%; } /* Voice */
-
-/* Link compacto e com reticências se grande */
-#words-table td a {
-  display:inline-block; max-width:100%;
-  overflow:hidden; text-overflow:ellipsis;
-}
-
-/* ——— Áudio: tamanho seguro e sempre clicável ——— */
-#words-table audio {
-  display:block;
-  width: 100%;
-  max-width: 180px;   /* antes 220px; reduz pra caber no S23 */
-  height: 32px;       /* botão de play mais confortável */
-}
-@media (min-width: 560px){
-  #words-table audio { max-width: 220px; }
-}
-
-/* Telas muito estreitas: ainda mais compacto */
-@media (max-width: 420px){
-  #words-table { font-size: .9rem; }
-  #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 44%; }
-  #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; }
-  #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 18%; }
-  #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; }
-  #words-table audio { max-width: 160px; }
-}
-
-/* ——— Compactação geral no S23 ——— */
-html { font-size: 15px; }                /* base menor */
-@media (max-width: 390px){ html{ font-size:14px; } }
-
-.topbar h1 { font-size: 1.05rem; }       /* título menor */
-.stat-value { font-size: 1.15rem; }      /* números dos cards menores */
-.stat-label { font-size: .8rem; }
-
-/* ——— Tabela mais compacta e sem corte ——— */
-#words-table { font-size: .95rem; }
-#words-table th, #words-table td {
-  padding: 6px 8px;            /* menos padding */
-  white-space: normal;
-  word-break: break-word;
-  overflow: visible;           /* evita "comer" os controles de áudio */
-}
-
-/* Rebalanceia larguras p/ dar mais espaço ao áudio */
-#words-table th:nth-child(1), #words-table td:nth-child(1) { width: 45%; } /* Word  */
-#words-table th:nth-child(2), #words-table td:nth-child(2) { width: 25%; } /* Definition */
-#words-table th:nth-child(3), #words-table td:nth-child(3) { width: 30%; } /* Voice */
-
-/* Link compacto e com reticências se grande */
-#words-table td a {
-  display:inline-block; max-width:100%;
-  overflow:hidden; text-overflow:ellipsis;
-}
-
-/* ——— Áudio: tamanho seguro e sempre clicável ——— */
-#words-table audio {
-  display:block;
-  width: 100%;
-  max-width: 180px;   /* antes 220px; reduz pra caber no S23 */
-  height: 32px;       /* botão de play mais confortável */
-}
-@media (min-width: 560px){
-  #words-table audio { max-width: 220px; }
-}
-
-/* Telas muito estreitas: ainda mais compacto */
-@media (max-width: 420px){
-  #words-table { font-size: .9rem; }
-  #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 44%; }
-  #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 14%; }
-  #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 18%; }
-  #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 24%; }
-  #words-table audio { max-width: 160px; }
-}
-
-
+    /* Compactação geral no S23 */
+    html { font-size: 15px; }
+    @media (max-width: 390px){ html{ font-size:14px; } }
+    .topbar h1 { font-size: 1.05rem; }
+    .stat-value { font-size: 1.15rem; }
+    .stat-label { font-size: .8rem; }
   </style>
 </head>
 <body class="is-mobile">
@@ -194,28 +98,27 @@ html { font-size: 15px; }                /* base menor */
       <div class="header-row" style="margin-top:8px">
         <input id="search" class="input" type="search" placeholder="Buscar palavra (ex.: house)" />
         <div class="spacer"></div>
-        <span class="small muted">Mostrando apenas palavras com nível ≥ 1</span>
+        <span class="small muted">Mostrando palavras do arquivo <code>words.json</code></span>
       </div>
     </section>
 
     <!-- stats -->
     <section class="stats">
       <div class="stat">
-        <div class="stat-label">Palavras em nível ≥ 1</div>
+        <div class="stat-label">Total de palavras</div>
         <div class="stat-value" id="stat-total-1plus">0</div>
       </div>
-      <!-- espaço pra futuros cards -->
       <div class="stat">
-        <div class="stat-label">Palavras em nível ≥ 4</div>
-        <div class="stat-value" id="stat-total-4plus">0</div>
+        <div class="stat-label">A1–A2</div>
+        <div class="stat-value" id="stat-a12">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label">Palavras em nível ≥ 7</div>
-        <div class="stat-value" id="stat-total-7plus">0</div>
+        <div class="stat-label">B1–B2</div>
+        <div class="stat-value" id="stat-b12">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label">Palavras em nível ≥ 10</div>
-        <div class="stat-value" id="stat-total-10plus">0</div>
+        <div class="stat-label">C1–C2</div>
+        <div class="stat-value" id="stat-c12">0</div>
       </div>
     </section>
 
@@ -235,112 +138,127 @@ html { font-size: 15px; }                /* base menor */
     </section>
   </main>
 
-<script>
-  // --------- config ----------
-  const LKEY = 'words_info'; // { [word]: { ...campos abaixo } }
+  <script>
+    // --------- config ----------
+    const LKEY = 'words_info'; // { [word__pos]: { word, level, pos, definition_url, voice_url, "Memoria", "Proxima revisão" } }
 
-  // --------- storage helpers ----------
-  const loadStore = () => {
-    try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); }
-    catch { return {}; }
-  };
-  const saveStore = (db) => localStorage.setItem(LKEY, JSON.stringify(db));
+    // --------- storage helpers ----------
+    const loadStore = () => {
+      try { return JSON.parse(localStorage.getItem(LKEY) || '{}'); }
+      catch { return {}; }
+    };
+    const saveStore = (db) => localStorage.setItem(LKEY, JSON.stringify(db));
 
-  // --------- normalização ----------
-  function normalizeWords(raw) {
-    return (raw || [])
-      .map(w => ({
-        word: String(w.word || '').trim(),
-        level: Number(w.level ?? 1),
-        pos: w.pos || '',
-        definition_url: w.definition_url || '',
-        voice_url: w.voice_url || ''
-      }))
-      .filter(w => w.word);
-  }
+    // --------- helpers ----------
+    const makeId = (w) => `${w.word}__${w.pos || ''}`;
 
-  // Cria/atualiza o registro no localStorage com os campos solicitados
-  function ensureEntry(db, w) {
-    if (!db[w.word]) {
-      db[w.word] = {
-        word: w.word,
-        level: Number(w.level ?? 1),
-        pos: w.pos || '',
-        definition_url: w.definition_url || '',
-        voice_url: w.voice_url || '',
-        "Memoria": 0,
-        "Proxima revisão": 100000
-      };
-    } else {
-      // Mantém sincronizados os campos vindos do words.json (sem mexer na Memoria/Proxima revisão)
-      db[w.word].word = w.word;
-      if (w.level != null) db[w.word].level = Number(w.level);
-      if (w.pos != null) db[w.word].pos = w.pos;
-      if (w.definition_url != null) db[w.word].definition_url = w.definition_url;
-      if (w.voice_url != null) db[w.word].voice_url = w.voice_url;
-    }
-  }
-
-  // --------- estado ---------
-  let DB = {};      // mapa salvo no localStorage
-  let WORDS = [];   // words.json normalizado (só pra render)
-
-  // --------- UI ---------
-  function renderCount() {
-    const n = Object.values(DB).filter(x => Number(x.level || 0) >= 1).length;
-    const el = document.getElementById('stat-total-1plus');
-    if (el) el.textContent = String(n);
-  }
-
-  function renderTable(filterText = '') {
-    const q = (filterText || '').trim().toLowerCase();
-    const tbody = document.getElementById('tb');
-    if (!tbody) return;
-
-    const rows = Object.values(DB)
-      .filter(item => Number(item.level || 0) >= 1)
-      .filter(item => !q || item.word.toLowerCase().includes(q))
-      .sort((a, b) => a.word.localeCompare(b.word))
-      .map(item => {
-        const def = item.definition_url ? `<a href="${item.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
-        const voc = item.voice_url ? `<audio controls preload="none"><source src="${item.voice_url}"></audio>` : '';
-        return `<tr>
-          <td class="nowrap">${item.word}</td>
-          <td class="right"><span class="badge">L${item.level ?? 0}</span></td>
-          <td>${def}</td>
-          <td>${voc}</td>
-        </tr>`;
-      }).join('');
-
-    tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra no nível 1+ ainda.</td></tr>`;
-  }
-
-  // --------- boot ---------
-  (async function init() {
-    try {
-      const res = await fetch('words.json', { cache: 'no-store' });
-      WORDS = res.ok ? normalizeWords(await res.json()) : [];
-    } catch (e) {
-      console.warn('Falha ao carregar words.json', e);
-      WORDS = [];
+    // Mantém level exatamente como veio do JSON (CEFR: a1/b2/etc.)
+    function normalizeWords(raw) {
+      return (raw || [])
+        .map(w => ({
+          word: String(w.word || '').trim(),
+          level: (w.level ?? '').toString().trim(),
+          pos: w.pos || '',
+          definition_url: w.definition_url || '',
+          voice_url: w.voice_url || ''
+        }))
+        .filter(w => w.word);
     }
 
-    // carrega o que já havia e garante as entradas mínimas
-    DB = loadStore();
-    WORDS.forEach(w => ensureEntry(DB, w));
-    saveStore(DB); // persiste após normalizar
+    // Cria/atualiza o registro no localStorage com os campos solicitados
+    function ensureEntry(db, w) {
+      const id = makeId(w);
 
-    // render
-    renderCount();
-    renderTable();
-
-    // busca
-    const search = document.getElementById('search');
-    if (search) {
-      search.addEventListener('input', (e) => renderTable(e.target.value));
+      if (!db[id]) {
+        db[id] = {
+          word: w.word,
+          level: w.level,                 // CEFR como no JSON
+          pos: w.pos || '',
+          definition_url: w.definition_url || '',
+          voice_url: w.voice_url || '',
+          "Memoria": 0,                   // primeiro registro = 0
+          "Proxima revisão": 100000       // primeiro registro = 100000
+        };
+      } else {
+        // Sincroniza com o words.json (não altera Memoria/Proxima revisão)
+        db[id].word = w.word;
+        db[id].level = w.level;
+        db[id].pos = w.pos || '';
+        db[id].definition_url = w.definition_url || '';
+        db[id].voice_url = w.voice_url || '';
+      }
     }
-  })();
-</script>
 
+    // --------- estado ---------
+    let DB = {};      // mapa salvo no localStorage
+    let WORDS = [];   // words.json normalizado (base de render)
+
+    // --------- UI ---------
+    function renderCount() {
+      const total = Object.keys(DB).length;
+      const a12 = Object.values(DB).filter(x => /^a[12]$/i.test(x.level)).length;
+      const b12 = Object.values(DB).filter(x => /^b[12]$/i.test(x.level)).length;
+      const c12 = Object.values(DB).filter(x => /^c[12]$/i.test(x.level)).length;
+
+      const elT = document.getElementById('stat-total-1plus');
+      const elA = document.getElementById('stat-a12');
+      const elB = document.getElementById('stat-b12');
+      const elC = document.getElementById('stat-c12');
+      if (elT) elT.textContent = String(total);
+      if (elA) elA.textContent = String(a12);
+      if (elB) elB.textContent = String(b12);
+      if (elC) elC.textContent = String(c12);
+    }
+
+    function renderTable(filterText = '') {
+      const q = (filterText || '').trim().toLowerCase();
+      const tbody = document.getElementById('tb');
+      if (!tbody) return;
+
+      const rows = Object.values(DB)
+        .filter(item => !q || item.word.toLowerCase().includes(q))
+        .sort((a, b) => a.word.localeCompare(b.word) || (a.pos||'').localeCompare(b.pos||''))
+        .map(item => {
+          const def = item.definition_url ? `<a href="${item.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
+          const voc = item.voice_url ? `<audio controls preload="none"><source src="${item.voice_url}"></audio>` : '';
+          const badge = item.level ? item.level.toUpperCase() : '-';
+          const pos = item.pos ? ` <span class="small muted">(${item.pos})</span>` : '';
+          return `<tr>
+            <td class="nowrap">${item.word}${pos}</td>
+            <td class="right"><span class="badge">${badge}</span></td>
+            <td>${def}</td>
+            <td>${voc}</td>
+          </tr>`;
+        }).join('');
+
+      tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra encontrada.</td></tr>`;
+    }
+
+    // --------- boot ---------
+    (async function init() {
+      try {
+        const res = await fetch('words.json', { cache: 'no-store' });
+        WORDS = res.ok ? normalizeWords(await res.json()) : [];
+      } catch (e) {
+        console.warn('Falha ao carregar words.json', e);
+        WORDS = [];
+      }
+
+      // carrega o que já havia e garante as entradas mínimas
+      DB = loadStore();
+      WORDS.forEach(w => ensureEntry(DB, w));
+      saveStore(DB); // persiste após normalizar
+
+      // render
+      renderCount();
+      renderTable();
+
+      // busca
+      const search = document.getElementById('search');
+      if (search) {
+        search.addEventListener('input', (e) => renderTable(e.target.value));
+      }
+    })();
+  </script>
 </body>
 </html>
