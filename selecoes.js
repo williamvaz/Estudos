@@ -1182,6 +1182,53 @@
 
   const tbody = document.getElementById("sel-tbody");
 
+  // === Radar Chart (atk, dfs, mei, vel, ent) ===
+let radarChart;
+
+function setupRadar() {
+  const el = document.getElementById('radarChart');
+  if (!el) return;
+  const ctx = el.getContext('2d');
+
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['ATK','DFS','MEI','VEL','ENT'],
+      datasets: [{
+        label: 'Atributos',
+        data: [50,50,50,50,50],
+        backgroundColor: 'rgba(173, 255, 47, 0.35)', // verde-limão semi-transparente
+        borderColor: 'rgba(173, 255, 47, 0.9)',
+        pointBackgroundColor: 'rgba(173, 255, 47, 1)',
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          suggestedMin: 0, suggestedMax: 100,
+          ticks: { display: false },
+          pointLabels: { color: '#fff', font: { size: 11 } },
+          grid: { color: 'rgba(255,255,255,0.12)' },
+          angleLines: { color: 'rgba(255,255,255,0.12)' }
+        }
+      }
+    }
+  });
+}
+
+function updateRadar(attrs) {
+  if (!radarChart) setupRadar();
+  if (!radarChart) return;
+  radarChart.data.datasets[0].data = [attrs.atk, attrs.dfs, attrs.mei, attrs.vel, attrs.ent];
+  radarChart.update();
+}
+
+// inicia o canvas (com placeholder)
+setupRadar();
+
   function composeRow(s) {
     return `<tr data-code="${s.code}">
       <td><img class="flag" src="${s.flag}" alt="${s.name}" onerror="this.style.visibility='hidden'"></td>
@@ -1238,6 +1285,9 @@
         const flagEl = document.getElementById('box-flag');
         flagEl.src = data.flag;
         flagEl.alt = data.name;
+        const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
+        updateRadar({ atk, dfs, mei, vel, ent });
+
       });
     });
   }

@@ -110,6 +110,8 @@
     </div>
   </main>
 
+<!-- Painel fixo (box + radar) -->
+<div class="country-wrap">
   <div id="country-box" class="country-box">
     <h3 id="box-name">Selecione um país</h3>
     <p><strong>Torneio:</strong> <span id="box-tournament">-</span></p>
@@ -117,8 +119,12 @@
     <img id="box-flag" src="" alt="Bandeira" class="flag-box">
   </div>
 
+  <div class="radar-box">
+    <canvas id="radarChart" width="260" height="220" aria-label="Atributos"></canvas>
+  </div>
+</div>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   <script src="selecoes.js"></script>
 </body>
 
