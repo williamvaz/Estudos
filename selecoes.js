@@ -1310,14 +1310,18 @@ setupRadar();
     });
   }
 
-  function renderMedalBoard(team, mountSel = '#medal-board'){
+  // usa o <base> se existir; senão, força /Estudos/
+const BASE = document.querySelector('base')?.getAttribute('href') || '/Estudos/';
+
+function renderMedalBoard(team, mountSel = '#medal-board'){
   const mount = document.querySelector(mountSel);
   if(!mount) return;
 
   const imgFor = (key) => {
-    if (key.endsWith('_ouro'))  return 'medals/gold.png';
-    if (key.endsWith('_prata')) return 'medals/silver.png';
-    return 'medals/bronze.png';
+    const file = key.endsWith('_ouro') ? 'gold.png'
+              : key.endsWith('_prata') ? 'silver.png'
+              : 'bronze.png';
+    return `${BASE}medals/${file}`;
   };
 
   const rows = [
@@ -1349,6 +1353,7 @@ setupRadar();
   `;
   mount.innerHTML = html;
 }
+
 
 
 
