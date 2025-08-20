@@ -22,53 +22,6 @@
     localStorage.setItem(LKEY_STATE, JSON.stringify(state));
   }
 
-  // campos de medalhas que vão para o localStorage (por time)
-const MEDAL_FIELDS = [
-  'regional_bronze','regional_prata','regional_ouro',
-  'conf_bronze','conf_prata','conf_ouro',
-  'mundial_bronze','mundial_prata','mundial_ouro',
-];
-
-  function renderMedalBoard(team, mountSel = '#medal-board') {
-  const mount = document.querySelector(mountSel);
-  if (!mount) return;
-
-  const imgFor = (key) => {
-    if (key.endsWith('_ouro'))  return 'medals/gold.png';
-    if (key.endsWith('_prata')) return 'medals/silver.png';
-    return 'medals/bronze.png';
-  };
-
-  const rows = [
-    { title: 'CONTINENTAL',    keys: ['regional_bronze','regional_prata','regional_ouro'] },
-    { title: 'CONFEDERAÇÕES',  keys: ['conf_bronze','conf_prata','conf_ouro'] },
-    { title: 'COPA DO MUNDO',  keys: ['mundial_bronze','mundial_prata','mundial_ouro'] },
-  ];
-
-  const html = `
-    <div class="medal-board">
-      ${rows.map(r => `
-        <div class="medal-row">
-          <div class="medal-title">${r.title}</div>
-          <div class="medal-grid">
-            ${r.keys.map(k => {
-              const v = Number(team.state?.[k] ?? 0);
-              const zero = v === 0 ? 'is-zero' : '';
-              return `
-                <div class="medal ${zero}" data-key="${k}">
-                  <img src="${imgFor(k)}" alt="${k}">
-                  <div class="count">${v}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  mount.innerHTML = html;
-}
-
   function ensureTeamState(state, team) {
     if (!state[team.code]) {
     state[team.code] = { 
@@ -89,11 +42,7 @@ const MEDAL_FIELDS = [
   state[team.code].vel   = clamp(Number(state[team.code].vel)   || 50, 1, 100);
   state[team.code].ent   = clamp(Number(state[team.code].ent)   || 50, 1, 100);
 
-    // **novidade**: garantir medalhas no estado (0..999)
-  for (const k of MEDAL_FIELDS) st[k] = clamp(Number(st[k]) || 0, 0, 999);
-
-      // liga o estado ao objeto time
-    team.state = st;
+    // liga o estado ao objeto time
     team.state = state[team.code];
   }
 
@@ -1224,13 +1173,6 @@ const MEDAL_FIELDS = [
 
   ];
 
-  function openTeamDetails(team) {
-  const state = loadState();
-  ensureTeamState(state, team);   // garante medalhas = 0 se não existir
-  saveState(state);               // persiste
-
-  renderMedalBoard(team, '#medal-board'); // <-- AQUI
-}
   const selecoes = normalizeSelecoes(rawSelecoes);
   const state = loadState();
   selecoes.forEach(s => ensureTeamState(state, s));
