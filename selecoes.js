@@ -1318,9 +1318,9 @@ function renderMedalBoard(team, mountSel = '#medal-board'){
   if(!mount) return;
 
   const imgFor = (key) => {
-    const file = key.endsWith('_ouro') ? 'gold.png'
-              : key.endsWith('_prata') ? 'silver.png'
-              : 'bronze.png';
+    const file = key.endsWith('_ouro') ? 'Ouro.png'
+              : key.endsWith('_prata') ? 'Prata.png'
+              : 'Bronze.png';
     return `${BASE}medals/${file}`;
   };
 
