@@ -1,7 +1,7 @@
 const CACHE = 'estudos-v1';
 const ASSETS = [
   '/', '/home.html', '/styles.css', '/install-pwa.js',
-  '/manifest.webmanifest', '/Icone.webp'
+  '/manifest.webmanifest', '/icone.webp'
 ];
 
 self.addEventListener('install', (e) => {

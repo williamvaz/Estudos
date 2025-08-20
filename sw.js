@@ -4,7 +4,7 @@ const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './Icone.webp',
+  './icone.webp',
   './campeonato.html',
   './selecoes.html',
   './palavras.html',
