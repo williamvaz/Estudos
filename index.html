@@ -16,104 +16,188 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Copa English">
 
-  <link rel="stylesheet" href="home.css">
+  <!-- CSS inline (unificado) -->
   <style>
-    /* Banner de instalação (bem simples) */
-    .install-banner{
-      position: fixed; inset: auto 0 0 0; display:none;
-      background:#12382a; color:#fff; padding:12px 16px;
-      box-shadow: 0 -6px 20px rgba(0,0,0,.3); z-index: 9999;
-      font: 600 15px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    :root{
+      /* identidade visual */
+      --turf:#0e2a12; --turf2:#144e1f; --line:#c8facc;
+      --panel:#0f172a; --muted:#98a3b0; --text:#ecf2f7;
+      --accent:#22c55e; --accent-2:#38bdf8; --danger:#ef4444;
+      --radius:16px; --soft:20px; --shadow:0 14px 36px rgba(0,0,0,.35);
+      --touch:56px;
     }
-    .install-banner .row{display:flex; gap:12px; align-items:center; justify-content:space-between;}
-    .install-banner button{
-      border:0; padding:10px 14px; border-radius:10px; cursor:pointer;
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font:500 16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans","Helvetica Neue",Arial;
+      background:
+        radial-gradient(1200px 800px at 80% -30%, rgba(56,189,248,.12), transparent 60%),
+        linear-gradient(180deg, rgba(34,197,94,.05), transparent 40%),
+        repeating-linear-gradient(90deg, var(--turf) 0 56px, var(--turf2) 56px 112px);
     }
-    .install{background:#2fd47a; color:#092015; font-weight:700;}
-    .fechar{background:#2a2a2a; color:#fff;}
-    @media (display-mode: standalone) {
-      .install-banner{display:none !important;}
+
+    .app{max-width:640px;margin:0 auto;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
+    .topbar{
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); padding:12px 14px; margin:16px 0;
+      box-shadow:var(--shadow)
     }
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand h1{font-size:1.25rem;margin:0}
+    .ball{font-size:26px}
+
+    .menu-grid{
+      display:grid; gap:14px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .menu-card{
+      min-height:128px; padding:14px; width:100%;
+      display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;
+      border-radius:var(--soft); cursor:pointer; text-align:left;
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+      box-shadow:var(--shadow);
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .menu-card:active{transform:scale(.98)}
+    .menu-card:hover{filter:brightness(1.05)}
+    .menu-card .icon{font-size:28px;margin-bottom:8px}
+    .menu-card .title{font-weight:800;font-size:1.05rem;margin-bottom:4px}
+    .menu-card .descr{color:var(--muted);font-size:.92rem}
+
+    /* Acessibilidade dos links */
+    a { color:#fff; text-decoration:none; }
+    a:visited { color:#fff; }
+    a:hover { color:#ddd; text-decoration:underline; }/* (removido) banner de instalação estático — agora usamos um banner dinâmico criado via JS */
+
+    /* Responsivo */
+    @media (max-width:360px){ .menu-grid{grid-template-columns:1fr} }
+    @media (min-width:768px){ .app{max-width:760px} }
   </style>
 </head>
-<body class="is-mobile">
+<body>
   <div class="app">
-    <header class="topbar">
+    <header class="topbar" role="banner">
       <div class="brand">
         <span class="ball" aria-hidden="true">⚽</span>
         <h1 class="brand-title">Copa English</h1>
       </div>
     </header>
 
+    <!-- HOME: 4 botões/links para outras páginas (sem JS extra) -->
     <section class="menu-grid" aria-label="Ações principais">
-      <a class="menu-card" href="campeonato.html">
-        <div class="icon">🏆</div><div class="title">Jogar</div>
+      <a class="menu-card" href="campeonato.html" aria-label="Jogar — iniciar um campeonato">
+        <div class="icon" aria-hidden="true">🏆</div><div class="title">Jogar</div>
         <div class="descr">Inicie um campeonato</div>
       </a>
 
-      <a class="menu-card" href="selecoes.html">
-        <div class="icon">🌍</div><div class="title">Lista de Seleções</div>
+      <a class="menu-card" href="selecoes.html" aria-label="Lista de seleções — bandeiras, score e atributos">
+        <div class="icon" aria-hidden="true">🌍</div><div class="title">Lista de Seleções</div>
         <div class="descr">Bandeiras, score e atributos</div>
       </a>
 
-      <a class="menu-card" href="palavras.html">
-        <div class="icon">📚</div><div class="title">Lista de Palavras</div>
+      <a class="menu-card" href="palavras.html" aria-label="Lista de palavras — banco para revisão">
+        <div class="icon" aria-hidden="true">📚</div><div class="title">Lista de Palavras</div>
         <div class="descr">Seu banco para revisão</div>
       </a>
 
-      <a class="menu-card" href="edicoes.html">
-        <div class="icon">📜</div><div class="title">Histórico de Edições</div>
+      <a class="menu-card" href="edicoes.html" aria-label="Histórico de edições — anfitriões e campeões">
+        <div class="icon" aria-hidden="true">📜</div><div class="title">Histórico de Edições</div>
         <div class="descr">Anfitriões e campeões</div>
       </a>
     </section>
   </div>
-
-  <!-- Banner de instalação -->
-  <div id="installBanner" class="install-banner" role="dialog" aria-live="polite" aria-label="Instalar aplicativo">
-    <div class="row">
-      <div>Instalar “Copa English” na tela inicial?</div>
-      <div>
-        <button class="fechar" id="btnFechar">Agora não</button>
-        <button class="install" id="btnInstalar">Instalar</button>
+  <!-- (removido) banner estático: usamos criação dinâmica via JS -->
+<div>
+        <button class="fechar" id="btnFechar" type="button">Agora não</button>
+        <button class="install" id="btnInstalar" type="button">Instalar</button>
       </div>
     </div>
   </div>
 
+  <!-- JS inline (unificado) -->
   <script>
-  // --- PWA (mantive sua lógica) ---
-  if ('serviceWorker' in navigator) {
-    // certifique-se que o nome aqui é o do seu arquivo real (service-worker.js ou sw.js)
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
-  }
-
-  let deferredPrompt = null;
-  const banner = document.getElementById('installBanner');
-  const btnInstalar = document.getElementById('btnInstalar');
-  const btnFechar = document.getElementById('btnFechar');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const jaMostrado = localStorage.getItem('pwaPromptMostrado') === '1';
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (!jaMostrado && isMobile && !isStandalone) banner.style.display = 'block';
-  });
-
-  btnInstalar?.addEventListener('click', async () => {
-    localStorage.setItem('pwaPromptMostrado', '1');
-    banner.style.display = 'none';
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      try { await deferredPrompt.userChoice; } finally { deferredPrompt = null; }
+    // Registro do Service Worker (ajuste o caminho se necessário)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').catch(console.error);
     }
-  });
-  btnFechar?.addEventListener('click', () => {
-    localStorage.setItem('pwaPromptMostrado', '1');
-    banner.style.display = 'none';
-  });
 
-</script>
+    // -------- Banner PWA dinâmico (baseado no seu snippet) --------
+    let deferredPrompt = null;
 
+    function isStandalone(){
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    }
+    function isMobile(){
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    // cria banner simples
+    function createInstallBanner() {
+      if (document.getElementById('pwa-install')) return;
+
+      const bar = document.createElement('div');
+      bar.id = 'pwa-install';
+      Object.assign(bar.style, {
+        position:'fixed', left:'0', right:'0', bottom:'0', zIndex:'9999', display:'flex', gap:'12px',
+        alignItems:'center', justifyContent:'space-between', padding:'10px 14px',
+        borderTopLeftRadius:'10px', borderTopRightRadius:'10px', background:'#2b1b1b', color:'#fff',
+        boxShadow:'0 -6px 16px rgba(0,0,0,.35)', fontFamily:'system-ui, sans-serif'
+      });
+
+      const left = document.createElement('div');
+      Object.assign(left.style, { display:'flex', alignItems:'center', gap:'10px' });
+      left.innerHTML = `
+        <img src="Icone.webp" alt="Ícone" width="28" height="28" style="border-radius:6px">
+        <div>
+          <div style="font-weight:600">Instalar Estudos Futebol</div>
+          <div style="opacity:.8;font-size:12px">Use como app no seu S23</div>
+        </div>
+      `;
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Instalar';
+      Object.assign(btn.style, { padding:'8px 14px', border:'none', borderRadius:'12px', fontWeight:'600', cursor:'pointer', background:'#7a4d4d', color:'#fff' });
+
+      const close = document.createElement('button');
+      close.textContent = 'X';
+      close.setAttribute('aria-label', 'Fechar');
+      Object.assign(close.style, { background:'transparent', border:'none', color:'#fff', fontSize:'16px', opacity:'.7' });
+
+      bar.append(left, btn, close);
+      document.body.appendChild(bar);
+
+      btn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        try { await deferredPrompt.userChoice; } finally {
+          deferredPrompt = null;
+          bar.remove();
+          localStorage.setItem('pwaPromptMostrado','1');
+        }
+      });
+
+      close.addEventListener('click', () => { bar.remove(); localStorage.setItem('pwaPromptMostrado','1'); });
+    }
+
+    // captura o evento e mostra o banner
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const jaMostrado = localStorage.getItem('pwaPromptMostrado') === '1';
+      if (isMobile() && !isStandalone() && !jaMostrado) createInstallBanner();
+    });
+
+    // se já estiver instalado, não mostrar
+    window.addEventListener('appinstalled', () => {
+      const bar = document.getElementById('pwa-install');
+      if (bar) bar.remove();
+      localStorage.setItem('pwaPromptMostrado','1');
+    });
+  </script>
 </body>
 </html>
