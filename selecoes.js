@@ -22,29 +22,38 @@
     localStorage.setItem(LKEY_STATE, JSON.stringify(state));
   }
 
+  
   function ensureTeamState(state, team) {
-    if (!state[team.code]) {
+  if (!state[team.code]) {
     state[team.code] = { 
-    score: 250,
-    atk: 50,
-    dfs: 50,
-    mei: 50,
-    int: 50,
-    ent: 50
-   };
-    }
+      score: 250,
+      atk: 50,
+      dfs: 50,
+      mei: 50,
+      vel: 50,   // <- corrigido (antes havia "int")
+      ent: 50
+    };
+  }
+
+  const st = state[team.code];
 
   // garante que os valores estejam dentro dos limites
-  state[team.code].score = clamp(Number(state[team.code].score) || 250, 1, 500);
-  state[team.code].atk   = clamp(Number(state[team.code].atk)   || 50, 1, 100);
-  state[team.code].dfs   = clamp(Number(state[team.code].dfs)   || 50, 1, 100);
-  state[team.code].mei   = clamp(Number(state[team.code].mei)   || 50, 1, 100);
-  state[team.code].vel   = clamp(Number(state[team.code].vel)   || 50, 1, 100);
-  state[team.code].ent   = clamp(Number(state[team.code].ent)   || 50, 1, 100);
+  st.score = clamp(Number(st.score) || 250, 1, 500);
+  st.atk   = clamp(Number(st.atk)   || 50,  1, 100);
+  st.dfs   = clamp(Number(st.dfs)   || 50,  1, 100);
+  st.mei   = clamp(Number(st.mei)   || 50,  1, 100);
+  st.vel   = clamp(Number(st.vel)   || 50,  1, 100);
+  st.ent   = clamp(Number(st.ent)   || 50,  1, 100);
 
-    // liga o estado ao objeto time
-    team.state = state[team.code];
+  // medalhas (0..999 por padrão)
+  for (const k of MEDAL_FIELDS) {
+    st[k] = clamp(Number(st[k]) || 0, 0, 999999);
   }
+
+  // liga o estado ao objeto time
+  team.state = st;
+}
+
 
   function normalizeSelecoes(raw) {
     return (raw || []).map((s) => {
@@ -1173,6 +1182,13 @@
 
   ];
 
+  // campos de medalhas que vão para o localStorage (por time)
+const MEDAL_FIELDS = [
+  'regional_bronze','regional_prata','regional_ouro',
+  'conf_bronze','conf_prata','conf_ouro',
+  'mundial_bronze','mundial_prata','mundial_ouro',
+];
+
   const selecoes = normalizeSelecoes(rawSelecoes);
   const state = loadState();
   selecoes.forEach(s => ensureTeamState(state, s));
@@ -1288,10 +1304,52 @@ setupRadar();
         flagEl.alt = data.name;
         const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
         updateRadar({ atk, dfs, mei, vel, ent });
+        renderMedalBoard(data, '#medal-board');
 
       });
     });
   }
+
+  function renderMedalBoard(team, mountSel = '#medal-board'){
+  const mount = document.querySelector(mountSel);
+  if(!mount) return;
+
+  const imgFor = (key) => {
+    if (key.endsWith('_ouro'))  return 'medals/gold.png';
+    if (key.endsWith('_prata')) return 'medals/silver.png';
+    return 'medals/bronze.png';
+  };
+
+  const rows = [
+    { title: 'CONTINENTAL',    keys: ['regional_bronze','regional_prata','regional_ouro'] },
+    { title: 'CONFEDERAÇÕES',  keys: ['conf_bronze','conf_prata','conf_ouro'] },
+    { title: 'COPA DO MUNDO',  keys: ['mundial_bronze','mundial_prata','mundial_ouro'] },
+  ];
+
+  const html = `
+    <div class="medal-board">
+      ${rows.map(r => `
+        <div class="medal-row">
+          <div class="medal-title">${r.title}</div>
+          <div class="medal-grid">
+            ${r.keys.map(k => {
+              const v = Number(team.state?.[k] ?? 0);
+              const zero = v === 0 ? 'is-zero' : '';
+              return `
+                <div class="medal ${zero}" data-key="${k}" title="${k}">
+                  <img src="${imgFor(k)}" alt="${k}">
+                  <div class="count">${v}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  mount.innerHTML = html;
+}
+
 
   renderTable();
 
