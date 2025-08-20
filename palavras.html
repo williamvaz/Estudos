@@ -23,9 +23,22 @@
     .small { font-size:.9rem; opacity:.8; }
     .muted { opacity:.85; }
     .grid { display:grid; gap:12px; }
-    .header-row { display:flex; align-items:center; gap:12px; }
+    .header-row { display:flex; align-items:center; gap:12px; flex-wrap: wrap; }
     .spacer { flex:1 }
-    .input { width: 260px; background:#0f1f15; color:#fff; border:1px solid #284b34; border-radius:10px; padding:10px 12px; }
+    .input { width: 260px; max-width: 100%; background:#0f1f15; color:#fff; border:1px solid #284b34; border-radius:10px; padding:10px 12px; }
+
+    /* --- filtros --- */
+    .filters { display:grid; gap:10px; }
+    @media (min-width: 720px){ .filters { grid-template-columns: 1fr 1fr; } }
+    fieldset { border:1px dashed rgba(255,255,255,.15); border-radius:12px; padding:10px 12px; }
+    fieldset legend { padding:0 6px; font-size:.9rem; opacity:.85; }
+    .checks { display:flex; flex-wrap:wrap; gap:8px 10px; }
+    .chip {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:999px; border:1px solid #284b34; background:#102618;
+      font-size:.9rem; cursor:pointer; user-select:none;
+    }
+    .chip input { accent-color:#2fb36c; }
 
     /* --- stat cards --- */
     .stats { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; }
@@ -35,9 +48,8 @@
     .stat-label { font-size:.85rem; opacity:.8; }
     .stat-value { font-size:1.4rem; font-weight:700; }
 
-    /* -------- tabela responsiva sem scroll horizontal -------- */
+    /* tabela */
     .table-wrap { overflow-x: visible; }
-
     #words-table {
       width: 100%;
       border-collapse: collapse;
@@ -50,11 +62,10 @@
       word-break: break-word;
       overflow: visible;
     }
-    /* Larguras */
-    #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 45%; } /* Word  */
-    #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 15%; } /* Level */
-    #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 20%; } /* Definition */
-    #words-table th:nth-child(4), #words-table td:nth-child(4) { width: 20%; } /* Voice */
+    /* Larguras: 3 colunas (sem nível) */
+    #words-table th:nth-child(1), #words-table td:nth-child(1) { width: 50%; } /* Word  */
+    #words-table th:nth-child(2), #words-table td:nth-child(2) { width: 25%; } /* Definition */
+    #words-table th:nth-child(3), #words-table td:nth-child(3) { width: 25%; } /* Voice */
 
     #words-table td a {
       display:inline-block; max-width:100%;
@@ -98,27 +109,40 @@
       <div class="header-row" style="margin-top:8px">
         <input id="search" class="input" type="search" placeholder="Buscar palavra (ex.: house)" />
         <div class="spacer"></div>
-        <span class="small muted">Mostrando palavras do arquivo <code>words.json</code></span>
+        <span class="small muted">Dados de <code>words.json</code> + memória no <code>localStorage</code></span>
+      </div>
+
+      <div class="filters" style="margin-top:10px">
+        <fieldset>
+          <legend>Filtrar por Level (CEFR)</legend>
+          <div id="f-level" class="checks"></div>
+          <div class="small muted" style="margin-top:6px">Selecione um ou mais níveis. Sem seleção = todos.</div>
+        </fieldset>
+        <fieldset>
+          <legend>Filtrar por Memória</legend>
+          <div id="f-mem" class="checks"></div>
+          <div class="small muted" style="margin-top:6px">Valores lidos do localStorage. Sem seleção = todos.</div>
+        </fieldset>
       </div>
     </section>
 
-    <!-- stats -->
+    <!-- stats (memória) -->
     <section class="stats">
       <div class="stat">
-        <div class="stat-label">Total de palavras</div>
-        <div class="stat-value" id="stat-total-1plus">0</div>
+        <div class="stat-label">Memória ≥ 1</div>
+        <div class="stat-value" id="stat-m1">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label">A1–A2</div>
-        <div class="stat-value" id="stat-a12">0</div>
+        <div class="stat-label">Memória ≥ 5</div>
+        <div class="stat-value" id="stat-m5">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label">B1–B2</div>
-        <div class="stat-value" id="stat-b12">0</div>
+        <div class="stat-label">Memória ≥ 8</div>
+        <div class="stat-value" id="stat-m8">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label">C1–C2</div>
-        <div class="stat-value" id="stat-c12">0</div>
+        <div class="stat-label">Memória ≥ 10</div>
+        <div class="stat-value" id="stat-m10">0</div>
       </div>
     </section>
 
@@ -128,7 +152,6 @@
         <thead>
           <tr>
             <th>Word</th>
-            <th class="right">Level</th>
             <th>Definition</th>
             <th>Voice</th>
           </tr>
@@ -168,7 +191,6 @@
     // Cria/atualiza o registro no localStorage com os campos solicitados
     function ensureEntry(db, w) {
       const id = makeId(w);
-
       if (!db[id]) {
         db[id] = {
           word: w.word,
@@ -193,23 +215,79 @@
     let DB = {};      // mapa salvo no localStorage
     let WORDS = [];   // words.json normalizado (base de render)
 
-    // --------- UI ---------
-    function renderCount() {
-      const total = Object.keys(DB).length;
-      const a12 = Object.values(DB).filter(x => /^a[12]$/i.test(x.level)).length;
-      const b12 = Object.values(DB).filter(x => /^b[12]$/i.test(x.level)).length;
-      const c12 = Object.values(DB).filter(x => /^c[12]$/i.test(x.level)).length;
+    // --------- filtros (estado UI) ---------
+    let selectedLevels = new Set();   // CEFR (ex.: 'a1','b2'...)
+    let selectedMem = new Set();      // números inteiros (ex.: 0,1,2,...)
 
-      const elT = document.getElementById('stat-total-1plus');
-      const elA = document.getElementById('stat-a12');
-      const elB = document.getElementById('stat-b12');
-      const elC = document.getElementById('stat-c12');
-      if (elT) elT.textContent = String(total);
-      if (elA) elA.textContent = String(a12);
-      if (elB) elB.textContent = String(b12);
-      if (elC) elC.textContent = String(c12);
+    // util de leitura das seleções
+    function readSelections(name) {
+      return new Set(
+        Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value)
+      );
     }
 
+    function buildLevelFilter() {
+      const wrap = document.getElementById('f-level');
+      if (!wrap) return;
+
+      const allLevels = Array.from(new Set(Object.values(DB)
+        .map(x => (x.level || '').toLowerCase())
+        .filter(Boolean)))
+        .sort((a,b) => a.localeCompare(b, 'en'));
+
+      wrap.innerHTML = allLevels.map(lvl => `
+        <label class="chip">
+          <input type="checkbox" name="fLevel" value="${lvl}">
+          <span>${lvl.toUpperCase()}</span>
+        </label>
+      `).join('') || `<span class="small muted">Sem níveis para filtrar.</span>`;
+
+      wrap.addEventListener('change', () => {
+        selectedLevels = readSelections('fLevel');
+        renderTable(document.getElementById('search')?.value || '');
+      });
+    }
+
+    function buildMemFilter() {
+      const wrap = document.getElementById('f-mem');
+      if (!wrap) return;
+
+      const allMem = Array.from(new Set(Object.values(DB)
+        .map(x => Number(x["Memoria"] ?? 0))
+        .filter(n => Number.isFinite(n))))
+        .sort((a,b) => a - b);
+
+      wrap.innerHTML = allMem.map(n => `
+        <label class="chip">
+          <input type="checkbox" name="fMem" value="${n}">
+          <span>M${n}</span>
+        </label>
+      `).join('') || `<span class="small muted">Sem valores de memória no localStorage.</span>`;
+
+      wrap.addEventListener('change', () => {
+        selectedMem = new Set(Array.from(readSelections('fMem')).map(v => Number(v)));
+        renderTable(document.getElementById('search')?.value || '');
+        renderCount(); // manter cartões atualizados mesmo quando o usuário mexe em filtros
+      });
+    }
+
+    // --------- UI: cards de contagem (baseados em MEMÓRIA) ---------
+    function renderCount() {
+      const vals = Object.values(DB).map(x => Number(x["Memoria"] ?? 0));
+
+      const m1  = vals.filter(v => v >= 1).length;
+      const m5  = vals.filter(v => v >= 5).length;
+      const m8  = vals.filter(v => v >= 8).length;
+      const m10 = vals.filter(v => v >= 10).length;
+
+      const setText = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = String(n); }
+      setText('stat-m1',  m1);
+      setText('stat-m5',  m5);
+      setText('stat-m8',  m8);
+      setText('stat-m10', m10);
+    }
+
+    // --------- UI: tabela ---------
     function renderTable(filterText = '') {
       const q = (filterText || '').trim().toLowerCase();
       const tbody = document.getElementById('tb');
@@ -217,21 +295,27 @@
 
       const rows = Object.values(DB)
         .filter(item => !q || item.word.toLowerCase().includes(q))
+        // filtro CEFR: se nada selecionado, não filtra; se houver, precisa estar em selectedLevels
+        .filter(item => selectedLevels.size === 0 || selectedLevels.has((item.level || '').toLowerCase()))
+        // filtro Memória: se nada selecionado, não filtra; se houver, precisa EQUAL a um dos selecionados
+        .filter(item => {
+          if (selectedMem.size === 0) return true;
+          const m = Number(item["Memoria"] ?? 0);
+          return selectedMem.has(m);
+        })
         .sort((a, b) => a.word.localeCompare(b.word) || (a.pos||'').localeCompare(b.pos||''))
         .map(item => {
           const def = item.definition_url ? `<a href="${item.definition_url}" target="_blank" rel="noopener">abrir</a>` : '';
           const voc = item.voice_url ? `<audio controls preload="none"><source src="${item.voice_url}"></audio>` : '';
-          const badge = item.level ? item.level.toUpperCase() : '-';
           const pos = item.pos ? ` <span class="small muted">(${item.pos})</span>` : '';
           return `<tr>
             <td class="nowrap">${item.word}${pos}</td>
-            <td class="right"><span class="badge">${badge}</span></td>
             <td>${def}</td>
             <td>${voc}</td>
           </tr>`;
         }).join('');
 
-      tbody.innerHTML = rows || `<tr><td colspan="4" class="muted">Nenhuma palavra encontrada.</td></tr>`;
+      tbody.innerHTML = rows || `<tr><td colspan="3" class="muted">Nenhuma palavra encontrada.</td></tr>`;
     }
 
     // --------- boot ---------
@@ -249,11 +333,15 @@
       WORDS.forEach(w => ensureEntry(DB, w));
       saveStore(DB); // persiste após normalizar
 
-      // render
+      // construir filtros com base no DB preenchido
+      buildLevelFilter();
+      buildMemFilter();
+
+      // render cards e tabela
       renderCount();
       renderTable();
 
-      // busca
+      // busca por texto
       const search = document.getElementById('search');
       if (search) {
         search.addEventListener('input', (e) => renderTable(e.target.value));
