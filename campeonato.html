@@ -336,4 +336,49 @@
   })();
   </script>
 </body>
+
+<style>
+  /* ==== Compacta a tela do Campeonato (overrides) ==== */
+  :root{
+    --flag-w: 88px;
+    --flag-h: 58px;
+    --radar-w: 180px;
+    --radar-h: 150px;
+    --name-fs: .95rem;
+    --score-fs: 1rem;
+    --gap: 8px;
+  }
+
+  .card{ padding:10px; }
+  .row{ gap:10px; }
+
+  .team-card{ gap: var(--gap); }
+  .flag{ width: var(--flag-w); height: var(--flag-h); border-radius: 8px; }
+  .team-name{ font-size: var(--name-fs); }
+  .score{ font-size: var(--score-fs); padding: 4px 10px; border-radius: 999px; }
+
+  .radar{ width: var(--radar-w); height: var(--radar-h); }
+  .legend{ gap:6px 8px; font-size:.78rem; }
+  .badge{ padding:2px 6px; }
+
+  .footer-actions{
+    padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
+  }
+  .btn{ padding:10px 12px; border-radius:10px; font-weight:700; }
+  
+  /* ainda menor no S23/viewport estreita */
+  @media (max-width: 410px){
+    :root{
+      --flag-w: 80px;
+      --flag-h: 52px;
+      --radar-w: 160px;
+      --radar-h: 130px;
+      --name-fs: .9rem;
+      --score-fs: .95rem;
+      --gap: 6px;
+    }
+    .legend{ font-size:.72rem; }
+  }
+</style>
+
 </html>
