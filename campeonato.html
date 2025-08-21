@@ -60,7 +60,7 @@
 
     <!-- Próximo confronto -->
     <section class="card">
-      <!-- [CHANGE] título do confronto fica dinâmico conforme o plano -->
+      <!-- [CHANGE] título do confronto dinâmico -->
       <div id="fixture-info" class="small muted" style="margin-bottom:6px">Próximo confronto</div>
       <div class="row" id="match">
         <!-- time A -->
@@ -97,47 +97,45 @@
   // ===========================
   // CONFIG / CHAVES
   // ===========================
-  const CHAMP = 'CONCACAF'; // campeonato de fallback quando não houver plano
+  const CHAMP = 'CONCACAF'; // fallback quando não houver plano
   const CHAMPS = ['CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'];
   const LKEY_INIT = 'iniciado';
   const LKEY_STATE_V3 = 'team_state_v3'; // { [id]: { score, atk, dfs, mei, vel, ent, sequencia_reg: { CHAMP: n } } }
-  const LKEY_NEXT1 = 'Nextvs1'; // compat (fallback)
-  const LKEY_NEXT2 = 'Nextvs2'; // compat (fallback)
+  const LKEY_NEXT1 = 'Nextvs1'; // compat fallback
+  const LKEY_NEXT2 = 'Nextvs2'; // compat fallback
 
-  // [CHANGE] novas chaves para plano/resultados/slots
+  // [CHANGE] chaves p/ plano, resultados, slots e KO
   const LKEY_PLAN    = 'fixtures_plan_flat_v1'; // array linear de jogos
-  const LKEY_RESULTS = 'fixtures_results_v1';   // { [JOGO]: { ...resultado... } }
+  const LKEY_RESULTS = 'fixtures_results_v1';   // { [JOGO]: { home, away, score:{home,away} } }
   const LKEY_SLOTS   = 'bracket_slots_v1';      // { [comp_id]: { [slot]: "Nome do País" } }
+  const LKEY_KODEF   = 'knockout_def_v1';       // { [comp_id]: { matches:[...], order:[...] } }
+  const LKEY_GROUPS  = 'groups_plan_v1';        // { [camp]: { "Grupo 1":[...], ... } }
 
   // ===========================
   // HELPERS: storage e dados
   // ===========================
   const jget = (k, fb) => { try { const v = JSON.parse(localStorage.getItem(k) || ''); return v ?? fb; } catch { return fb; } };
   const jset = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+  // aliases p/ compat com patches
+  const loadJSON = jget, saveJSON = jset;
   const clamp = (n,a,b) => Math.max(a, Math.min(b, Number(n)||0));
 
-  // tenta obter a lista de seleções de alguma fonte do projeto
   function loadTeams(){
-    // 1) fontes globais
     if (Array.isArray(window.SELECOES)) return window.SELECOES;
     if (Array.isArray(window.TEAMS)) return window.TEAMS;
-    // 2) localStorage (ex.: você pode salvar sua lista em 'teams')
     const ls = jget('teams', []);
     if (Array.isArray(ls) && ls.length) return ls;
-    return []; // sem dados
+    return [];
   }
-  // normaliza propriedades (aceita ID por nome ou code)
   function normTeam(t){
     const conf = (t.conf || t.confederacao || t.region || t.regiao || t.campeonato || '').toString().toUpperCase().trim();
     const code = (t.code || t.cod || t.sigla || t.id || '').toString().toUpperCase().trim();
     const name = (t.name || t.nome || t.country || t.pais || '').toString().trim();
     let flag = (t.flag || t.bandeira || '').toString().trim();
-    if (!flag && name) flag = `Flags/${name}.jpg`; // fallback padrão do teu projeto
+    if (!flag && name) flag = `Flags/${name}.jpg`;
     return { code, name, conf, flag };
   }
-
-  // [CHANGE] agora indexamos por "qualquer chave": code OU name.
-  // byKey permite procurar pelo ID salvo no state, seja ele code ou nome.
+  // [CHANGE] mapeia por code E por name
   function indexTeams(raw){
     const all = raw.map(normTeam).filter(x => (x.code || x.name) && x.conf);
     const byKey = {};
@@ -145,7 +143,7 @@
     for (const c of CHAMPS) byChamp[c] = [];
     for (const t of all){
       if (t.code) byKey[t.code] = t;
-      if (t.name) byKey[t.name] = t; // chaveia pelo nome também
+      if (t.name) byKey[t.name] = t;
       if (CHAMPS.includes(t.conf)) byChamp[t.conf].push(t);
     }
     return { all, byKey, byChamp };
@@ -156,7 +154,6 @@
   // ===========================
   function loadStateV3(){ return jget(LKEY_STATE_V3, {}); }
   function saveStateV3(s){ jset(LKEY_STATE_V3, s); }
-
   function ensureTeamBaseline(s, id){
     if (!s[id]) s[id] = {};
     const st = s[id];
@@ -169,8 +166,6 @@
     if (!st.sequencia_reg || typeof st.sequencia_reg !== 'object') st.sequencia_reg = {};
     return st;
   }
-
-  // gera 1..N aleatório único
   function shuffled1toN(n){
     const arr = Array.from({length:n}, (_,i)=>i+1);
     for (let i=arr.length-1;i>0;i--){
@@ -179,71 +174,56 @@
     }
     return arr;
   }
-
-  // inicialização total (rodada 1x quando 'iniciado' inexistente/0)
   function firstRunInit(byChamp){
     const state = loadStateV3();
-
-    // para cada campeonato, aplica sequência única 1..N
     for (const champ of CHAMPS){
       const list = byChamp[champ] || [];
       if (!list.length) continue;
       const seq = shuffled1toN(list.length);
       list.forEach((t, idx) => {
-        // [CHANGE] ID pode ser nome OU code; preferimos nome se existir
-        const id = t.name || t.code;
+        const id = t.name || t.code; // id preferido: nome
         const st = ensureTeamBaseline(state, id);
-        st.sequencia_reg[champ] = seq[idx]; // salva mapeado por campeonato
+        st.sequencia_reg[champ] = seq[idx];
       });
     }
-
     saveStateV3(state);
     localStorage.setItem(LKEY_INIT, '1');
   }
-
-  // encontra time por sequencia_reg e campeonato (retorna ID salvo no state)
   function findBySeq(champ, seq){
     const state = loadStateV3();
     for (const id in state){
       const st = state[id];
-      if (st?.sequencia_reg?.[champ] === seq) return id;
+      if (st?.sequencia_reg?.[champ] === Number(seq)) return id;
     }
     return null;
   }
 
   // ===========================
-  // Plano / Resultados / Slots (mata-mata)
+  // Plano / Resultados / Slots
   // ===========================
   function loadPlan(){ return jget(LKEY_PLAN, []); }
   function loadResults(){ return jget(LKEY_RESULTS, {}); }
   function loadSlots(){ return jget(LKEY_SLOTS, {}); }
+  function loadKoDef(){ return jget(LKEY_KODEF, {}); }
 
-  // [CHANGE] resolve um participante a partir da referência do plano
-  // suporta: {type:'seed', champ, seq} | {type:'slot', comp_id, slot} | {type:'name', name} | {type:'code', code}
+  // [CHANGE] resolve ref: seed | slot | name | code
   function resolveRef(ref){
     if (!ref) return null;
     const type = String(ref.type||'').toLowerCase();
     if (type === 'seed'){
       const { champ, seq } = ref;
-      const id = findBySeq(champ, Number(seq));
-      return id;
+      return findBySeq((champ||'').toUpperCase(), Number(seq));
     }
     if (type === 'slot'){
       const { comp_id, slot } = ref;
       const slots = loadSlots();
-      const name = slots?.[comp_id]?.[slot] || null; // nome do país
-      return name || null; // nosso ID é o próprio nome
+      const name = slots?.[comp_id]?.[slot] || null;
+      return name || null;
     }
-    if (type === 'name'){
-      return ref.name || null;
-    }
-    if (type === 'code'){
-      return ref.code || null;
-    }
+    if (type === 'name') return ref.name || null;
+    if (type === 'code') return ref.code || null;
     return null;
   }
-
-  // [CHANGE] acha o primeiro jogo do plano ainda não concluído
   function getNextFixture(){
     const plan = loadPlan();
     const results = loadResults();
@@ -252,7 +232,7 @@
       const jid = String(item.JOGO);
       if (!results || !results.hasOwnProperty(jid)) return item;
     }
-    return null; // todos jogados
+    return null;
   }
 
   // ===========================
@@ -261,7 +241,6 @@
   function ensureNextMatchFallback(champ){
     let n1 = jget(LKEY_NEXT1, null);
     let n2 = jget(LKEY_NEXT2, null);
-
     if (!n1 || !n1.id){
       const id1 = findBySeq(champ, 1);
       if (id1) n1 = { id: id1, champ }; else n1 = null;
@@ -276,26 +255,20 @@
   }
 
   // ===========================
-  // UI: Radar (SVG)
+  // UI
   // ===========================
   function drawRadar(svg, stats){
-    // stats: { atk, dfs, mei, vel, ent }  (1..100)
     const W=260, H=220, cx=130, cy=110, R=85;
     const axes = ['atk','dfs','mei','vel','ent'];
     const angles = axes.map((_,i)=> -Math.PI/2 + i*(2*Math.PI/axes.length));
-
-    // limpa
     svg.innerHTML='';
-
-    // grid
-    const g = 4; // 4 anéis
+    const g = 4;
     for (let r=R/g; r<=R; r+=R/g){
       const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
       c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r);
       c.setAttribute('fill','none'); c.setAttribute('stroke','rgba(255,255,255,.12)'); c.setAttribute('stroke-width','1');
       svg.appendChild(c);
     }
-    // eixos
     for (const ang of angles){
       const x = cx + Math.cos(ang)*R;
       const y = cy + Math.sin(ang)*R;
@@ -306,7 +279,6 @@
       line.setAttribute('stroke-width','1');
       svg.appendChild(line);
     }
-    // polígono
     const pts = angles.map((ang,i)=>{
       const key = axes[i];
       const v = clamp(stats[key]||0, 0, 100) / 100;
@@ -321,16 +293,11 @@
     poly.setAttribute('stroke-width','2');
     svg.appendChild(poly);
   }
-
-  // ===========================
-  // RENDER
-  // ===========================
   function renderTeam(slotId, team, state){
     const nameEl   = document.getElementById(`${slotId}-name`);
     const flagEl   = document.getElementById(`${slotId}-flag`);
     const scoreEl  = document.getElementById(`${slotId}-score`);
     const radarEl  = document.getElementById(`${slotId}-radar`);
-
     if (!team){
       nameEl.textContent = '—';
       flagEl.removeAttribute('src');
@@ -341,27 +308,266 @@
     nameEl.textContent = team.name || team.code || '—';
     flagEl.src = team.flag || '';
     scoreEl.textContent = state.score ?? '—';
-    drawRadar(radarEl, {
-      atk: state.atk, dfs: state.dfs, mei: state.mei, vel: state.vel, ent: state.ent
-    });
+    drawRadar(radarEl, { atk: state.atk, dfs: state.dfs, mei: state.mei, vel: state.vel, ent: state.ent });
   }
-
   function showStatus(msg){
     const el = document.getElementById('status');
     if (!el) return;
     el.innerHTML = msg || '';
   }
-
-  // [CHANGE] legenda do confronto (de onde vieram os times)
   function setFixtureInfo(text){
     const el = document.getElementById('fixture-info');
     if (el) el.textContent = text || 'Próximo confronto';
   }
 
+  // =====================================================
+  // [GROUPS→KO] --------- PIPELINE GRUPOS → MATA-MATA ----
+  // =====================================================
+  async function getCampConfig(camp){
+    const cache = jget('campeonatos', null);
+    if (cache && (Array.isArray(cache) || typeof cache==='object')) {
+      const obj = Array.isArray(cache) ? cache.find(x=> (x.Nome||'').toUpperCase()===camp) : cache[camp];
+      if (obj) return obj;
+    }
+    try{
+      const res = await fetch('campeonatos.json', { cache:'no-store' });
+      if (res.ok){
+        const data = await res.json();
+        jset('campeonatos', data);
+        if (Array.isArray(data)) return data.find(x=> (x.Nome||'').toUpperCase()===camp) || null;
+        return data[camp] || null;
+      }
+    }catch{}
+    return null;
+  }
+  function ensureGroupsPlanFromSeeds(camp, campCfg){
+    const groupsPlan = jget(LKEY_GROUPS, {});
+    if (groupsPlan[camp] && Object.keys(groupsPlan[camp]).length) return groupsPlan[camp];
+    const state = jget(LKEY_STATE_V3, {});
+    const seeded = Object.entries(state)
+      .map(([name,st]) => ({ name, seq: st?.sequencia_reg?.[camp] }))
+      .filter(x => Number.isFinite(x.seq))
+      .sort((a,b)=> a.seq - b.seq);
+    if (!seeded.length || !campCfg) return null;
+    const entries = Object.entries(campCfg).filter(([k]) => /^Grupo\s+\d+$/i.test(k))
+      .sort((a,b)=> parseInt(a[0].match(/\d+/)[0],10) - parseInt(b[0].match(/\d+/)[0],10));
+    const plan = {};
+    let idx = 0;
+    for (const [gName, gSize] of entries){
+      const size = Number(gSize)||0;
+      const slice = seeded.slice(idx, idx+size).map(x=>x.name);
+      plan[gName] = slice;
+      idx += size;
+    }
+    groupsPlan[camp] = plan;
+    jset(LKEY_GROUPS, groupsPlan);
+    return plan;
+  }
+  function computeGroupTables(camp, groupsPlan){
+    const plan = loadPlan();
+    const results = loadResults();
+    if (!groupsPlan) return null;
+    const teamGroup = {};
+    for (const [gName, list] of Object.entries(groupsPlan)){ for (const nm of list){ teamGroup[nm] = gName; } }
+    const table = {};
+    for (const gName of Object.keys(groupsPlan)){
+      table[gName] = {};
+      for (const nm of groupsPlan[gName]){
+        table[gName][nm] = { pts:0, gp:0, gc:0, sg:0, v:0, e:0, d:0, j:0 };
+      }
+    }
+    for (const fx of plan){
+      const jid = String(fx.JOGO);
+      const r = results[jid];
+      if (!r) continue;
+      const isSeed1 = fx.Nextvs1 && fx.Nextvs1.type==='seed' && (fx.Nextvs1.champ||'').toUpperCase()===camp;
+      const isSeed2 = fx.Nextvs2 && fx.Nextvs2.type==='seed' && (fx.Nextvs2.champ||'').toUpperCase()===camp;
+      if (!(isSeed1 && isSeed2)) continue;
+      const home = r.home; const away = r.away;
+      const gHome = teamGroup[home]; const gAway = teamGroup[away];
+      if (!gHome || !gAway || gHome!==gAway) continue;
+      const sh = Number(r?.score?.home||0);
+      const sa = Number(r?.score?.away||0);
+      const th = table[gHome][home]; const ta = table[gAway][away];
+      if (!th || !ta) continue;
+      th.j++; ta.j++;
+      th.gp += sh; th.gc += sa; th.sg = th.gp - th.gc;
+      ta.gp += sa; ta.gc += sh; ta.sg = ta.gp - ta.gc;
+      if (sh>sa){ th.v++; th.pts+=3; ta.d++; }
+      else if (sh<sa){ ta.v++; ta.pts+=3; th.d++; }
+      else { th.e++; ta.e++; th.pts++; ta.pts++; }
+    }
+    const sorted = {};
+    for (const [gName, rows] of Object.entries(table)){
+      sorted[gName] = Object.entries(rows)
+        .map(([name,stat]) => ({ name, ...stat }))
+        .sort((a,b)=>{
+          if (b.pts!==a.pts) return b.pts-a.pts;
+          if (b.sg!==a.sg)   return b.sg-a.sg;
+          if (b.gp!==a.gp)   return b.gp-a.gp;
+          return a.name.localeCompare(b.name,'pt');
+        });
+    }
+    return sorted;
+  }
+  function groupsCompleted(camp){
+    const plan = loadPlan();
+    const results = loadResults();
+    for (const fx of plan){
+      const isSeed1 = fx.Nextvs1 && fx.Nextvs1.type==='seed' && (fx.Nextvs1.champ||'').toUpperCase()===camp;
+      const isSeed2 = fx.Nextvs2 && fx.Nextvs2.type==='seed' && (fx.Nextvs2.champ||'').toUpperCase()===camp;
+      if (isSeed1 && isSeed2){
+        const jid = String(fx.JOGO);
+        if (!results[jid]) return false;
+      }
+    }
+    return true;
+  }
+  function seedKnockoutFromTables(camp, tables){
+    const compId = `${camp}-KO`;
+    const groupsNames = Object.keys(tables).sort((a,b)=> parseInt(a.match(/\d+/)[0],10) - parseInt(b.match(/\d+/)[0],10));
+    const G = {};
+    groupsNames.forEach((gName, idx)=>{
+      const arr = tables[gName]||[];
+      G[idx+1] = { first: arr[0]?.name || null, second: arr[1]?.name || null };
+    });
+    const slots = {};
+    const pairings = [
+      { left:{lab:'A1', from:G[1]?.first }, right:{lab:'B2', from:G[2]?.second} }, // O1
+      { left:{lab:'C1', from:G[3]?.first }, right:{lab:'D2', from:G[4]?.second} }, // O2
+      { left:{lab:'E1', from:G[5]?.first }, right:{lab:'F2', from:G[6]?.second} }, // O3
+      { left:{lab:'G1', from:G[7]?.first }, right:{lab:'H2', from:G[8]?.second} }, // O4
+      { left:{lab:'B1', from:G[2]?.first }, right:{lab:'A2', from:G[1]?.second} }, // O5
+      { left:{lab:'D1', from:G[4]?.first }, right:{lab:'C2', from:G[3]?.second} }, // O6
+      { left:{lab:'F1', from:G[6]?.first }, right:{lab:'E2', from:G[5]?.second} }, // O7
+      { left:{lab:'H1', from:G[8]?.first }, right:{lab:'G2', from:G[7]?.second} }  // O8
+    ];
+    pairings.forEach((p)=>{ if (p.left.from)  slots[p.left.lab]  = p.left.from;
+                            if (p.right.from) slots[p.right.lab] = p.right.from; });
+    const def = {
+      matches: [
+        { id:'O1', left:{slot:'A1'}, right:{slot:'B2'}, winTo:{slot:'O1'} },
+        { id:'O2', left:{slot:'C1'}, right:{slot:'D2'}, winTo:{slot:'O2'} },
+        { id:'O3', left:{slot:'E1'}, right:{slot:'F2'}, winTo:{slot:'O3'} },
+        { id:'O4', left:{slot:'G1'}, right:{slot:'H2'}, winTo:{slot:'O4'} },
+        { id:'O5', left:{slot:'B1'}, right:{slot:'A2'}, winTo:{slot:'O5'} },
+        { id:'O6', left:{slot:'D1'}, right:{slot:'C2'}, winTo:{slot:'O6'} },
+        { id:'O7', left:{slot:'F1'}, right:{slot:'E2'}, winTo:{slot:'O7'} },
+        { id:'O8', left:{slot:'H1'}, right:{slot:'G2'}, winTo:{slot:'O8'} },
+
+        { id:'Q1', left:{slot:'O1'}, right:{slot:'O2'}, winTo:{slot:'Q1'} },
+        { id:'Q2', left:{slot:'O3'}, right:{slot:'O4'}, winTo:{slot:'Q2'} },
+        { id:'Q3', left:{slot:'O5'}, right:{slot:'O6'}, winTo:{slot:'Q3'} },
+        { id:'Q4', left:{slot:'O7'}, right:{slot:'O8'}, winTo:{slot:'Q4'} },
+
+        { id:'L1', left:{slot:'Q1'}, right:{slot:'Q2'}, winTo:{slot:'L1'}, loseTo:{slot:'T1', side:'left'} },
+        { id:'L2', left:{slot:'Q3'}, right:{slot:'Q4'}, winTo:{slot:'L2'}, loseTo:{slot:'T1', side:'right'} },
+
+        { id:'W1', left:{slot:'L1'}, right:{slot:'L2'}, winTo:{slot:'W1'} },
+        { id:'T1', left:{slot:'L1*'}, right:{slot:'L2*'}, winTo:{slot:'T1'} }
+      ],
+      order: ['O1','O2','O3','O4','O5','O6','O7','O8','Q1','Q2','Q3','Q4','L1','L2','T1','W1']
+    };
+    const slotsAll = jget(LKEY_SLOTS, {});
+    const defAll   = jget(LKEY_KODEF, {});
+    slotsAll[compId] = Object.assign(slotsAll[compId]||{}, slots);
+    defAll[compId]   = def;
+    jset(LKEY_SLOTS, slotsAll);
+    jset(LKEY_KODEF, defAll);
+    return { compId, def, slots };
+  }
+
+  // ===== KO progressivo: adiciona oitavas e destrava até a final =====
+
+  // [CHANGE] (substitui a versão simples): adiciona SÓ OITAVAS agora, grava M=id do KO
+  function appendKnockoutToPlan(compId, def){
+    const plan = loadJSON(LKEY_PLAN, []);
+    const sig = (m) => `${compId}:${m.left.slot}|${compId}:${m.right.slot}`;
+    const hasSig = new Set(
+      plan.filter(x => x?.Nextvs1?.type==='slot' && x?.Nextvs2?.type==='slot')
+          .map(x => `${x.Nextvs1.comp_id}:${x.Nextvs1.slot}|${x.Nextvs2.comp_id}:${x.Nextvs2.slot}`)
+    );
+    let nextId = plan.length ? Math.max(...plan.map(x=> Number(x.JOGO)||0)) + 1 : 1;
+    const addRound = (ids) => {
+      const toAdd = [];
+      for (const id of ids){
+        const m = def.matches.find(x=> x.id===id);
+        if (!m) continue;
+        const s = sig(m);
+        if (hasSig.has(s)) continue;
+        toAdd.push({
+          JOGO: nextId++,
+          M: id, // id da partida no KO (O1/Q1/L1/T1/W1)
+          Nextvs1: { type:'slot', comp_id: compId, slot: m.left.slot },
+          Nextvs2: { type:'slot', comp_id: compId, slot: m.right.slot }
+        });
+        hasSig.add(s);
+      }
+      if (toAdd.length){ plan.push(...toAdd); localStorage.setItem(LKEY_PLAN, JSON.stringify(plan)); }
+    };
+    addRound(['O1','O2','O3','O4','O5','O6','O7','O8']); // só oitavas por agora
+  }
+  function koRoundResultsDone(compId, ids){
+    const plan = loadJSON(LKEY_PLAN, []);
+    const results = loadJSON(LKEY_RESULTS, {});
+    const id2jogo = Object.fromEntries(
+      plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId)
+          .map(p => [p.M, String(p.JOGO)])
+    );
+    return ids.every(id => results[id2jogo[id]]);
+  }
+  function appendKORound(compId, def, ids){
+    const plan = loadJSON(LKEY_PLAN, []);
+    const hasM = new Set(plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId).map(p=>p.M));
+    const need = ids.filter(id=>!hasM.has(id));
+    if (!need.length) return;
+    let nextId = plan.length ? Math.max(...plan.map(x=> Number(x.JOGO)||0)) + 1 : 1;
+    const toAdd = [];
+    for (const id of need){
+      const m = def.matches.find(x=> x.id===id);
+      if (!m) continue;
+      toAdd.push({
+        JOGO: nextId++,
+        M: id,
+        Nextvs1: { type:'slot', comp_id: compId, slot: m.left.slot },
+        Nextvs2: { type:'slot', comp_id: compId, slot: m.right.slot }
+      });
+    }
+    if (toAdd.length){
+      plan.push(...toAdd);
+      localStorage.setItem(LKEY_PLAN, JSON.stringify(plan));
+    }
+  }
+  async function maybeUnlockNextKORounds(compId, def){
+    // todas as Oitavas feitas? → Quartas
+    if (koRoundResultsDone(compId, ['O1','O2','O3','O4','O5','O6','O7','O8'])){
+      appendKORound(compId, def, ['Q1','Q2','Q3','Q4']);
+    }
+    // Quartas feitas? → Semis
+    if (koRoundResultsDone(compId, ['Q1','Q2','Q3','Q4'])){
+      appendKORound(compId, def, ['L1','L2']);
+    }
+    // Semis feitas? → 3º lugar e Final
+    if (koRoundResultsDone(compId, ['L1','L2'])){
+      appendKORound(compId, def, ['T1','W1']);
+    }
+  }
+
+  async function ensureKOPhaseIfReady(camp){
+    const cfg = await getCampConfig(camp);
+    const groups = ensureGroupsPlanFromSeeds(camp, cfg);
+    if (!groups) return;
+    if (!groupsCompleted(camp)) return; // ainda falta jogo de grupo
+    const tables = computeGroupTables(camp, groups);
+    const { compId, def } = seedKnockoutFromTables(camp, tables);
+    appendKnockoutToPlan(compId, def);       // adiciona oitavas (se não tiver)
+    await maybeUnlockNextKORounds(compId, def); // destrava até a final
+  }
+
   // ===========================
   // BOOT
   // ===========================
-  (function init(){
+  (async function init(){
     const teamsRaw = loadTeams();
     const { byKey, byChamp } = indexTeams(teamsRaw);
 
@@ -373,18 +579,24 @@
     // 1) iniciado?
     const iniciado = Number(localStorage.getItem(LKEY_INIT) || 0);
     if (!iniciado){
-      firstRunInit(byChamp); // gera sequências e salva
+      firstRunInit(byChamp); // sorteia sequências e salva
     }
 
-    // 2) tenta montar pelo PLANO linear (sem JOGO.json, usa resultados para achar o primeiro pendente)
+    // 2) [GROUPS→KO] antes de montar próximo jogo, tente graduar KO em cada confederação
+    await ensureKOPhaseIfReady('CONMEBOL');
+    await ensureKOPhaseIfReady('CONCACAF');
+    await ensureKOPhaseIfReady('CAF');
+    await ensureKOPhaseIfReady('AFC');
+    await ensureKOPhaseIfReady('OFC');
+    await ensureKOPhaseIfReady('UEFA');
+
+    // 3) Próximo confronto via plano linear
     const fixture = getNextFixture();
 
     let id1=null, id2=null, info='Próximo confronto';
     if (fixture){
       id1 = resolveRef(fixture.Nextvs1);
       id2 = resolveRef(fixture.Nextvs2);
-
-      // monta um texto amigável da origem
       const sideDesc = (ref)=>{
         if (!ref) return '—';
         const t = String(ref.type||'').toLowerCase();
@@ -398,7 +610,7 @@
       setFixtureInfo(info);
     }
 
-    // 3) se não houver plano, cai no fallback (pares 1×2 do campeonato padrão)
+    // 4) Fallback (se não houver plano)
     if (!id1 || !id2){
       const fb = ensureNextMatchFallback(CHAMP);
       id1 = id1 || fb.n1?.id || null;
@@ -406,15 +618,12 @@
       if (!fixture) setFixtureInfo(`Próximo confronto (${CHAMP})`);
     }
 
-    // 4) Render
+    // 5) Render
     const st = loadStateV3();
-
-    // garante baseline
     if (id1){ ensureTeamBaseline(st, id1); }
     if (id2){ ensureTeamBaseline(st, id2); }
     saveStateV3(st);
 
-    // resolve objetos do catálogo (byKey aceita nome OU código)
     const t1 = id1 ? (byKey[id1] || { name:id1, flag:`Flags/${id1}.jpg` }) : null;
     const t2 = id2 ? (byKey[id2] || { name:id2, flag:`Flags/${id2}.jpg` }) : null;
 
@@ -441,25 +650,19 @@
     --score-fs: 1rem;
     --gap: 8px;
   }
-
   .card{ padding:10px; }
   .row{ gap:10px; }
-
   .team-card{ gap: var(--gap); }
   .flag{ width: var(--flag-w); height: var(--flag-h); border-radius: 8px; }
   .team-name{ font-size: var(--name-fs); }
   .score{ font-size: var(--score-fs); padding: 4px 10px; border-radius: 999px; }
-
   .radar{ width: var(--radar-w); height: var(--radar-h); }
   .legend{ gap:6px 8px; font-size:.78rem; }
   .badge{ padding:2px 6px; }
-
   .footer-actions{
     padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
   }
   .btn{ padding:10px 12px; border-radius:10px; font-weight:700; }
-  
-  /* ainda menor no S23/viewport estreita */
   @media (max-width: 410px){
     :root{
       --flag-w: 80px;
