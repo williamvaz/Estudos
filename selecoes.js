@@ -30,7 +30,7 @@
       atk: 50,
       dfs: 50,
       mei: 50,
-      vel: 50,   // <- corrigido (antes havia "int")
+      vel: 50,
       ent: 50
     };
   }
@@ -48,6 +48,11 @@
   // medalhas (0..999 por padrão)
   for (const k of MEDAL_FIELDS) {
     st[k] = clamp(Number(st[k]) || 0, 0, 999999);
+  }
+
+    // 👇 NOVO: prepara o espaço onde o campeonato vai gravar a sequência
+  if (!st.sequencia_reg || typeof st.sequencia_reg !== 'object') {
+    st.sequencia_reg = {}; // exemplo: { CONCACAF: 12, UEFA: 4, ... }
   }
 
   // liga o estado ao objeto time
@@ -1193,6 +1198,21 @@ const MEDAL_FIELDS = [
   const state = loadState();
   selecoes.forEach(s => ensureTeamState(state, s));
   saveState(state);
+
+  // Disponibiliza a lista para outras telas (ex.: campeonato.html)
+window.SELECOES = selecoes;
+
+// (opcional) também salva um formato enxuto no localStorage
+// que o campeonato.html sabe ler (code, name, conf, flag)
+localStorage.setItem('teams', JSON.stringify(
+  selecoes.map(s => ({
+    code: s.code,
+    name: s.name,
+    conf: (s.tournament || s.conf || s.region || '').toUpperCase(),
+    flag: s.flag
+  }))
+));
+
 
   let sortKey = "name",
       sortDir = 1;

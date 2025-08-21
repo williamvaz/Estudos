@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Estudos Futebol • Campeonato</title>
+  <base href="/Estudos/">
+  <meta name="theme-color" content="#0b3b22" />
+  <link rel="stylesheet" href="home.css" />
+  <style>
+    :root { color-scheme: dark; }
+    body { color:#fff; }
+
+    .container{ max-width:980px; margin:0 auto; padding:12px; display:flex; flex-direction:column; gap:12px; }
+    .card{ background:rgba(0,0,0,.15); border:1px solid rgba(255,255,255,.08);
+           border-radius:14px; padding:12px; }
+    .row{ display:grid; gap:12px; }
+    @media (min-width: 860px){ .row{ grid-template-columns: 1fr 1fr; } }
+
+    .team-card{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+    .flag{ width:120px; height:80px; object-fit:cover; border-radius:10px;
+           box-shadow:0 0 0 1px rgba(0,0,0,.3) inset, 0 8px 22px rgba(0,0,0,.4); }
+    .team-name{ font-weight:800; font-size:1.05rem; text-align:center; }
+    .score{ font-size:1.25rem; font-weight:800; background:#102618; border:1px solid #284b34;
+            padding:6px 12px; border-radius:999px; }
+
+    /* Radar */
+    .radar{ width:260px; height:220px; }
+    .legend{ display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:center; font-size:.85rem; opacity:.85 }
+    .badge{ padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
+
+    /* rodapé fixo */
+    .footer-actions{
+      position: fixed; left:0; right:0; bottom:0; z-index: 1000;
+      padding: 10px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-right));
+      background: rgba(10,18,12,.85); backdrop-filter: blur(6px);
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; gap:10px;
+    }
+    .btn{ flex:1; text-align:center; padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+          color:#fff; text-decoration:none; font-weight:800; }
+    .btn-primary{ background:#22c55e; color:#092015; border-color:#22c55e; }
+    .btn-secondary{ background:#0f1f15; }
+    .muted{ opacity:.8; }
+    .warn{ background:#2a1c1c; border-color:#553a3a; color:#ffd0d0; padding:12px; border-radius:10px; }
+  </style>
+</head>
+<body class="is-mobile">
+  <header class="topbar">
+    <div class="brand">
+      <span class="ball">🏆</span>
+      <h1>Campeonato</h1>
+      <a class="back small" href="index.html" style="margin-left:auto">← Início</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Status/erros -->
+    <div id="status" class="muted small"></div>
+
+    <!-- Próximo confronto -->
+    <section class="card">
+      <div class="small muted" style="margin-bottom:6px">Próximo confronto (CONCACAF)</div>
+      <div class="row" id="match">
+        <!-- time A -->
+        <div class="team-card" id="t1">
+          <img class="flag" id="t1-flag" alt="">
+          <div class="team-name" id="t1-name">—</div>
+          <div class="score">Score: <span id="t1-score">—</span></div>
+          <svg class="radar" id="t1-radar" viewBox="0 0 260 220" aria-hidden="true"></svg>
+          <div class="legend">
+            <span class="badge">ATK</span><span class="badge">DFS</span><span class="badge">MEI</span><span class="badge">VEL</span><span class="badge">ENT</span>
+          </div>
+        </div>
+        <!-- time B -->
+        <div class="team-card" id="t2">
+          <img class="flag" id="t2-flag" alt="">
+          <div class="team-name" id="t2-name">—</div>
+          <div class="score">Score: <span id="t2-score">—</span></div>
+          <svg class="radar" id="t2-radar" viewBox="0 0 260 220" aria-hidden="true"></svg>
+          <div class="legend">
+            <span class="badge">ATK</span><span class="badge">DFS</span><span class="badge">MEI</span><span class="badge">VEL</span><span class="badge">ENT</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- botões fixos -->
+  <div class="footer-actions">
+    <a class="btn btn-primary" href="jogar.html">Jogar</a>
+    <a class="btn btn-secondary" href="tabela.html">Ver tabelas</a>
+  </div>
+
+  <script>
+  // ===========================
+  // CONFIG / CHAVES
+  // ===========================
+  const CHAMP = 'CONCACAF'; // campeonato inicial para montar Nextvs1/2
+  const CHAMPS = ['CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'];
+  const LKEY_INIT = 'iniciado';
+  const LKEY_STATE_V3 = 'team_state_v3'; // { [code]: { score, atk, dfs, mei, vel, ent, sequencia_reg: { CHAMP: n } } }
+  const LKEY_NEXT1 = 'Nextvs1'; // { code, champ }
+  const LKEY_NEXT2 = 'Nextvs2'; // { code, champ }
+
+  // ===========================
+  // HELPERS: storage e dados
+  // ===========================
+  const jget = (k, fb) => { try { const v = JSON.parse(localStorage.getItem(k) || ''); return v ?? fb; } catch { return fb; } };
+  const jset = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+  const clamp = (n,a,b) => Math.max(a, Math.min(b, Number(n)||0));
+
+  // tenta obter a lista de seleções de alguma fonte do projeto
+  function loadTeams(){
+    // 1) fontes globais
+    if (Array.isArray(window.SELECOES)) return window.SELECOES;
+    if (Array.isArray(window.TEAMS)) return window.TEAMS;
+    // 2) localStorage (ex.: você pode salvar sua lista em 'teams')
+    const ls = jget('teams', []);
+    if (Array.isArray(ls) && ls.length) return ls;
+    return []; // sem dados
+  }
+  // normaliza propriedades (code/name/conf/flag)
+  function normTeam(t){
+    const conf = (t.conf || t.confederacao || t.region || t.regiao || t.campeonato || '').toString().toUpperCase().trim();
+    const code = (t.code || t.cod || t.sigla || t.id || '').toString().toUpperCase().trim();
+    const name = (t.name || t.nome || t.country || t.pais || '').toString().trim();
+    let flag = (t.flag || t.bandeira || '').toString().trim();
+    if (!flag && name) flag = `Flags/${name}.jpg`; // fallback padrão do teu projeto
+    return { code, name, conf, flag };
+  }
+  function indexTeams(raw){
+    const all = raw.map(normTeam).filter(x => x.code && x.conf);
+    const byCode = Object.fromEntries(all.map(t => [t.code, t]));
+    const byChamp = {};
+    for (const c of CHAMPS) byChamp[c] = [];
+    for (const t of all) if (CHAMPS.includes(t.conf)) byChamp[t.conf].push(t);
+    return { all, byCode, byChamp };
+  }
+
+  // ===========================
+  // STATE V3 (por time)
+  // ===========================
+  function loadStateV3(){ return jget(LKEY_STATE_V3, {}); }
+  function saveStateV3(s){ jset(LKEY_STATE_V3, s); }
+
+  function ensureTeamBaseline(s, code){
+    if (!s[code]) s[code] = {};
+    const st = s[code];
+    st.score = clamp(st.score ?? 250, 1, 9999);
+    st.atk = clamp(st.atk ?? 50, 1, 100);
+    st.dfs = clamp(st.dfs ?? 50, 1, 100);
+    st.mei = clamp(st.mei ?? 50, 1, 100);
+    st.vel = clamp(st.vel ?? 50, 1, 100);
+    st.ent = clamp(st.ent ?? 50, 1, 100);
+    if (!st.sequencia_reg || typeof st.sequencia_reg !== 'object') st.sequencia_reg = {};
+    return st;
+  }
+
+  // gera 1..N aleatório único
+  function shuffled1toN(n){
+    const arr = Array.from({length:n}, (_,i)=>i+1);
+    for (let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
+  // inicialização total (rodada 1x quando 'iniciado' inexistente/0)
+  function firstRunInit(byChamp){
+    const state = loadStateV3();
+
+    // para cada campeonato, aplica sequência única 1..N
+    for (const champ of CHAMPS){
+      const list = byChamp[champ] || [];
+      if (!list.length) continue;
+      const seq = shuffled1toN(list.length);
+      list.forEach((t, idx) => {
+        const st = ensureTeamBaseline(state, t.code);
+        st.sequencia_reg[champ] = seq[idx]; // salva mapeado por campeonato
+      });
+    }
+
+    saveStateV3(state);
+    localStorage.setItem(LKEY_INIT, '1');
+  }
+
+  // encontra time por sequencia_reg e campeonato
+  function findBySeq(champ, seq, idx){
+    const state = loadStateV3();
+    // procura por code cujo state.sequencia_reg[champ] === seq
+    for (const code in state){
+      const st = state[code];
+      if (st?.sequencia_reg?.[champ] === seq) return code;
+    }
+    return null;
+  }
+
+  // ===========================
+  // NEXT VS
+  // ===========================
+  function ensureNextMatch(champ){
+    let n1 = jget(LKEY_NEXT1, null);
+    let n2 = jget(LKEY_NEXT2, null);
+
+    if (!n1 || !n1.code){ // grava {code, champ}
+      const code1 = findBySeq(champ, 1);
+      if (code1) n1 = { code: code1, champ }; else n1 = null;
+      if (n1) jset(LKEY_NEXT1, n1);
+    }
+    if (!n2 || !n2.code){
+      const code2 = findBySeq(champ, 2);
+      if (code2) n2 = { code: code2, champ }; else n2 = null;
+      if (n2) jset(LKEY_NEXT2, n2);
+    }
+    return { n1, n2 };
+  }
+
+  // ===========================
+  // UI: Radar (SVG)
+  // ===========================
+  function drawRadar(svg, stats){
+    // stats: { atk, dfs, mei, vel, ent }  (1..100)
+    const W=260, H=220, cx=130, cy=110, R=85;
+    const axes = ['atk','dfs','mei','vel','ent'];
+    const angles = axes.map((_,i)=> -Math.PI/2 + i*(2*Math.PI/axes.length));
+
+    // limpa
+    svg.innerHTML='';
+
+    // grid
+    const g = 4; // 4 anéis
+    for (let r=R/g; r<=R; r+=R/g){
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r);
+      c.setAttribute('fill','none'); c.setAttribute('stroke','rgba(255,255,255,.12)'); c.setAttribute('stroke-width','1');
+      svg.appendChild(c);
+    }
+    // eixos
+    for (const ang of angles){
+      const x = cx + Math.cos(ang)*R;
+      const y = cy + Math.sin(ang)*R;
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',cx); line.setAttribute('y1',cy);
+      line.setAttribute('x2',x);  line.setAttribute('y2',y);
+      line.setAttribute('stroke','rgba(255,255,255,.15)');
+      line.setAttribute('stroke-width','1');
+      svg.appendChild(line);
+    }
+    // polígono
+    const pts = angles.map((ang,i)=>{
+      const key = axes[i];
+      const v = clamp(stats[key]||0, 0, 100) / 100;
+      const x = cx + Math.cos(ang)*R*v;
+      const y = cy + Math.sin(ang)*R*v;
+      return `${x},${y}`;
+    }).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill','rgba(56,189,248,.25)');
+    poly.setAttribute('stroke','rgba(56,189,248,.9)');
+    poly.setAttribute('stroke-width','2');
+    svg.appendChild(poly);
+  }
+
+  // ===========================
+  // RENDER
+  // ===========================
+  function renderTeam(slotId, team, state){
+    const nameEl   = document.getElementById(`${slotId}-name`);
+    const flagEl   = document.getElementById(`${slotId}-flag`);
+    const scoreEl  = document.getElementById(`${slotId}-score`);
+    const radarEl  = document.getElementById(`${slotId}-radar`);
+
+    if (!team){
+      nameEl.textContent = '—';
+      flagEl.removeAttribute('src');
+      scoreEl.textContent = '—';
+      radarEl.innerHTML = '';
+      return;
+    }
+    nameEl.textContent = team.name || team.code;
+    flagEl.src = team.flag || '';
+    scoreEl.textContent = state.score ?? '—';
+    drawRadar(radarEl, {
+      atk: state.atk, dfs: state.dfs, mei: state.mei, vel: state.vel, ent: state.ent
+    });
+  }
+
+  function showStatus(msg){
+    const el = document.getElementById('status');
+    if (!el) return;
+    el.innerHTML = msg || '';
+  }
+
+  // ===========================
+  // BOOT
+  // ===========================
+  (function init(){
+    const teamsRaw = loadTeams();
+    const { byCode, byChamp } = indexTeams(teamsRaw);
+
+    if (!byChamp[CHAMP] || byChamp[CHAMP].length === 0){
+      showStatus('<div class="warn">Nenhuma seleção encontrada. Carregue a lista de seleções (window.SELECOES / window.TEAMS ou localStorage "teams").</div>');
+      return;
+    }
+
+    // 1) iniciado?
+    const iniciado = Number(localStorage.getItem(LKEY_INIT) || 0);
+    if (!iniciado){
+      firstRunInit(byChamp); // gera sequências e salva
+    }
+
+    // 2) Nextvs
+    const { n1, n2 } = ensureNextMatch(CHAMP);
+
+    // 3) Render
+    const st = loadStateV3();
+    const t1 = n1?.code ? byCode[n1.code] : null;
+    const t2 = n2?.code ? byCode[n2.code] : null;
+
+    if (!t1 || !t2){
+      showStatus('<div class="warn">Não foi possível montar o próximo confronto. Verifique se a sequência foi gerada para o CONCACAF.</div>');
+    } else {
+      showStatus('');
+    }
+
+    // garante baseline antes de render
+    if (t1){ ensureTeamBaseline(st, t1.code); }
+    if (t2){ ensureTeamBaseline(st, t2.code); }
+    saveStateV3(st);
+
+    renderTeam('t1', t1, t1 ? st[t1.code] : {} );
+    renderTeam('t2', t2, t2 ? st[t2.code] : {} );
+  })();
+  </script>
+</body>
+</html>
