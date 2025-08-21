@@ -1,0 +1,7347 @@
+[
+  {
+    "JOGO": 1,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 2,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 3,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 4,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 5,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 6,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 7,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 8,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 1
+    }
+  },
+  {
+    "JOGO": 9,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 10,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 11,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 12,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 13,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 1
+    }
+  },
+  {
+    "JOGO": 14,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 15,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 16,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 8
+    }
+  },
+  {
+    "JOGO": 17,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 18,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 19,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 20,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 21,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 22,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 23,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 24,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 25,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 26,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 27,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 28,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 15
+    }
+  },
+  {
+    "JOGO": 29,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 30,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 31,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 15
+    }
+  },
+  {
+    "JOGO": 32,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 33,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 15
+    }
+  },
+  {
+    "JOGO": 34,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 35,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 36,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 37,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 38,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 39,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 40,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 41,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 42,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 43,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 44,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 45,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 46,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 47,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 48,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 49,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 50,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 51,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 52,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 53,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 54,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 55,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 56,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 57,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 58,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 59,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 60,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 28
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 61,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 28
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 62,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 28
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 63,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 64,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 65,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 66,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 67,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 68,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 69,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 70,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 71,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 72,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 73,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 74,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 75,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 35
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 76,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 77,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 78,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 79,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 80,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 81,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 82,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 83,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 84,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 85,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONCACAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 86,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 87,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 88,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 89,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 90,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 91,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 92,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 93,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 94,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 95,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 96,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 97,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 8
+    }
+  },
+  {
+    "JOGO": 98,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 99,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 100,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 8
+    }
+  },
+  {
+    "JOGO": 101,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 102,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 103,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 104,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 105,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CONMEBOL",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 106,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 107,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 108,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 109,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 110,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 111,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 112,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 113,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 114,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 115,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 116,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 117,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 118,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 119,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 120,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 121,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 122,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 123,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 124,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 125,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 126,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 127,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 128,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 129,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 130,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 131,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 132,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 133,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 134,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 135,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 136,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 137,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 138,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 139,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 140,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 141,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 142,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 143,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 144,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 145,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 146,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 147,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 148,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 149,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 150,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 151,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 152,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 153,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 154,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 155,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 156,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 157,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 158,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 159,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 160,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 161,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 162,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 163,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 164,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 165,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 166,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 167,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 168,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 169,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 170,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 171,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 172,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 173,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 174,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 175,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 176,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 177,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 178,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 179,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 180,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 181,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 182,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 183,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 184,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 185,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 186,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 187,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 188,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 189,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 190,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 191,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 192,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 193,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 194,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 195,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 196,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 197,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 198,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 199,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 200,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 201,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 202,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 203,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 204,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 205,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 206,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 207,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 208,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 209,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 210,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 211,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    }
+  },
+  {
+    "JOGO": 212,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 213,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 214,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 215,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 216,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 217,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 218,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 219,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 220,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 221,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 222,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 223,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 224,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 225,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 226,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 227,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 228,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 229,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 230,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 231,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 41
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 232,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    }
+  },
+  {
+    "JOGO": 233,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 234,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 235,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 236,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 237,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 238,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 239,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 240,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 241,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 242,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 243,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 244,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 245,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 246,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 247,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 248,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 249,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 250,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 251,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 47
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 252,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 48
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 253,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    }
+  },
+  {
+    "JOGO": 254,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    }
+  },
+  {
+    "JOGO": 255,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 256,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 257,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 258,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 259,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    }
+  },
+  {
+    "JOGO": 260,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 261,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 262,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 263,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 264,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 265,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 266,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 267,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 268,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 269,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 270,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 53
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 271,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 272,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 54
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 273,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 55
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "CAF",
+      "seq": 56
+    }
+  },
+  {
+    "JOGO": 274,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 275,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 276,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 277,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 278,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 279,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 280,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 281,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 282,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 283,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 284,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 285,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 286,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 287,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 288,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 289,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 8
+    }
+  },
+  {
+    "JOGO": 290,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 291,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 292,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 293,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 7
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 294,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 295,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 296,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 297,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 298,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 299,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 300,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 301,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 302,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 303,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 304,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 305,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 15
+    }
+  },
+  {
+    "JOGO": 306,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 307,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 308,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 309,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 15
+    }
+  },
+  {
+    "JOGO": 310,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 311,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 312,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 14
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 313,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 314,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 315,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 316,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 317,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 318,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 319,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 320,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 321,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 22
+    }
+  },
+  {
+    "JOGO": 322,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 323,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 324,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 325,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 22
+    }
+  },
+  {
+    "JOGO": 326,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 327,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 328,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 21
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 22
+    }
+  },
+  {
+    "JOGO": 329,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 21
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 330,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 21
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 331,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 332,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 333,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 334,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 335,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 336,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 337,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 338,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 339,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 340,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 341,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 342,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 343,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 344,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 345,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 346,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 28
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 29
+    }
+  },
+  {
+    "JOGO": 347,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 28
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 348,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 349,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 350,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 351,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 352,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 353,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 354,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 355,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 356,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 357,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 358,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 359,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 360,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 361,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 362,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 363,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 35
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 36
+    }
+  },
+  {
+    "JOGO": 364,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 365,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 366,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 367,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 368,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 369,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 370,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 371,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 372,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 373,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 374,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 375,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 376,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 377,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 378,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 41
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 379,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 44
+    }
+  },
+  {
+    "JOGO": 380,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 381,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 382,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 383,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 384,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 385,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 386,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 387,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 388,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "AFC",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 389,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 390,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 391,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 392,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 393,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 394,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 395,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 396,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 397,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 398,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 399,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 400,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 401,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 402,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 403,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "OFC",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 404,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    }
+  },
+  {
+    "JOGO": 405,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 406,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 407,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 408,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 409,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 1
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 410,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    }
+  },
+  {
+    "JOGO": 411,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 412,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 413,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 414,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 2
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 415,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    }
+  },
+  {
+    "JOGO": 416,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 417,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 418,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 3
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 419,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    }
+  },
+  {
+    "JOGO": 420,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 421,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 4
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 422,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    }
+  },
+  {
+    "JOGO": 423,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 5
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 424,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 6
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 7
+    }
+  },
+  {
+    "JOGO": 425,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    }
+  },
+  {
+    "JOGO": 426,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 427,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 428,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 429,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 430,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 8
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 431,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    }
+  },
+  {
+    "JOGO": 432,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 433,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 434,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 435,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 9
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 436,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    }
+  },
+  {
+    "JOGO": 437,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 438,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 439,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 10
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 440,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    }
+  },
+  {
+    "JOGO": 441,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 442,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 11
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 443,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    }
+  },
+  {
+    "JOGO": 444,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 12
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 445,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 13
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 14
+    }
+  },
+  {
+    "JOGO": 446,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    }
+  },
+  {
+    "JOGO": 447,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 448,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 449,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 450,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 451,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 15
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 452,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    }
+  },
+  {
+    "JOGO": 453,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 454,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 455,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 456,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 16
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 457,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    }
+  },
+  {
+    "JOGO": 458,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 459,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 460,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 17
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 461,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    }
+  },
+  {
+    "JOGO": 462,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 463,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 18
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 464,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    }
+  },
+  {
+    "JOGO": 465,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 19
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 466,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 20
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 21
+    }
+  },
+  {
+    "JOGO": 467,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    }
+  },
+  {
+    "JOGO": 468,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 469,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 470,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 471,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 472,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 22
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 473,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    }
+  },
+  {
+    "JOGO": 474,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 475,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 476,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 477,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 23
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 478,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    }
+  },
+  {
+    "JOGO": 479,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 480,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 481,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 24
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 482,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    }
+  },
+  {
+    "JOGO": 483,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 484,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 25
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 485,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    }
+  },
+  {
+    "JOGO": 486,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 26
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 487,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 27
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 28
+    }
+  },
+  {
+    "JOGO": 488,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    }
+  },
+  {
+    "JOGO": 489,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 490,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 491,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 492,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 493,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 29
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 494,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    }
+  },
+  {
+    "JOGO": 495,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 496,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 497,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 498,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 30
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 499,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    }
+  },
+  {
+    "JOGO": 500,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 501,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 502,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 31
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 503,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    }
+  },
+  {
+    "JOGO": 504,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 505,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 32
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 506,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    }
+  },
+  {
+    "JOGO": 507,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 33
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 508,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 34
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 35
+    }
+  },
+  {
+    "JOGO": 509,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    }
+  },
+  {
+    "JOGO": 510,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 511,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 512,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 513,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 514,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 36
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 515,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    }
+  },
+  {
+    "JOGO": 516,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 517,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 518,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 519,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 37
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 520,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    }
+  },
+  {
+    "JOGO": 521,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 522,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 523,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 38
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 524,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    }
+  },
+  {
+    "JOGO": 525,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 526,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 39
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 527,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    }
+  },
+  {
+    "JOGO": 528,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 40
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 529,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 41
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 42
+    }
+  },
+  {
+    "JOGO": 530,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    }
+  },
+  {
+    "JOGO": 531,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 532,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 533,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 534,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 535,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 43
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 536,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    }
+  },
+  {
+    "JOGO": 537,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 538,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 539,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 540,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 44
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 541,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    }
+  },
+  {
+    "JOGO": 542,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 543,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 544,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 45
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 545,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    }
+  },
+  {
+    "JOGO": 546,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 547,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 46
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 548,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    }
+  },
+  {
+    "JOGO": 549,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 47
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 550,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 48
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 49
+    }
+  },
+  {
+    "JOGO": 551,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 51
+    }
+  },
+  {
+    "JOGO": 552,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 52
+    }
+  },
+  {
+    "JOGO": 553,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 554,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 555,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 50
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 556,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 52
+    }
+  },
+  {
+    "JOGO": 557,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 558,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 559,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 51
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 560,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 53
+    }
+  },
+  {
+    "JOGO": 561,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 562,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 52
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 563,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 53
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 54
+    }
+  },
+  {
+    "JOGO": 564,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 53
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 55
+    }
+  },
+  {
+    "JOGO": 565,
+    "Nextvs1": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 54
+    },
+    "Nextvs2": {
+      "type": "seed",
+      "champ": "UEFA",
+      "seq": 55
+    }
+  }
+]
