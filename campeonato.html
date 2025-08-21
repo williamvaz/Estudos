@@ -60,7 +60,8 @@
 
     <!-- Próximo confronto -->
     <section class="card">
-      <div class="small muted" style="margin-bottom:6px">Próximo confronto (CONCACAF)</div>
+      <!-- [CHANGE] título do confronto fica dinâmico conforme o plano -->
+      <div id="fixture-info" class="small muted" style="margin-bottom:6px">Próximo confronto</div>
       <div class="row" id="match">
         <!-- time A -->
         <div class="team-card" id="t1">
@@ -96,12 +97,17 @@
   // ===========================
   // CONFIG / CHAVES
   // ===========================
-  const CHAMP = 'CONCACAF'; // campeonato inicial para montar Nextvs1/2
+  const CHAMP = 'CONCACAF'; // campeonato de fallback quando não houver plano
   const CHAMPS = ['CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'];
   const LKEY_INIT = 'iniciado';
-  const LKEY_STATE_V3 = 'team_state_v3'; // { [code]: { score, atk, dfs, mei, vel, ent, sequencia_reg: { CHAMP: n } } }
-  const LKEY_NEXT1 = 'Nextvs1'; // { code, champ }
-  const LKEY_NEXT2 = 'Nextvs2'; // { code, champ }
+  const LKEY_STATE_V3 = 'team_state_v3'; // { [id]: { score, atk, dfs, mei, vel, ent, sequencia_reg: { CHAMP: n } } }
+  const LKEY_NEXT1 = 'Nextvs1'; // compat (fallback)
+  const LKEY_NEXT2 = 'Nextvs2'; // compat (fallback)
+
+  // [CHANGE] novas chaves para plano/resultados/slots
+  const LKEY_PLAN    = 'fixtures_plan_flat_v1'; // array linear de jogos
+  const LKEY_RESULTS = 'fixtures_results_v1';   // { [JOGO]: { ...resultado... } }
+  const LKEY_SLOTS   = 'bracket_slots_v1';      // { [comp_id]: { [slot]: "Nome do País" } }
 
   // ===========================
   // HELPERS: storage e dados
@@ -120,7 +126,7 @@
     if (Array.isArray(ls) && ls.length) return ls;
     return []; // sem dados
   }
-  // normaliza propriedades (code/name/conf/flag)
+  // normaliza propriedades (aceita ID por nome ou code)
   function normTeam(t){
     const conf = (t.conf || t.confederacao || t.region || t.regiao || t.campeonato || '').toString().toUpperCase().trim();
     const code = (t.code || t.cod || t.sigla || t.id || '').toString().toUpperCase().trim();
@@ -129,13 +135,20 @@
     if (!flag && name) flag = `Flags/${name}.jpg`; // fallback padrão do teu projeto
     return { code, name, conf, flag };
   }
+
+  // [CHANGE] agora indexamos por "qualquer chave": code OU name.
+  // byKey permite procurar pelo ID salvo no state, seja ele code ou nome.
   function indexTeams(raw){
-    const all = raw.map(normTeam).filter(x => x.code && x.conf);
-    const byCode = Object.fromEntries(all.map(t => [t.code, t]));
+    const all = raw.map(normTeam).filter(x => (x.code || x.name) && x.conf);
+    const byKey = {};
     const byChamp = {};
     for (const c of CHAMPS) byChamp[c] = [];
-    for (const t of all) if (CHAMPS.includes(t.conf)) byChamp[t.conf].push(t);
-    return { all, byCode, byChamp };
+    for (const t of all){
+      if (t.code) byKey[t.code] = t;
+      if (t.name) byKey[t.name] = t; // chaveia pelo nome também
+      if (CHAMPS.includes(t.conf)) byChamp[t.conf].push(t);
+    }
+    return { all, byKey, byChamp };
   }
 
   // ===========================
@@ -144,9 +157,9 @@
   function loadStateV3(){ return jget(LKEY_STATE_V3, {}); }
   function saveStateV3(s){ jset(LKEY_STATE_V3, s); }
 
-  function ensureTeamBaseline(s, code){
-    if (!s[code]) s[code] = {};
-    const st = s[code];
+  function ensureTeamBaseline(s, id){
+    if (!s[id]) s[id] = {};
+    const st = s[id];
     st.score = clamp(st.score ?? 250, 1, 9999);
     st.atk = clamp(st.atk ?? 50, 1, 100);
     st.dfs = clamp(st.dfs ?? 50, 1, 100);
@@ -177,7 +190,9 @@
       if (!list.length) continue;
       const seq = shuffled1toN(list.length);
       list.forEach((t, idx) => {
-        const st = ensureTeamBaseline(state, t.code);
+        // [CHANGE] ID pode ser nome OU code; preferimos nome se existir
+        const id = t.name || t.code;
+        const st = ensureTeamBaseline(state, id);
         st.sequencia_reg[champ] = seq[idx]; // salva mapeado por campeonato
       });
     }
@@ -186,32 +201,75 @@
     localStorage.setItem(LKEY_INIT, '1');
   }
 
-  // encontra time por sequencia_reg e campeonato
-  function findBySeq(champ, seq, idx){
+  // encontra time por sequencia_reg e campeonato (retorna ID salvo no state)
+  function findBySeq(champ, seq){
     const state = loadStateV3();
-    // procura por code cujo state.sequencia_reg[champ] === seq
-    for (const code in state){
-      const st = state[code];
-      if (st?.sequencia_reg?.[champ] === seq) return code;
+    for (const id in state){
+      const st = state[id];
+      if (st?.sequencia_reg?.[champ] === seq) return id;
     }
     return null;
   }
 
   // ===========================
-  // NEXT VS
+  // Plano / Resultados / Slots (mata-mata)
   // ===========================
-  function ensureNextMatch(champ){
+  function loadPlan(){ return jget(LKEY_PLAN, []); }
+  function loadResults(){ return jget(LKEY_RESULTS, {}); }
+  function loadSlots(){ return jget(LKEY_SLOTS, {}); }
+
+  // [CHANGE] resolve um participante a partir da referência do plano
+  // suporta: {type:'seed', champ, seq} | {type:'slot', comp_id, slot} | {type:'name', name} | {type:'code', code}
+  function resolveRef(ref){
+    if (!ref) return null;
+    const type = String(ref.type||'').toLowerCase();
+    if (type === 'seed'){
+      const { champ, seq } = ref;
+      const id = findBySeq(champ, Number(seq));
+      return id;
+    }
+    if (type === 'slot'){
+      const { comp_id, slot } = ref;
+      const slots = loadSlots();
+      const name = slots?.[comp_id]?.[slot] || null; // nome do país
+      return name || null; // nosso ID é o próprio nome
+    }
+    if (type === 'name'){
+      return ref.name || null;
+    }
+    if (type === 'code'){
+      return ref.code || null;
+    }
+    return null;
+  }
+
+  // [CHANGE] acha o primeiro jogo do plano ainda não concluído
+  function getNextFixture(){
+    const plan = loadPlan();
+    const results = loadResults();
+    if (!Array.isArray(plan) || plan.length === 0) return null;
+    for (const item of plan){
+      const jid = String(item.JOGO);
+      if (!results || !results.hasOwnProperty(jid)) return item;
+    }
+    return null; // todos jogados
+  }
+
+  // ===========================
+  // Fallback: NEXT VS simples (se não existir plano)
+  // ===========================
+  function ensureNextMatchFallback(champ){
     let n1 = jget(LKEY_NEXT1, null);
     let n2 = jget(LKEY_NEXT2, null);
 
-    if (!n1 || !n1.code){ // grava {code, champ}
-      const code1 = findBySeq(champ, 1);
-      if (code1) n1 = { code: code1, champ }; else n1 = null;
+    if (!n1 || !n1.id){
+      const id1 = findBySeq(champ, 1);
+      if (id1) n1 = { id: id1, champ }; else n1 = null;
       if (n1) jset(LKEY_NEXT1, n1);
     }
-    if (!n2 || !n2.code){
-      const code2 = findBySeq(champ, 2);
-      if (code2) n2 = { code: code2, champ }; else n2 = null;
+    if (!n2 || !n2.id){
+      const id2 = findBySeq(champ, 2);
+      if (id2) n2 = { id: id2, champ }; else n2 = null;
       if (n2) jset(LKEY_NEXT2, n2);
     }
     return { n1, n2 };
@@ -280,7 +338,7 @@
       radarEl.innerHTML = '';
       return;
     }
-    nameEl.textContent = team.name || team.code;
+    nameEl.textContent = team.name || team.code || '—';
     flagEl.src = team.flag || '';
     scoreEl.textContent = state.score ?? '—';
     drawRadar(radarEl, {
@@ -294,14 +352,20 @@
     el.innerHTML = msg || '';
   }
 
+  // [CHANGE] legenda do confronto (de onde vieram os times)
+  function setFixtureInfo(text){
+    const el = document.getElementById('fixture-info');
+    if (el) el.textContent = text || 'Próximo confronto';
+  }
+
   // ===========================
   // BOOT
   // ===========================
   (function init(){
     const teamsRaw = loadTeams();
-    const { byCode, byChamp } = indexTeams(teamsRaw);
+    const { byKey, byChamp } = indexTeams(teamsRaw);
 
-    if (!byChamp[CHAMP] || byChamp[CHAMP].length === 0){
+    if (!Object.keys(byChamp).length){
       showStatus('<div class="warn">Nenhuma seleção encontrada. Carregue a lista de seleções (window.SELECOES / window.TEAMS ou localStorage "teams").</div>');
       return;
     }
@@ -312,27 +376,56 @@
       firstRunInit(byChamp); // gera sequências e salva
     }
 
-    // 2) Nextvs
-    const { n1, n2 } = ensureNextMatch(CHAMP);
+    // 2) tenta montar pelo PLANO linear (sem JOGO.json, usa resultados para achar o primeiro pendente)
+    const fixture = getNextFixture();
 
-    // 3) Render
+    let id1=null, id2=null, info='Próximo confronto';
+    if (fixture){
+      id1 = resolveRef(fixture.Nextvs1);
+      id2 = resolveRef(fixture.Nextvs2);
+
+      // monta um texto amigável da origem
+      const sideDesc = (ref)=>{
+        if (!ref) return '—';
+        const t = String(ref.type||'').toLowerCase();
+        if (t==='seed') return `${ref.champ} #${ref.seq}`;
+        if (t==='slot') return `${ref.comp_id}:${ref.slot}`;
+        if (t==='name') return `${ref.name}`;
+        if (t==='code') return `${ref.code}`;
+        return '—';
+      };
+      info = `Jogo ${fixture.JOGO} — ${sideDesc(fixture.Nextvs1)} vs ${sideDesc(fixture.Nextvs2)}`;
+      setFixtureInfo(info);
+    }
+
+    // 3) se não houver plano, cai no fallback (pares 1×2 do campeonato padrão)
+    if (!id1 || !id2){
+      const fb = ensureNextMatchFallback(CHAMP);
+      id1 = id1 || fb.n1?.id || null;
+      id2 = id2 || fb.n2?.id || null;
+      if (!fixture) setFixtureInfo(`Próximo confronto (${CHAMP})`);
+    }
+
+    // 4) Render
     const st = loadStateV3();
-    const t1 = n1?.code ? byCode[n1.code] : null;
-    const t2 = n2?.code ? byCode[n2.code] : null;
+
+    // garante baseline
+    if (id1){ ensureTeamBaseline(st, id1); }
+    if (id2){ ensureTeamBaseline(st, id2); }
+    saveStateV3(st);
+
+    // resolve objetos do catálogo (byKey aceita nome OU código)
+    const t1 = id1 ? (byKey[id1] || { name:id1, flag:`Flags/${id1}.jpg` }) : null;
+    const t2 = id2 ? (byKey[id2] || { name:id2, flag:`Flags/${id2}.jpg` }) : null;
 
     if (!t1 || !t2){
-      showStatus('<div class="warn">Não foi possível montar o próximo confronto. Verifique se a sequência foi gerada para o CONCACAF.</div>');
+      showStatus('<div class="warn">Não foi possível montar o próximo confronto. Verifique o plano ou as sequências.</div>');
     } else {
       showStatus('');
     }
 
-    // garante baseline antes de render
-    if (t1){ ensureTeamBaseline(st, t1.code); }
-    if (t2){ ensureTeamBaseline(st, t2.code); }
-    saveStateV3(st);
-
-    renderTeam('t1', t1, t1 ? st[t1.code] : {} );
-    renderTeam('t2', t2, t2 ? st[t2.code] : {} );
+    renderTeam('t1', t1, id1 ? st[id1] : {} );
+    renderTeam('t2', t2, id2 ? st[id2] : {} );
   })();
   </script>
 </body>
