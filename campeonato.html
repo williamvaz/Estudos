@@ -24,12 +24,10 @@
     .score{ font-size:1.25rem; font-weight:800; background:#102618; border:1px solid #284b34;
             padding:6px 12px; border-radius:999px; }
 
-    /* Radar */
     .radar{ width:260px; height:220px; }
     .legend{ display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:center; font-size:.85rem; opacity:.85 }
     .badge{ padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
 
-    /* rodapé fixo */
     .footer-actions{
       position: fixed; left:0; right:0; bottom:0; z-index: 1000;
       padding: 10px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-right));
@@ -55,15 +53,10 @@
   </header>
 
   <main class="container">
-    <!-- Status/erros -->
     <div id="status" class="muted small"></div>
-
-    <!-- Próximo confronto -->
     <section class="card">
-      <!-- [CHANGE] título do confronto dinâmico -->
       <div id="fixture-info" class="small muted" style="margin-bottom:6px">Próximo confronto</div>
       <div class="row" id="match">
-        <!-- time A -->
         <div class="team-card" id="t1">
           <img class="flag" id="t1-flag" alt="">
           <div class="team-name" id="t1-name">—</div>
@@ -73,7 +66,6 @@
             <span class="badge">ATK</span><span class="badge">DFS</span><span class="badge">MEI</span><span class="badge">VEL</span><span class="badge">ENT</span>
           </div>
         </div>
-        <!-- time B -->
         <div class="team-card" id="t2">
           <img class="flag" id="t2-flag" alt="">
           <div class="team-name" id="t2-name">—</div>
@@ -87,37 +79,26 @@
     </section>
   </main>
 
-  <!-- botões fixos -->
   <div class="footer-actions">
     <a class="btn btn-primary" href="jogar.html">Jogar</a>
     <a class="btn btn-secondary" href="tabela.html">Ver tabelas</a>
   </div>
 
   <script>
-  // ===========================
-  // CONFIG / CHAVES
-  // ===========================
-  const CHAMP = 'CONCACAF'; // fallback quando não houver plano
+  const CHAMP = 'CONCACAF';
   const CHAMPS = ['CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'];
   const LKEY_INIT = 'iniciado';
-  const LKEY_STATE_V3 = 'team_state_v3'; // { [id]: { score, atk, dfs, mei, vel, ent, sequencia_reg: { CHAMP: n } } }
-  const LKEY_NEXT1 = 'Nextvs1'; // compat fallback
-  const LKEY_NEXT2 = 'Nextvs2'; // compat fallback
+  const LKEY_STATE_V3 = 'team_state_v3';
+  const LKEY_NEXT1 = 'Nextvs1';
+  const LKEY_NEXT2 = 'Nextvs2';
+  const LKEY_PLAN    = 'fixtures_plan_flat_v1';
+  const LKEY_RESULTS = 'fixtures_results_v1';
+  const LKEY_SLOTS   = 'bracket_slots_v1';
+  const LKEY_KODEF   = 'knockout_def_v1';
+  const LKEY_GROUPS  = 'groups_plan_v1';
 
-  // [CHANGE] chaves p/ plano, resultados, slots e KO
-  const LKEY_PLAN    = 'fixtures_plan_flat_v1'; // array linear de jogos
-  const LKEY_RESULTS = 'fixtures_results_v1';   // { [JOGO]: { home, away, score:{home,away} } }
-  const LKEY_SLOTS   = 'bracket_slots_v1';      // { [comp_id]: { [slot]: "Nome do País" } }
-  const LKEY_KODEF   = 'knockout_def_v1';       // { [comp_id]: { matches:[...], order:[...] } }
-  const LKEY_GROUPS  = 'groups_plan_v1';        // { [camp]: { "Grupo 1":[...], ... } }
-
-  // ===========================
-  // HELPERS: storage e dados
-  // ===========================
   const jget = (k, fb) => { try { const v = JSON.parse(localStorage.getItem(k) || ''); return v ?? fb; } catch { return fb; } };
   const jset = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-  // aliases p/ compat com patches
-  const loadJSON = jget, saveJSON = jset;
   const clamp = (n,a,b) => Math.max(a, Math.min(b, Number(n)||0));
 
   function loadTeams(){
@@ -135,7 +116,6 @@
     if (!flag && name) flag = `Flags/${name}.jpg`;
     return { code, name, conf, flag };
   }
-  // [CHANGE] mapeia por code E por name
   function indexTeams(raw){
     const all = raw.map(normTeam).filter(x => (x.code || x.name) && x.conf);
     const byKey = {};
@@ -149,9 +129,6 @@
     return { all, byKey, byChamp };
   }
 
-  // ===========================
-  // STATE V3 (por time)
-  // ===========================
   function loadStateV3(){ return jget(LKEY_STATE_V3, {}); }
   function saveStateV3(s){ jset(LKEY_STATE_V3, s); }
   function ensureTeamBaseline(s, id){
@@ -181,7 +158,7 @@
       if (!list.length) continue;
       const seq = shuffled1toN(list.length);
       list.forEach((t, idx) => {
-        const id = t.name || t.code; // id preferido: nome
+        const id = t.name || t.code;
         const st = ensureTeamBaseline(state, id);
         st.sequencia_reg[champ] = seq[idx];
       });
@@ -198,15 +175,11 @@
     return null;
   }
 
-  // ===========================
-  // Plano / Resultados / Slots
-  // ===========================
   function loadPlan(){ return jget(LKEY_PLAN, []); }
   function loadResults(){ return jget(LKEY_RESULTS, {}); }
   function loadSlots(){ return jget(LKEY_SLOTS, {}); }
   function loadKoDef(){ return jget(LKEY_KODEF, {}); }
 
-  // [CHANGE] resolve ref: seed | slot | name | code
   function resolveRef(ref){
     if (!ref) return null;
     const type = String(ref.type||'').toLowerCase();
@@ -235,9 +208,6 @@
     return null;
   }
 
-  // ===========================
-  // Fallback: NEXT VS simples (se não existir plano)
-  // ===========================
   function ensureNextMatchFallback(champ){
     let n1 = jget(LKEY_NEXT1, null);
     let n2 = jget(LKEY_NEXT2, null);
@@ -254,9 +224,6 @@
     return { n1, n2 };
   }
 
-  // ===========================
-  // UI
-  // ===========================
   function drawRadar(svg, stats){
     const W=260, H=220, cx=130, cy=110, R=85;
     const axes = ['atk','dfs','mei','vel','ent'];
@@ -320,9 +287,6 @@
     if (el) el.textContent = text || 'Próximo confronto';
   }
 
-  // =====================================================
-  // [GROUPS→KO] --------- PIPELINE GRUPOS → MATA-MATA ----
-  // =====================================================
   async function getCampConfig(camp){
     const cache = jget('campeonatos', null);
     if (cache && (Array.isArray(cache) || typeof cache==='object')) {
@@ -349,8 +313,8 @@
       .filter(x => Number.isFinite(x.seq))
       .sort((a,b)=> a.seq - b.seq);
     if (!seeded.length || !campCfg) return null;
-    const entries = Object.entries(campCfg).filter(([k]) => /^Grupo\s+\d+$/i.test(k))
-      .sort((a,b)=> parseInt(a[0].match(/\d+/)[0],10) - parseInt(b[0].match(/\d+/)[0],10));
+    const entries = Object.entries(campCfg).filter(([k,v]) => /^Grupo\\s+\\d+$/i.test(k) && Number(v)>0)
+      .sort((a,b)=> parseInt(a[0].match(/\\d+/)[0],10) - parseInt(b[0].match(/\\d+/)[0],10));
     const plan = {};
     let idx = 0;
     for (const [gName, gSize] of entries){
@@ -363,7 +327,7 @@
     jset(LKEY_GROUPS, groupsPlan);
     return plan;
   }
-  function computeGroupTables(camp, groupsPlan){
+  function computeGroupTablesFromResults(camp, groupsPlan){
     const plan = loadPlan();
     const results = loadResults();
     if (!groupsPlan) return null;
@@ -423,101 +387,121 @@
     }
     return true;
   }
-  function seedKnockoutFromTables(camp, tables){
+
+  // ---- Novo: seeding KO dinâmico por 'Classificados por grupo' ----
+  function seedKnockoutDynamic(camp, campCfg, tables){
     const compId = `${camp}-KO`;
-    const groupsNames = Object.keys(tables).sort((a,b)=> parseInt(a.match(/\d+/)[0],10) - parseInt(b.match(/\d+/)[0],10));
-    const G = {};
-    groupsNames.forEach((gName, idx)=>{
-      const arr = tables[gName]||[];
-      G[idx+1] = { first: arr[0]?.name || null, second: arr[1]?.name || null };
-    });
-    const slots = {};
-    const pairings = [
-      { left:{lab:'A1', from:G[1]?.first }, right:{lab:'B2', from:G[2]?.second} }, // O1
-      { left:{lab:'C1', from:G[3]?.first }, right:{lab:'D2', from:G[4]?.second} }, // O2
-      { left:{lab:'E1', from:G[5]?.first }, right:{lab:'F2', from:G[6]?.second} }, // O3
-      { left:{lab:'G1', from:G[7]?.first }, right:{lab:'H2', from:G[8]?.second} }, // O4
-      { left:{lab:'B1', from:G[2]?.first }, right:{lab:'A2', from:G[1]?.second} }, // O5
-      { left:{lab:'D1', from:G[4]?.first }, right:{lab:'C2', from:G[3]?.second} }, // O6
-      { left:{lab:'F1', from:G[6]?.first }, right:{lab:'E2', from:G[5]?.second} }, // O7
-      { left:{lab:'H1', from:G[8]?.first }, right:{lab:'G2', from:G[7]?.second} }  // O8
-    ];
-    pairings.forEach((p)=>{ if (p.left.from)  slots[p.left.lab]  = p.left.from;
-                            if (p.right.from) slots[p.right.lab] = p.right.from; });
-    const def = {
-      matches: [
-        { id:'O1', left:{slot:'A1'}, right:{slot:'B2'}, winTo:{slot:'O1'} },
-        { id:'O2', left:{slot:'C1'}, right:{slot:'D2'}, winTo:{slot:'O2'} },
-        { id:'O3', left:{slot:'E1'}, right:{slot:'F2'}, winTo:{slot:'O3'} },
-        { id:'O4', left:{slot:'G1'}, right:{slot:'H2'}, winTo:{slot:'O4'} },
-        { id:'O5', left:{slot:'B1'}, right:{slot:'A2'}, winTo:{slot:'O5'} },
-        { id:'O6', left:{slot:'D1'}, right:{slot:'C2'}, winTo:{slot:'O6'} },
-        { id:'O7', left:{slot:'F1'}, right:{slot:'E2'}, winTo:{slot:'O7'} },
-        { id:'O8', left:{slot:'H1'}, right:{slot:'G2'}, winTo:{slot:'O8'} },
-
-        { id:'Q1', left:{slot:'O1'}, right:{slot:'O2'}, winTo:{slot:'Q1'} },
-        { id:'Q2', left:{slot:'O3'}, right:{slot:'O4'}, winTo:{slot:'Q2'} },
-        { id:'Q3', left:{slot:'O5'}, right:{slot:'O6'}, winTo:{slot:'Q3'} },
-        { id:'Q4', left:{slot:'O7'}, right:{slot:'O8'}, winTo:{slot:'Q4'} },
-
-        { id:'L1', left:{slot:'Q1'}, right:{slot:'Q2'}, winTo:{slot:'L1'}, loseTo:{slot:'T1', side:'left'} },
-        { id:'L2', left:{slot:'Q3'}, right:{slot:'Q4'}, winTo:{slot:'L2'}, loseTo:{slot:'T1', side:'right'} },
-
-        { id:'W1', left:{slot:'L1'}, right:{slot:'L2'}, winTo:{slot:'W1'} },
-        { id:'T1', left:{slot:'L1*'}, right:{slot:'L2*'}, winTo:{slot:'T1'} }
-      ],
-      order: ['O1','O2','O3','O4','O5','O6','O7','O8','Q1','Q2','Q3','Q4','L1','L2','T1','W1']
-    };
-    const slotsAll = jget(LKEY_SLOTS, {});
-    const defAll   = jget(LKEY_KODEF, {});
-    slotsAll[compId] = Object.assign(slotsAll[compId]||{}, slots);
-    defAll[compId]   = def;
-    jset(LKEY_SLOTS, slotsAll);
-    jset(LKEY_KODEF, defAll);
-    return { compId, def, slots };
-  }
-
-  // ===== KO progressivo: adiciona oitavas e destrava até a final =====
-
-  // [CHANGE] (substitui a versão simples): adiciona SÓ OITAVAS agora, grava M=id do KO
-  function appendKnockoutToPlan(compId, def){
-    const plan = loadJSON(LKEY_PLAN, []);
-    const sig = (m) => `${compId}:${m.left.slot}|${compId}:${m.right.slot}`;
-    const hasSig = new Set(
-      plan.filter(x => x?.Nextvs1?.type==='slot' && x?.Nextvs2?.type==='slot')
-          .map(x => `${x.Nextvs1.comp_id}:${x.Nextvs1.slot}|${x.Nextvs2.comp_id}:${x.Nextvs2.slot}`)
-    );
-    let nextId = plan.length ? Math.max(...plan.map(x=> Number(x.JOGO)||0)) + 1 : 1;
-    const addRound = (ids) => {
-      const toAdd = [];
-      for (const id of ids){
-        const m = def.matches.find(x=> x.id===id);
-        if (!m) continue;
-        const s = sig(m);
-        if (hasSig.has(s)) continue;
-        toAdd.push({
-          JOGO: nextId++,
-          M: id, // id da partida no KO (O1/Q1/L1/T1/W1)
-          Nextvs1: { type:'slot', comp_id: compId, slot: m.left.slot },
-          Nextvs2: { type:'slot', comp_id: compId, slot: m.right.slot }
-        });
-        hasSig.add(s);
+    const adv = Number(campCfg?.['Classificados por grupo'] ?? 2);
+    const groupOrder = Object.keys(tables)
+      .sort((a,b)=> parseInt(a.match(/\\d+/)?.[0]||0,10) - parseInt(b.match(/\\d+/)?.[0]||0,10));
+    const qualifiers = [];
+    for (const gName of groupOrder){
+      const list = tables[gName] || [];
+      for (let i=0;i<Math.min(adv, list.length); i++){
+        qualifiers.push({ group:gName, pos:i+1, name:list[i]?.name||null });
       }
-      if (toAdd.length){ plan.push(...toAdd); localStorage.setItem(LKEY_PLAN, JSON.stringify(plan)); }
-    };
-    addRound(['O1','O2','O3','O4','O5','O6','O7','O8']); // só oitavas por agora
+    }
+    const total = qualifiers.filter(q=>q.name).length;
+    // Decide round inicial
+    let round = 'OITAVAS';
+    if (total <= 2) round = 'FINAL';
+    else if (total <= 4) round = 'SEMIS';
+    else if (total <= 8) round = 'QUARTAS';
+    else round = 'OITAVAS';
+
+    // Cria slots rotulados por grupo/posição: A1.., A2.., etc.
+    const slotsObj = {};
+    for (const q of qualifiers){
+      const label = `${q.group.replace(/^Grupo\\s+/i,'').toUpperCase()}${q.pos}`; // ex: A1
+      if (q.name) slotsObj[label] = q.name;
+    }
+
+    // Constrói chaveamento padrão alternando 1º vs 4º e 2º vs 3º entre grupos pareados
+    function pairByGroups(gLabels){
+      const pairs = [];
+      for (let i=0;i<gLabels.length;i+=2){
+        const A = gLabels[i], B = gLabels[i+1];
+        if (!B) break;
+        pairs.push([`${A}1`, `${B}4`]);
+        pairs.push([`${B}1`, `${A}4`]);
+        pairs.push([`${A}2`, `${B}3`]);
+        pairs.push([`${B}2`, `${A}3`]);
+      }
+      return pairs;
+    }
+
+    const gLabels = groupOrder.map(g=>g.replace(/^Grupo\\s+/i,'').toUpperCase());
+    const slotsAll = jget(LKEY_SLOTS, {});
+    slotsAll[compId] = Object.assign(slotsAll[compId]||{}, slotsObj);
+    jset(LKEY_SLOTS, slotsAll);
+
+    const def = { matches:[], order:[] };
+    const addMs = (ids) => { def.order.push(...ids); };
+
+    // Define ids fixos por rodada (usaremos conforme 'round')
+    const O = ['O1','O2','O3','O4','O5','O6','O7','O8'];
+    const Q = ['Q1','Q2','Q3','Q4'];
+    const L = ['L1','L2'];
+    const T = ['T1'];
+    const W = ['W1'];
+
+    // Monta as partidas da primeira rodada existente
+    if (round === 'OITAVAS'){
+      const pairs = pairByGroups(gLabels).slice(0,8); // até 8 jogos
+      pairs.forEach((p,idx)=>{
+        def.matches.push({ id:O[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:O[idx]} });
+      });
+      addMs(O);
+    } else if (round === 'QUARTAS'){
+      // usa 8 times => 4 jogos: A1 vs B2, B1 vs A2, C1 vs D2, D1 vs C2
+      const pairs = [];
+      for (let i=0;i<gLabels.length;i+=2){
+        const A=gLabels[i], B=gLabels[i+1]; if(!B) break;
+        pairs.push([`${A}1`, `${B}2`]);
+        pairs.push([`${B}1`, `${A}2`]);
+      }
+      pairs.slice(0,4).forEach((p,idx)=>{
+        def.matches.push({ id:Q[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:Q[idx]} });
+      });
+      addMs(Q);
+    } else if (round === 'SEMIS'){
+      // 4 times => 2 jogos: A1 vs B1, C1 vs D1
+      const pairs = [];
+      for (let i=0;i<gLabels.length;i+=2){
+        const A=gLabels[i], B=gLabels[i+1]; if(!B) break;
+        pairs.push([`${A}1`, `${B}1`]);
+      }
+      pairs.slice(0,2).forEach((p,idx)=>{
+        def.matches.push({ id:L[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:L[idx]}, loseTo:{slot:T[0], side: idx===0?'left':'right'} });
+      });
+      addMs(L);
+    } else {
+      // FINAL (2 times) => A1 vs B1
+      def.matches.push({ id:W[0], left:{slot:`${gLabels[0]}1`}, right:{slot:`${gLabels[1]}1`}, winTo:{slot:W[0]} });
+      addMs(W);
+    }
+
+    // conectividade para as fases seguintes (independente do round inicial)
+    def.matches.push({ id:'Q1', left:{slot:'O1'}, right:{slot:'O2'}, winTo:{slot:'Q1'} });
+    def.matches.push({ id:'Q2', left:{slot:'O3'}, right:{slot:'O4'}, winTo:{slot:'Q2'} });
+    def.matches.push({ id:'Q3', left:{slot:'O5'}, right:{slot:'O6'}, winTo:{slot:'Q3'} });
+    def.matches.push({ id:'Q4', left:{slot:'O7'}, right:{slot:'O8'}, winTo:{slot:'Q4'} });
+
+    def.matches.push({ id:'L1', left:{slot:'Q1'}, right:{slot:'Q2'}, winTo:{slot:'L1'}, loseTo:{slot:'T1', side:'left'} });
+    def.matches.push({ id:'L2', left:{slot:'Q3'}, right:{slot:'Q4'}, winTo:{slot:'L2'}, loseTo:{slot:'T1', side:'right'} });
+
+    def.matches.push({ id:'W1', left:{slot:'L1'}, right:{slot:'L2'}, winTo:{slot:'W1'} });
+    def.matches.push({ id:'T1', left:{slot:'L1*'}, right:{slot:'L2*'}, winTo:{slot:'T1'} });
+
+    const defAll = jget(LKEY_KODEF, {});
+    defAll[compId] = def;
+    jset(LKEY_KODEF, defAll);
+
+    return { compId, def, round };
   }
-  function koRoundResultsDone(compId, ids){
-    const plan = loadJSON(LKEY_PLAN, []);
-    const results = loadJSON(LKEY_RESULTS, {});
-    const id2jogo = Object.fromEntries(
-      plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId)
-          .map(p => [p.M, String(p.JOGO)])
-    );
-    return ids.every(id => results[id2jogo[id]]);
-  }
+
   function appendKORound(compId, def, ids){
-    const plan = loadJSON(LKEY_PLAN, []);
+    const plan = jget(LKEY_PLAN, []);
     const hasM = new Set(plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId).map(p=>p.M));
     const need = ids.filter(id=>!hasM.has(id));
     if (!need.length) return;
@@ -538,18 +522,35 @@
       localStorage.setItem(LKEY_PLAN, JSON.stringify(plan));
     }
   }
-  async function maybeUnlockNextKORounds(compId, def){
-    // todas as Oitavas feitas? → Quartas
-    if (koRoundResultsDone(compId, ['O1','O2','O3','O4','O5','O6','O7','O8'])){
-      appendKORound(compId, def, ['Q1','Q2','Q3','Q4']);
+  function koRoundResultsDone(compId, ids){
+    const plan = jget(LKEY_PLAN, []);
+    const results = jget(LKEY_RESULTS, {});
+    const id2jogo = Object.fromEntries(
+      plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId)
+          .map(p => [p.M, String(p.JOGO)])
+    );
+    return ids.every(id => results[id2jogo[id]]);
+  }
+  async function unlockFrom(round, compId, def){
+    const O = ['O1','O2','O3','O4','O5','O6','O7','O8'];
+    const Q = ['Q1','Q2','Q3','Q4'];
+    const L = ['L1','L2'];
+    const T = ['T1'];
+    const W = ['W1'];
+
+    if (round==='OITAVAS'){
+      appendKORound(compId, def, O);
+      if (koRoundResultsDone(compId, O)) appendKORound(compId, def, Q);
     }
-    // Quartas feitas? → Semis
-    if (koRoundResultsDone(compId, ['Q1','Q2','Q3','Q4'])){
-      appendKORound(compId, def, ['L1','L2']);
+    if (round==='QUARTAS'){
+      appendKORound(compId, def, Q);
     }
-    // Semis feitas? → 3º lugar e Final
-    if (koRoundResultsDone(compId, ['L1','L2'])){
-      appendKORound(compId, def, ['T1','W1']);
+    if (koRoundResultsDone(compId, Q)){
+      appendKORound(compId, def, L);
+    }
+    if (koRoundResultsDone(compId, L)){
+      appendKORound(compId, def, T);
+      appendKORound(compId, def, W);
     }
   }
 
@@ -557,32 +558,26 @@
     const cfg = await getCampConfig(camp);
     const groups = ensureGroupsPlanFromSeeds(camp, cfg);
     if (!groups) return;
-    if (!groupsCompleted(camp)) return; // ainda falta jogo de grupo
-    const tables = computeGroupTables(camp, groups);
-    const { compId, def } = seedKnockoutFromTables(camp, tables);
-    appendKnockoutToPlan(compId, def);       // adiciona oitavas (se não tiver)
-    await maybeUnlockNextKORounds(compId, def); // destrava até a final
+    if (!groupsCompleted(camp)) return;
+    const tables = computeGroupTablesFromResults(camp, groups);
+    const { compId, def, round } = seedKnockoutDynamic(camp, cfg, tables);
+    await unlockFrom(round, compId, def);
   }
 
-  // ===========================
-  // BOOT
-  // ===========================
   (async function init(){
     const teamsRaw = loadTeams();
     const { byKey, byChamp } = indexTeams(teamsRaw);
 
     if (!Object.keys(byChamp).length){
-      showStatus('<div class="warn">Nenhuma seleção encontrada. Carregue a lista de seleções (window.SELECOES / window.TEAMS ou localStorage "teams").</div>');
+      showStatus('<div class="warn">Nenhuma seleção encontrada. Carregue a lista de seleções (window.SELECOES / window.TEAMS ou localStorage \"teams\").</div>');
       return;
     }
 
-    // 1) iniciado?
     const iniciado = Number(localStorage.getItem(LKEY_INIT) || 0);
     if (!iniciado){
-      firstRunInit(byChamp); // sorteia sequências e salva
+      firstRunInit(byChamp);
     }
 
-    // 2) [GROUPS→KO] antes de montar próximo jogo, tente graduar KO em cada confederação
     await ensureKOPhaseIfReady('CONMEBOL');
     await ensureKOPhaseIfReady('CONCACAF');
     await ensureKOPhaseIfReady('CAF');
@@ -590,7 +585,6 @@
     await ensureKOPhaseIfReady('OFC');
     await ensureKOPhaseIfReady('UEFA');
 
-    // 3) Próximo confronto via plano linear
     const fixture = getNextFixture();
 
     let id1=null, id2=null, info='Próximo confronto';
@@ -610,7 +604,6 @@
       setFixtureInfo(info);
     }
 
-    // 4) Fallback (se não houver plano)
     if (!id1 || !id2){
       const fb = ensureNextMatchFallback(CHAMP);
       id1 = id1 || fb.n1?.id || null;
@@ -618,7 +611,6 @@
       if (!fixture) setFixtureInfo(`Próximo confronto (${CHAMP})`);
     }
 
-    // 5) Render
     const st = loadStateV3();
     if (id1){ ensureTeamBaseline(st, id1); }
     if (id2){ ensureTeamBaseline(st, id2); }
@@ -637,44 +629,42 @@
     renderTeam('t2', t2, id2 ? st[id2] : {} );
   })();
   </script>
-</body>
 
-<style>
-  /* ==== Compacta a tela do Campeonato (overrides) ==== */
-  :root{
-    --flag-w: 88px;
-    --flag-h: 58px;
-    --radar-w: 180px;
-    --radar-h: 150px;
-    --name-fs: .95rem;
-    --score-fs: 1rem;
-    --gap: 8px;
-  }
-  .card{ padding:10px; }
-  .row{ gap:10px; }
-  .team-card{ gap: var(--gap); }
-  .flag{ width: var(--flag-w); height: var(--flag-h); border-radius: 8px; }
-  .team-name{ font-size: var(--name-fs); }
-  .score{ font-size: var(--score-fs); padding: 4px 10px; border-radius: 999px; }
-  .radar{ width: var(--radar-w); height: var(--radar-h); }
-  .legend{ gap:6px 8px; font-size:.78rem; }
-  .badge{ padding:2px 6px; }
-  .footer-actions{
-    padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
-  }
-  .btn{ padding:10px 12px; border-radius:10px; font-weight:700; }
-  @media (max-width: 410px){
+  <style>
     :root{
-      --flag-w: 80px;
-      --flag-h: 52px;
-      --radar-w: 160px;
-      --radar-h: 130px;
-      --name-fs: .9rem;
-      --score-fs: .95rem;
-      --gap: 6px;
+      --flag-w: 88px;
+      --flag-h: 58px;
+      --radar-w: 180px;
+      --radar-h: 150px;
+      --name-fs: .95rem;
+      --score-fs: 1rem;
+      --gap: 8px;
     }
-    .legend{ font-size:.72rem; }
-  }
-</style>
-
+    .card{ padding:10px; }
+    .row{ gap:10px; }
+    .team-card{ gap: var(--gap); }
+    .flag{ width: var(--flag-w); height: var(--flag-h); border-radius: 8px; }
+    .team-name{ font-size: var(--name-fs); }
+    .score{ font-size: var(--score-fs); padding: 4px 10px; border-radius: 999px; }
+    .radar{ width: var(--radar-w); height: var(--radar-h); }
+    .legend{ gap:6px 8px; font-size:.78rem; }
+    .badge{ padding:2px 6px; }
+    .footer-actions{
+      padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
+    }
+    .btn{ padding:10px 12px; border-radius:10px; font-weight:700; }
+    @media (max-width: 410px){
+      :root{
+        --flag-w: 80px;
+        --flag-h: 52px;
+        --radar-w: 160px;
+        --radar-h: 130px;
+        --name-fs: .9rem;
+        --score-fs: .95rem;
+        --gap: 6px;
+      }
+      .legend{ font-size:.72rem; }
+    }
+  </style>
+</body>
 </html>
