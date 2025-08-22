@@ -102,192 +102,187 @@
 </div>
 
 <script>
-/* === UTIL === */
-const $ = sel => document.querySelector(sel);
+/* ===== Utils básicas ===== */
+const $ = (s) => document.querySelector(s);
 const el = (tag, attrs={}, children=[]) => {
   const e = document.createElement(tag);
-  Object.entries(attrs).forEach(([k,v])=>{
-    if(k==='text') e.textContent = v;
-    else if(k==='html') e.innerHTML = v;
-    else if(k==='class') e.className = v;
+  for (const [k,v] of Object.entries(attrs)){
+    if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'class') e.className = v;
     else e.setAttribute(k,v);
-  });
+  }
   (Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));
   return e;
 };
-const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const LOGOS = {
-  "AFC": "Logos/AFC.png",
-  "CAF": "Logos/CAF.png",
-  "CONCACAF": "Logos/CONCACAF.png",
-  "CONMEBOL": "Logos/CONMEBOL.svg",
-  "OFC": "Logos/OFC.png",
-  "UEFA": "Logos/UEFA.svg",
-  "FIFA": "Logos/Copa do mundo.png",
-  "Copa das Confederações": "Logos/Copa das confederações.png"
-};
+const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-/* === STATE/ROUTER === */
-let state = {
-  torneios: [],
-  torneio: null,
-  grupoKey: null,
-  grupoTimes: []
-};
-
-const rota = () => decodeURIComponent(location.hash.slice(1) || '');
-const parseHash = () => {
-  // patterns: "", "TORNEIO", "TORNEIO_Grupo-A"
-  const h = rota();
-  if(!h) return {scr:"home"};
-  const mGrupo = h.match(/^(.+)_Grupo\-([A-H])$/);
-  if(mGrupo) return {scr:"grupo", torneio:mGrupo[1], grupo:mGrupo[2]};
-  return {scr:"grupos", torneio:h};
-};
-const go = (hash) => { location.hash = encodeURIComponent(hash).replace(/%20/g,' '); };
-
-$("#btnBack").addEventListener("click", () => {
-  window.location.href = "campeonato.html";
-});
-
-$("#tabGrupos").addEventListener("click",()=>{
-  $("#tabGrupos").classList.add("active");$("#tabMata").classList.remove("active");
-  $("#viewGrupos").style.display="block";$("#viewMata").style.display="none";
-});
-$("#tabMata").addEventListener("click",()=>{
-  $("#tabMata").classList.add("active");$("#tabGrupos").classList.remove("active");
-  $("#viewMata").style.display="block";$("#viewGrupos").style.display="none";
-});
-
-function getGroupKey(label){ // "Grupo E" -> "Grupo 5"
+/* Normaliza rótulos de grupo vindos da UI: "GRUPO E" -> "Grupo 5", "Grupo 5" -> "Grupo 5" */
+function getGroupKey(label){
+  if (!label) return label;
   const mLet = /grupo\s*([A-Z])/i.exec(label);
   const mNum = /grupo\s*(\d+)/i.exec(label);
   if (mNum) return `Grupo ${Number(mNum[1])}`;
   if (mLet){
-    const pos = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(mLet[1].toUpperCase());
+    const pos = ABC.indexOf(mLet[1].toUpperCase());
     return pos >= 0 ? `Grupo ${pos+1}` : label;
   }
   return label;
 }
 
-// uso na tela:
-const store = JSON.parse(localStorage.getItem('groups_plan_v1')||'{}');
-const conf  = 'UEFA';                          // vindo do torneio atual
-const uiGrp = 'GRUPO E';                       // vindo da UI
-const key   = getGroupKey(uiGrp);              // -> "Grupo 5"
-const teams = store?.[conf]?.[key] || [];      // agora encontra
+/* ===== Router ===== */
+const rota = () => decodeURIComponent(location.hash.slice(1) || '');
+function parseHash(){
+  const h = rota();
+  if(!h) return {scr:"home"};
+  const mGrupo = h.match(/^(.+)_Grupo\-([A-Z])$/i);
+  if(mGrupo) return {scr:"grupo", torneio:mGrupo[1], grupo:mGrupo[2].toUpperCase()};
+  return {scr:"grupos", torneio:h};
+}
+function go(hash){ location.hash = encodeURIComponent(hash).replace(/%20/g,' '); }
 
-/* === CARREGAR DADOS DO localStorage (compat) === */
+/* ===== Estado ===== */
+let state = {
+  torneios: [],        // array de objetos do localStorage.campeonatos
+  torneio: null,       // nome atual
+  grupoLetra: null,    // A, B, C, ...
+  grupoTimes: []       // times do grupo atual
+};
+
+/* ===== Leitura do localStorage ===== */
 function loadTorneios(){
-  // Espera um array de objetos no localStorage.campeonatos
   try{
     const raw = localStorage.getItem("campeonatos");
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr)?arr:[];
-  }catch(e){ return []; }
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch{ return []; }
 }
 
-// Gera pares do turno único
-function gerarPares(times){
-  const n = times.length;
-  const pares = [];
-  for(let i=0;i<n;i++){
-    for(let j=i+1;j<n;j++){
-      pares.push({home:times[i], away:times[j]});
+/* Descobre quantos grupos existem (ou, melhor, quais existem) */
+function detectarGruposDisponiveis(torneioNome){
+  const letras = new Set();
+
+  // 1) Ver se há stores dedicadas
+  const storeKeys = ["groups_plan_v1","groups_p1an_v1"];
+  for(const sk of storeKeys){
+    try{
+      const raw = localStorage.getItem(sk);
+      if(!raw) continue;
+      const dict = JSON.parse(raw);
+
+      // formatos aceitos:
+      // - "<TORNEIO>:Grupo X"  (X = letra)
+      // - "<TORNEIO>-Grupo X"
+      // - dict["<TORNEIO>"]["Grupo X"] (ou "Grupo 1" etc.)
+      for(const k of Object.keys(dict)){
+        const v = dict[k];
+        // chave "TORNEIO:Grupo X"
+        const m1 = new RegExp(`^${escapeRegExp(torneioNome)}[:\\-]Grupo\\s+([A-Z0-9]+)$`,"i").exec(k);
+        if(m1){
+          const token = m1[1];
+          if (/^[A-Z]$/.test(token)) letras.add(token.toUpperCase());
+          else if (/^\\d+$/.test(token)) {
+            const n = Number(token);
+            if (n>=1 && n<=26) letras.add(ABC[n-1]);
+          }
+        }
+        // formato aninhado
+        if (k === torneioNome && v && typeof v === 'object'){
+          for(const sub of Object.keys(v)){
+            const mLet = /grupo\s*([A-Z])/i.exec(sub);
+            const mNum = /grupo\s*(\d+)/i.exec(sub);
+            if (mLet) letras.add(mLet[1].toUpperCase());
+            else if (mNum){
+              const pos = Number(mNum[1]) - 1;
+              if (pos>=0 && pos<26) letras.add(ABC[pos]);
+            }
+          }
+        }
+      }
+    }catch{}
+  }
+
+  // 2) procurar dentro do objeto do torneio (campeonatos) como "Grupo 1.."
+  const t = state.torneios.find(x=>x.Nome===torneioNome);
+  if (t){
+    for (const k of Object.keys(t)){
+      const m = /^Grupo\s*(\d+)$/i.exec(k);
+      if (m){
+        const pos = Number(m[1]) - 1;
+        if (pos>=0 && pos<26) letras.add(ABC[pos]);
+      }
     }
   }
-  return pares;
+
+  // fallback: se nada achado, A..H
+  if (!letras.size){ "ABCDEFGH".split("").forEach(L=>letras.add(L)); }
+
+  return Array.from(letras).sort((a,b)=>ABC.indexOf(a)-ABC.indexOf(b));
 }
 
-function tryLoadResultados(torneio, grupo){
-  // Várias chaves possíveis para compatibilidade
-  const keys = ["fixtures_results_v1","fixtures_plan_flat_v1","fixtures_group_results_v1"];
-  for(const k of keys){
+/* Extrai times do storage, aceitando todos os formatos que você já usou */
+function extractTimes(torneioNome, grupoLetra){
+  const tentativas = [];
+  const gKeyLetra = `Grupo ${grupoLetra}`;
+  const gKeyNum   = `Grupo ${ABC.indexOf(grupoLetra)+1}`;
+
+  // 1) stores dedicadas
+  const storeKeys = ["groups_plan_v1","groups_p1an_v1"];
+  for(const sk of storeKeys){
     try{
-      const raw = localStorage.getItem(k);
+      const raw = localStorage.getItem(sk);
       if(!raw) continue;
-      const data = JSON.parse(raw);
-      // suportar mapa por "TORNEIO:Grupo X" ou aninhado
-      const label1 = `${torneio}:Grupo ${grupo}`;
-      const label2 = `${torneio}-Grupo ${grupo}`;
-      if(Array.isArray(data[label1])) return data[label1];
-      if(Array.isArray(data[label2])) return data[label2];
-      if(data[torneio] && data[torneio][grupo]) return data[torneio][grupo];
-    }catch(e){}
-  }
-  return null;
-}
+      const dict = JSON.parse(raw);
 
-function tryLoadKnockout(torneio){
-  const keys = ["knockout_v1","mata_mata_v1"];
-  for(const k of keys){
-    try{
-      const raw = localStorage.getItem(k);
-      if(!raw) continue;
-      const data = JSON.parse(raw);
-      if(Array.isArray(data[torneio])) return data[torneio];
-      if(data[torneio]) return data[torneio];
-    }catch(e){}
-  }
-  return null;
-}
+      // chaves planas
+      tentativas.push(dict[`${torneioNome}:${gKeyLetra}`]);
+      tentativas.push(dict[`${torneioNome}-${gKeyLetra}`]);
+      tentativas.push(dict[`${torneioNome}:${gKeyNum}`]);
+      tentativas.push(dict[`${torneioNome}-${gKeyNum}`]);
 
-/* Descobrir quantos grupos existem no torneio */
-function getGroupCount(torneioNome){
-  const t = state.torneios.find(x=>x.Nome===torneioNome) || {};
-  // 1) se existir propriedade "Grupos" com número, usar
-  if(typeof t.Grupos === "number" && t.Grupos>0) return t.Grupos;
-  // 2) contar chaves "Grupo 1", "Grupo 2", ...
-  let max = 0;
-  Object.keys(t).forEach(k=>{
-    const m = k.match(/^Grupo\s+(\d+)$/i);
-    if(m) max = Math.max(max, parseInt(m[1],10));
-  });
-  if(max>0) return max;
-  // 3) fallback 8
-  return 8;
-}
-
-function extractTimesFromCampeonatos(torneioNome, grupoLetra){
-  // Tentar stores dedicadas
-  const storeKeys = ["groups_plan_v1","groups_p1an_v1"]; // inclui legado com 1 no lugar de l
-  for(const storeKey of storeKeys){
-    try{
-      const raw = localStorage.getItem(storeKey);
-      if(raw){
-        const dict = JSON.parse(raw);
-        const gKey1 = `${torneioNome}:Grupo ${grupoLetra}`;
-        const gKey2 = `${torneioNome}-Grupo ${grupoLetra}`;
-        if(Array.isArray(dict[gKey1])) return dict[gKey1];
-        if(Array.isArray(dict[gKey2])) return dict[gKey2];
-        if(dict[torneioNome] && Array.isArray(dict[torneioNome][grupoLetra])) return dict[torneioNome][grupoLetra];
+      // aninhado por torneio
+      if (dict[torneioNome]){
+        const bucket = dict[torneioNome];
+        tentativas.push(bucket[gKeyLetra]);
+        tentativas.push(bucket[gKeyNum]);
+        // também tolerar "Grupo A" / "Grupo 1" como arrays diretos
+        const altLetra = `Grupo ${grupoLetra}`;
+        const altNum   = `Grupo ${ABC.indexOf(grupoLetra)+1}`;
+        tentativas.push(bucket[altLetra]);
+        tentativas.push(bucket[altNum]);
       }
-    }catch(e){}
+    }catch{}
   }
-  // fallback: buscar dentro do objeto do torneio (Grupo 1..)
+
+  // 2) dentro de "campeonatos" como Grupo 1..N
   const t = state.torneios.find(x=>x.Nome===torneioNome);
-  const idx = "ABCDEFGH".indexOf(grupoLetra)+1;
-  if(t && t[`Grupo ${idx}`] && Array.isArray(t[`Grupo ${idx}`])){
-    return t[`Grupo ${idx}`];
+  if (t){
+    if (Array.isArray(t[gKeyNum]))   tentativas.push(t[gKeyNum]);
+    if (Array.isArray(t[gKeyLetra])) tentativas.push(t[gKeyLetra]); // se você armazenou por letra
   }
-  // mais um fallback: chaves livres tipo "grupos_TORNEIO_GrupoA"
-  const guessKeys = [
+
+  // 3) chaves alternativas que você já usou soltas
+  const altKeys = [
     `grupos_${torneioNome}_Grupo${grupoLetra}`,
-    `${torneioNome}_Grupo${grupoLetra}`
+    `${torneioNome}_Grupo${grupoLetra}`,
+    `grupos_${torneioNome}_${gKeyLetra}`,
+    `${torneioNome}_${gKeyLetra}`
   ];
-  for(const k of guessKeys){
+  for(const k of altKeys){
     try{
       const raw = localStorage.getItem(k);
       if(!raw) continue;
       const arr = JSON.parse(raw);
-      if(Array.isArray(arr)) return arr;
-    }catch(e){}
+      if (Array.isArray(arr)) tentativas.push(arr);
+    }catch{}
   }
-  return null;
+
+  // retorna a primeira que de fato seja um array com tamanho
+  const ok = tentativas.find(v => Array.isArray(v) && v.length);
+  return ok || [];
 }
 
-/* === UI BUILDERS === */
+/* ===== Renderização ===== */
 function renderHome(){
   $("#scrTorneios").classList.add("active");
   $("#scrGrupos").classList.remove("active");
@@ -296,23 +291,20 @@ function renderHome(){
   const grid = $("#torneiosGrid");
   grid.innerHTML = "";
   state.torneios = loadTorneios();
-  if(!state.torneios.length){
+
+  if (!state.torneios.length){
     grid.appendChild(el("div",{class:"warning", html:"Não encontrei <b>campeonatos</b> no seu <code>localStorage</code>.<br/>Abra o <b>campeonato.html</b> primeiro para popular os dados ou adicione manualmente."}));
     return;
   }
 
-  state.torneios.forEach(t => {
+  state.torneios.forEach(t=>{
     const card = el("div",{class:"card"});
-    const row = el("div",{class:"row"});
-    const img = el("img",{class:"logo", src: LOGOS[t.Nome] || LOGOS["FIFA"], alt:t.Nome});
-    row.appendChild(img);
-    row.appendChild(el("div",{html:`<div class="section-title" style="margin:0">${t.Nome}</div><div class="muted">Formato: ${t.Formato||"-"}</div>`}));
-    const btn = el("div",{class:"item", style:"margin-top:.6rem"}, [
-      el("div",{class:"row"},[ el("span",{class:"badge",text:"🏆"}), el("div",{text:"Abrir grupos"}) ]),
-      el("span",{class:"pill", text:"ver"})
+    card.appendChild(el("div",{class:"row", html:`<div style="font-weight:800;letter-spacing:.04em">${t.Nome}</div>`}));
+    const btn = el("div",{class:"item", style:"margin-top:.6rem"},[
+      el("div",{class:"row"},[el("span",{class:"badge",text:"🏆"}), el("div",{text:"Abrir grupos"})]),
+      el("span",{class:"pill",text:"ver"})
     ]);
     btn.addEventListener("click",()=>go(t.Nome));
-    card.appendChild(row);
     card.appendChild(btn);
     grid.appendChild(card);
   });
@@ -325,22 +317,18 @@ function renderGrupos(torneioNome){
 
   const wrap = $("#gruposWrap");
   wrap.innerHTML = "";
-  const header = el("div",{class:"row"},[
-    el("img",{class:"logo",src:LOGOS[torneioNome]||LOGOS["FIFA"],alt:torneioNome}),
-    el("div",{class:"section-title",text:torneioNome})
-  ]);
-  wrap.appendChild(header);
 
-  const qtd = Math.max(1, Math.min(getGroupCount(torneioNome), 26)); // até Z por segurança
-  for(let i=0;i<qtd;i++){
-    const letra = ABC[i];
+  wrap.appendChild(el("div",{class:"section-title", text:torneioNome}));
+
+  const letras = detectarGruposDisponiveis(torneioNome);
+  letras.forEach(L=>{
     const btn = el("div",{class:"item"},[
-      el("div",{class:"row"},[el("span",{class:"badge",text:letra}),el("div",{text:`Grupo ${letra}`})]),
+      el("div",{class:"row"},[ el("span",{class:"badge",text:L}), el("div",{text:`Grupo ${L}`}) ]),
       el("span",{class:"pill",text:"abrir"})
     ]);
-    btn.addEventListener("click",()=>go(`${torneioNome}_Grupo-${letra}`));
+    btn.addEventListener("click",()=>go(`${torneioNome}_Grupo-${L}`));
     wrap.appendChild(btn);
-  }
+  });
 }
 
 function renderGrupoView(torneioNome, grupoLetra){
@@ -348,39 +336,28 @@ function renderGrupoView(torneioNome, grupoLetra){
   $("#scrGrupos").classList.remove("active");
   $("#scrGrupoView").classList.add("active");
 
-  $("#grupoHeader").innerHTML = "";
-  $("#grupoHeader").appendChild(el("img",{class:"logo",src:LOGOS[torneioNome]||LOGOS["FIFA"],alt:torneioNome}));
-  $("#grupoHeader").appendChild(el("div",{class:"section-title",text:`${torneioNome} • Grupo ${grupoLetra}` }));
+  state.torneio = torneioNome;
+  state.grupoLetra = grupoLetra;
 
+  $("#grupoHeader").innerHTML = "";
+  $("#grupoHeader").appendChild(el("div",{class:"section-title", text:`${torneioNome} • Grupo ${grupoLetra}`}));
   $("#fasePill").textContent = "Fase de Grupos";
 
-  const tObj = state.torneios.find(x=>x.Nome===torneioNome) || {};
-  if(tObj.Formato) $("#fasePill").textContent = tObj.Formato;
-
-  const times = extractTimesFromCampeonatos(torneioNome, grupoLetra) || [];
+  const times = extractTimes(torneioNome, grupoLetra);
   state.grupoTimes = times;
-  state.torneio = torneioNome;
-  state.grupoKey = `Grupo ${grupoLetra}`;
 
-  // RESULTADOS
+  // Resultados (simples — sem placar salvo, apenas tabela de confrontos)
   const contRes = $("#resultados");
   contRes.innerHTML = "";
-
-  if(times.length<2){
-    contRes.appendChild(el("div",{class:"warning",html:"Não encontrei os <b>times</b> deste grupo no seu armazenamento.<br/>Popule <code>groups_plan_v1</code> (ou <code>groups_p1an_v1</code>) ou o objeto do torneio e recarregue."}));
-  }else{
-    // tenta carregar resultados reais
-    const pares = gerarPares(times);
-    const resultados = tryLoadResultados(torneioNome, grupoLetra);
-    // indexar placares se existirem
-    const scoreMap = new Map();
-    if(Array.isArray(resultados)){
-      resultados.forEach(m=>{
-        const key = `${m.home}__${m.away}`;
-        scoreMap.set(key, {gh:Number(m.gh)||0, ga:Number(m.ga)||0});
-      });
+  if (times.length < 2){
+    contRes.appendChild(el("div",{class:"warning", html:"Não encontrei os <b>times</b> deste grupo no seu armazenamento.<br/>Popule <code>groups_plan_v1</code> (ou <code>groups_p1an_v1</code>) ou o objeto do torneio e recarregue."}));
+  } else {
+    const pares = [];
+    for (let i=0;i<times.length;i++){
+      for (let j=i+1;j<times.length;j++){
+        pares.push([times[i], times[j]]);
+      }
     }
-
     const tbl = el("table");
     tbl.appendChild(el("thead",{}, el("tr",{},[
       el("th",{text:"Mandante"}),
@@ -389,92 +366,68 @@ function renderGrupoView(torneioNome, grupoLetra){
     ])));
     const tb = el("tbody");
     pares.forEach(p=>{
-      const s = scoreMap.get(`${p.home}__${p.away}`) || {gh:0,ga:0};
       tb.appendChild(el("tr",{},[
-        el("td",{text:p.home}),
-        el("td",{text:`${s.gh} × ${s.ga}`}),
-        el("td",{text:p.away})
+        el("td",{text:p[0]}),
+        el("td",{text:"–"}),
+        el("td",{text:p[1]})
       ]));
     });
     tbl.appendChild(tb);
     contRes.appendChild(tbl);
   }
 
-  // CLASSIFICAÇÃO
+  // Classificação (zerada se não há placares)
   const contClass = $("#classificacao");
   contClass.innerHTML = "";
-  if(times.length){
-    const stats = new Map();
-    times.forEach(t=>stats.set(t,{J:0,V:0,E:0,D:0,GP:0,GC:0,SG:0,PTS:0,name:t}));
-    // compute a partir de resultados (se houver)
-    const resultados = tryLoadResultados(torneioNome, grupoLetra) || [];
-    resultados.forEach(m=>{
-      const gh = Number(m.gh)||0, ga = Number(m.ga)||0;
-      if(!stats.has(m.home)||!stats.has(m.away)) return;
-      const H = stats.get(m.home), A = stats.get(m.away);
-      H.J++; A.J++;
-      H.GP+=gh; H.GC+=ga; H.SG=H.GP-H.GC;
-      A.GP+=ga; A.GC+=gh; A.SG=A.GP-A.GC;
-      if(gh>ga){H.V++;A.D++;H.PTS+=3;}
-      else if(gh<ga){A.V++;H.D++;A.PTS+=3;}
-      else {H.E++;A.E++;H.PTS+=1;A.PTS+=1;}
-    });
-    const arr = [...stats.values()].sort((a,b)=> b.PTS-a.PTS || b.SG-a.SG || b.GP-a.GP || a.name.localeCompare(b.name));
+  if (times.length){
     const tbl = el("table");
     tbl.appendChild(el("thead",{}, el("tr",{},[
-      el("th",{text:"Seleção"}), el("th",{text:"J"}), el("th",{text:"V"}), el("th",{text:"E"}), el("th",{text:"D"}),
-      el("th",{text:"GP"}), el("th",{text:"GC"}), el("th",{text:"SG"}), el("th",{text:"PTS"})
+      el("th",{text:"Time"}), el("th",{text:"J"}), el("th",{text:"V"}), el("th",{text:"E"}), el("th",{text:"D"}), el("th",{text:"GP"}), el("th",{text:"GC"}), el("th",{text:"SG"}), el("th",{text:"PTS"})
     ])));
     const tb = el("tbody");
-    arr.forEach(t=>{
+    times.forEach(t=>{
       tb.appendChild(el("tr",{},[
-        el("td",{text:t.name}), el("td",{text:t.J}), el("td",{text:t.V}), el("td",{text:t.E}), el("td",{text:t.D}),
-        el("td",{text:t.GP}), el("td",{text:t.GC}), el("td",{text:t.SG}), el("td",{text:t.PTS})
+        el("td",{text:t}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}),
+        el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"})
       ]));
     });
     tbl.appendChild(tb);
     contClass.appendChild(tbl);
-  }else{
-    contClass.appendChild(el("div",{class:"warning",text:"Sem times no grupo."}));
-  }
-
-  // MATA-MATA (opcional)
-  const knockWrap = $("#knockout");
-  knockWrap.innerHTML = "";
-  const knockout = tryLoadKnockout(torneioNome);
-  if(!knockout){
-    knockWrap.appendChild(el("div",{class:"warning",text:"Nenhuma chave de mata‑mata encontrada para este torneio."}));
-  }else{
-    const list = el("div",{class:"list"});
-    knockout.forEach(match=>{
-      // match esperado: {fase:'Quartas', home:'X', away:'Y', gh:?, ga:?}
-      const linha = el("div",{class:"item"},[
-        el("div",{class:"row"},[
-          el("span",{class:"badge",text:match.fase?.[0]||'M'}),
-          el("div",{html:`<div>${match.fase||'Jogo'}</div><div class="muted">${match.home||'??'} × ${match.away||'??'} ${typeof match.gh==='number' && typeof match.ga==='number' ? `(${match.gh}–${match.ga})` : ''}</div>`})
-        ])
-      ]);
-      list.appendChild(linha);
-    });
-    knockWrap.appendChild(list);
   }
 }
 
-/* === INIT / ROUTER === */
-function syncRoute(){
-  const h = parseHash();
-  if(h.scr==="home"){ renderHome(); }
-  else if(h.scr==="grupos"){ renderGrupos(h.torneio); }
-  else if(h.scr==="grupo"){ renderGrupoView(h.torneio, h.grupo); }
-}
-window.addEventListener("hashchange", syncRoute);
-window.addEventListener("load", ()=>{
-  syncRoute();
-  $("#btnVoltarCampeonato").addEventListener("click",()=>{
-    const h = parseHash();
-    go(h.torneio || "");
-  });
+/* ===== Listeners ===== */
+$("#btnBack").addEventListener("click", () => {
+  // volta para a tela principal de campeonatos
+  window.location.href = "campeonato.html";
 });
+$("#btnVoltarCampeonato").addEventListener("click", () => {
+  window.location.href = "campeonato.html";
+});
+
+$("#tabGrupos").addEventListener("click",()=>{
+  $("#tabGrupos").classList.add("active"); $("#tabMata").classList.remove("active");
+  $("#viewGrupos").style.display="block";    $("#viewMata").style.display="none";
+});
+$("#tabMata").addEventListener("click",()=>{
+  $("#tabMata").classList.add("active"); $("#tabGrupos").classList.remove("active");
+  $("#viewMata").style.display="block";    $("#viewGrupos").style.display="none";
+});
+
+/* ===== Boot ===== */
+function mount(){
+  state.torneios = loadTorneios();
+  const h = parseHash();
+  if (h.scr === "home") renderHome();
+  else if (h.scr === "grupos") renderGrupos(h.torneio);
+  else if (h.scr === "grupo") renderGrupoView(h.torneio, h.grupo);
+}
+window.addEventListener("hashchange", mount);
+document.addEventListener("DOMContentLoaded", mount);
+
+/* helper */
+function escapeRegExp(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 </script>
+
 </body>
 </html>
