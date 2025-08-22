@@ -65,6 +65,22 @@ body {
   min-height: 100%;
 }
 
+/* célula com time + bandeira */
+.teamCell{
+  display:flex; align-items:center; gap:.55rem;
+  justify-content:flex-start;
+}
+.teamCell img.flag{
+  width:20px; height:14px; object-fit:cover;
+  border-radius:2px; box-shadow:0 0 0 1px #0b2a22 inset;
+}
+
+/* tabela de classificação: primeira coluna alinhada à esquerda; demais, centralizadas */
+.table-classificacao th, 
+.table-classificacao td{ text-align:center; }
+.table-classificacao td:first-child,
+.table-classificacao th:first-child{ text-align:left; }
+
 </style>
 </head>
 <body>
@@ -136,6 +152,40 @@ const el = (tag, attrs={}, children=[]) => {
   return e;
 };
 const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+// carrega e indexa seu dataset de times do localStorage
+const TEAMS_DATA = (() => {
+  try{ return JSON.parse(localStorage.getItem('teams')) || []; }
+  catch{ return []; }
+})();
+const TEAMS_INDEX = Object.fromEntries(
+  TEAMS_DATA.map(t => [String(t.name || t.Team).toLowerCase(), t])
+);
+
+// devolve {name, flag} para renderizar
+function teamMeta(name){
+  const key = String(name).toLowerCase();
+  const t = TEAMS_INDEX[key];
+  // tenta usar Path do seu JSON; se não tiver, tenta uma pasta padrão
+  const flag = t?.Path || t?.path || `Flags/${name}.jpg`;
+  return { name: t?.name || t?.Team || name, flag };
+}
+
+// cria um <td> com bandeira + nome
+function tdTeam(name){
+  const {flag, name:label} = teamMeta(name);
+  const td = document.createElement('td');
+  td.className = 'teamCell';
+  const img = document.createElement('img');
+  img.className = 'flag'; img.alt = label; img.referrerPolicy = "no-referrer";
+  img.src = flag;
+  // fallback silencioso se a imagem não existir
+  img.onerror = () => { img.style.display='none'; };
+  const span = document.createElement('span');
+  span.textContent = label;
+  td.append(img, span);
+  return td;
+}
 
 /* Normaliza rótulos de grupo vindos da UI: "GRUPO E" -> "Grupo 5", "Grupo 5" -> "Grupo 5" */
 function getGroupKey(label){
@@ -386,11 +436,14 @@ function renderGrupoView(torneioNome, grupoLetra){
     ])));
     const tb = el("tbody");
     pares.forEach(p=>{
-      tb.appendChild(el("tr",{},[
-        el("td",{text:p[0]}),
-        el("td",{text:"–"}),
-        el("td",{text:p[1]})
-      ]));
+      const tr = document.createElement('tr');
+tr.append(
+  tdTeam(p[0]),
+  el("td",{text:"–"}),
+  tdTeam(p[1])
+);
+tb.appendChild(tr);
+
     });
     tbl.appendChild(tb);
     contRes.appendChild(tbl);
@@ -400,19 +453,26 @@ function renderGrupoView(torneioNome, grupoLetra){
   const contClass = $("#classificacao");
   contClass.innerHTML = "";
   if (times.length){
-    const tbl = el("table");
-    tbl.appendChild(el("thead",{}, el("tr",{},[
-      el("th",{text:"Time"}), el("th",{text:"J"}), el("th",{text:"V"}), el("th",{text:"E"}), el("th",{text:"D"}), el("th",{text:"GP"}), el("th",{text:"GC"}), el("th",{text:"SG"}), el("th",{text:"PTS"})
-    ])));
-    const tb = el("tbody");
-    times.forEach(t=>{
-      tb.appendChild(el("tr",{},[
-        el("td",{text:t}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}),
-        el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"})
-      ]));
-    });
-    tbl.appendChild(tb);
-    contClass.appendChild(tbl);
+const tbl = el("table",{class:"table-classificacao"});
+tbl.appendChild(el("thead",{}, el("tr",{},[
+  el("th",{text:"Time"}), el("th",{text:"J"}), el("th",{text:"V"}),
+  el("th",{text:"E"}), el("th",{text:"D"}), el("th",{text:"GP"}),
+  el("th",{text:"GC"}), el("th",{text:"SG"}), el("th",{text:"PTS"})
+])));
+const tb = el("tbody");
+times.forEach(t=>{
+  const tr = document.createElement('tr');
+  tr.append(
+    tdTeam(t),
+    el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}),
+    el("td",{text:"0"}), el("td",{text:"0"}), el("td",{text:"0"}),
+    el("td",{text:"0"}), el("td",{text:"0"})
+  );
+  tb.appendChild(tr);
+});
+tbl.appendChild(tb);
+contClass.appendChild(tbl);
+
   }
 }
 
