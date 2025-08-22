@@ -161,6 +161,24 @@ $("#tabMata").addEventListener("click",()=>{
   $("#viewMata").style.display="block";$("#viewGrupos").style.display="none";
 });
 
+function getGroupKey(label){ // "Grupo E" -> "Grupo 5"
+  const mLet = /grupo\s*([A-Z])/i.exec(label);
+  const mNum = /grupo\s*(\d+)/i.exec(label);
+  if (mNum) return `Grupo ${Number(mNum[1])}`;
+  if (mLet){
+    const pos = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(mLet[1].toUpperCase());
+    return pos >= 0 ? `Grupo ${pos+1}` : label;
+  }
+  return label;
+}
+
+// uso na tela:
+const store = JSON.parse(localStorage.getItem('groups_plan_v1')||'{}');
+const conf  = 'UEFA';                          // vindo do torneio atual
+const uiGrp = 'GRUPO E';                       // vindo da UI
+const key   = getGroupKey(uiGrp);              // -> "Grupo 5"
+const teams = store?.[conf]?.[key] || [];      // agora encontra
+
 /* === CARREGAR DADOS DO localStorage (compat) === */
 function loadTorneios(){
   // Espera um array de objetos no localStorage.campeonatos
