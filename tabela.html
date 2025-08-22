@@ -45,6 +45,26 @@
   .tabs{display:flex;gap:.5rem;margin:.6rem 0}
   .tab{padding:.35rem .6rem;border:1px solid #ffffff22;border-radius:999px;font-size:12px;cursor:pointer;background:#0d2b23}
   .tab.active{background:#124b3b;border-color:#ffffff40}
+
+  html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;       /* garante altura total */
+  background: #113a2f; /* sua cor de fundo */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  flex: 1;            /* ocupa o espaço todo disponível */
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 </style>
 </head>
 <body>
