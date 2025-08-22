@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,29 +15,18 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:#2b1f24;font-family:system-ui,Segoe UI,Roboto,Inter,Arial}
-  .app{max-width:360px;margin:0 auto;background:var(--bg);min-height:100dvh;color:var(--text);}
-  header{
-    display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;
-    background:linear-gradient(180deg, #0c2b23, #0b251f);
-    position:sticky;top:0;z-index:5;border-bottom:1px solid #ffffff10;
-  }
+  .app{max-width:420px;margin:0 auto;background:var(--bg);min-height:100dvh;color:var(--text)}
+  header{display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;background:linear-gradient(180deg,#0c2b23,#0b251f);position:sticky;top:0;z-index:5;border-bottom:1px solid #ffffff10}
   header .back{appearance:none;border:0;background:transparent;color:var(--text);font-size:20px;cursor:pointer;padding:.2rem .4rem;border-radius:.6rem}
   header .back:hover{background:#ffffff13}
   header h1{font-size:15px;margin:0;font-weight:700;opacity:.95}
-  .screen{padding:1rem 1rem 2rem;display:none}
+  .screen{padding:1rem .9rem 2rem;display:none}
   .screen.active{display:block}
   h2{font-size:15px;letter-spacing:.03em;margin:.6rem 0 1rem}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-  .card{
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
-    border:1px solid #ffffff12;border-radius:14px;padding:.9rem;box-shadow:0 10px 24px #00000030;
-  }
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid #ffffff12;border-radius:14px;padding:.9rem;box-shadow:0 10px 24px #00000030}
   .card h3{margin:.3rem 0 1rem;font-size:12px;opacity:.9;font-weight:700;letter-spacing:.06em}
-  .item{
-    background:radial-gradient(120px 60px at 50% -40px,#ffffff10,transparent 60%), #133e32;
-    border:1px solid #ffffff16;border-radius:14px;padding:1rem .9rem;
-    display:flex;align-items:center;justify-content:space-between;cursor:pointer;
-  }
+  .item{background:radial-gradient(120px 60px at 50% -40px,#ffffff10,transparent 60%),#133e32;border:1px solid #ffffff16;border-radius:14px;padding:1rem .9rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:.15s transform}
   .item:hover{border-color:#ffffff30;transform:translateY(-1px)}
   .badge{background:#ffffff14;border:1px solid #ffffff22;color:#fff;height:28px;width:28px;display:grid;place-items:center;border-radius:999px;font-size:13px;margin-right:.5rem}
   .row{display:flex;align-items:center;gap:.6rem}
@@ -53,7 +41,10 @@
   .stack{display:grid;gap:.8rem}
   .section-title{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin:.2rem 0 .6rem;opacity:.9}
   .warning{background:#40251d;border:1px solid #c77b3a;padding:.6rem .7rem;border-radius:10px;color:#ffd7b1;font-size:12px}
-  a.btnlink{display:inline-block;margin-top:.8rem;padding:.55rem .8rem;border-radius:10px;border:1px solid #ffffff22;text-decoration:none;color:#fff;background:#0e2e26}
+  a.btnlink,button.btnlink{display:inline-block;margin-top:.8rem;padding:.55rem .8rem;border-radius:10px;border:1px solid #ffffff22;text-decoration:none;color:#fff;background:#0e2e26}
+  .tabs{display:flex;gap:.5rem;margin:.6rem 0}
+  .tab{padding:.35rem .6rem;border:1px solid #ffffff22;border-radius:999px;font-size:12px;cursor:pointer;background:#0d2b23}
+  .tab.active{background:#124b3b;border-color:#ffffff40}
 </style>
 </head>
 <body>
@@ -82,16 +73,31 @@
       <div id="grupoHeader" class="row"></div>
       <span id="fasePill" class="pill">Fase de Grupos</span>
     </div>
-    <div class="card" style="margin-top:.8rem">
-      <h3>Resultados</h3>
-      <div id="resultados"></div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabGrupos">Fase de Grupos</button>
+      <button class="tab" id="tabMata">Mata‑mata</button>
     </div>
-    <div class="card" style="margin-top:.8rem">
-      <h3>Classificação</h3>
-      <div id="classificacao"></div>
+
+    <div id="viewGrupos">
+      <div class="card" style="margin-top:.4rem">
+        <h3>Resultados</h3>
+        <div id="resultados"></div>
+      </div>
+      <div class="card" style="margin-top:.8rem">
+        <h3>Classificação</h3>
+        <div id="classificacao"></div>
+      </div>
     </div>
+    <div id="viewMata" style="display:none">
+      <div class="card" style="margin-top:.4rem">
+        <h3>Chave (Mata‑mata)</h3>
+        <div id="knockout"></div>
+      </div>
+    </div>
+
     <div id="msg" style="margin-top:.8rem"></div>
-    <a class="btnlink" id="btnVoltarCampeonato" href="campeonato.html">Voltar para Campeonato</a>
+    <button class="btnlink" id="btnVoltarCampeonato" type="button">Voltar para Campeonato</button>
   </section>
 </div>
 
@@ -103,11 +109,13 @@ const el = (tag, attrs={}, children=[]) => {
   Object.entries(attrs).forEach(([k,v])=>{
     if(k==='text') e.textContent = v;
     else if(k==='html') e.innerHTML = v;
+    else if(k==='class') e.className = v;
     else e.setAttribute(k,v);
   });
   (Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));
   return e;
 };
+const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const LOGOS = {
   "AFC": "Logos/AFC.png",
   "CAF": "Logos/CAF.png",
@@ -127,22 +135,30 @@ let state = {
   grupoTimes: []
 };
 
-const rota = () => location.hash.slice(1) || '';
+const rota = () => decodeURIComponent(location.hash.slice(1) || '');
 const parseHash = () => {
   // patterns: "", "TORNEIO", "TORNEIO_Grupo-A"
   const h = rota();
   if(!h) return {scr:"home"};
-  const mGrupo = h.match(/^([A-ZÁ-Úa-z\- ]+)_Grupo\-([A-H])$/);
+  const mGrupo = h.match(/^(.+)_Grupo\-([A-H])$/);
   if(mGrupo) return {scr:"grupo", torneio:mGrupo[1], grupo:mGrupo[2]};
   return {scr:"grupos", torneio:h};
 };
-const go = (hash) => { location.hash = hash; };
+const go = (hash) => { location.hash = encodeURIComponent(hash).replace(/%20/g,' '); };
 
 $("#btnBack").addEventListener("click", () => {
   const h = parseHash();
-  if(h.scr==="grupo") go(`${encodeURIComponent(h.torneio)}`);
+  if(h.scr==="grupo") go(h.torneio);
   else if(h.scr==="grupos") go("");
   else history.back();
+});
+$("#tabGrupos").addEventListener("click",()=>{
+  $("#tabGrupos").classList.add("active");$("#tabMata").classList.remove("active");
+  $("#viewGrupos").style.display="block";$("#viewMata").style.display="none";
+});
+$("#tabMata").addEventListener("click",()=>{
+  $("#tabMata").classList.add("active");$("#tabGrupos").classList.remove("active");
+  $("#viewMata").style.display="block";$("#viewGrupos").style.display="none";
 });
 
 /* === CARREGAR DADOS DO localStorage (compat) === */
@@ -187,6 +203,74 @@ function tryLoadResultados(torneio, grupo){
   return null;
 }
 
+function tryLoadKnockout(torneio){
+  const keys = ["knockout_v1","mata_mata_v1"];
+  for(const k of keys){
+    try{
+      const raw = localStorage.getItem(k);
+      if(!raw) continue;
+      const data = JSON.parse(raw);
+      if(Array.isArray(data[torneio])) return data[torneio];
+      if(data[torneio]) return data[torneio];
+    }catch(e){}
+  }
+  return null;
+}
+
+/* Descobrir quantos grupos existem no torneio */
+function getGroupCount(torneioNome){
+  const t = state.torneios.find(x=>x.Nome===torneioNome) || {};
+  // 1) se existir propriedade "Grupos" com número, usar
+  if(typeof t.Grupos === "number" && t.Grupos>0) return t.Grupos;
+  // 2) contar chaves "Grupo 1", "Grupo 2", ...
+  let max = 0;
+  Object.keys(t).forEach(k=>{
+    const m = k.match(/^Grupo\s+(\d+)$/i);
+    if(m) max = Math.max(max, parseInt(m[1],10));
+  });
+  if(max>0) return max;
+  // 3) fallback 8
+  return 8;
+}
+
+function extractTimesFromCampeonatos(torneioNome, grupoLetra){
+  // Tentar stores dedicadas
+  const storeKeys = ["groups_plan_v1","groups_p1an_v1"]; // inclui legado com 1 no lugar de l
+  for(const storeKey of storeKeys){
+    try{
+      const raw = localStorage.getItem(storeKey);
+      if(raw){
+        const dict = JSON.parse(raw);
+        const gKey1 = `${torneioNome}:Grupo ${grupoLetra}`;
+        const gKey2 = `${torneioNome}-Grupo ${grupoLetra}`;
+        if(Array.isArray(dict[gKey1])) return dict[gKey1];
+        if(Array.isArray(dict[gKey2])) return dict[gKey2];
+        if(dict[torneioNome] && Array.isArray(dict[torneioNome][grupoLetra])) return dict[torneioNome][grupoLetra];
+      }
+    }catch(e){}
+  }
+  // fallback: buscar dentro do objeto do torneio (Grupo 1..)
+  const t = state.torneios.find(x=>x.Nome===torneioNome);
+  const idx = "ABCDEFGH".indexOf(grupoLetra)+1;
+  if(t && t[`Grupo ${idx}`] && Array.isArray(t[`Grupo ${idx}`])){
+    return t[`Grupo ${idx}`];
+  }
+  // mais um fallback: chaves livres tipo "grupos_TORNEIO_GrupoA"
+  const guessKeys = [
+    `grupos_${torneioNome}_Grupo${grupoLetra}`,
+    `${torneioNome}_Grupo${grupoLetra}`
+  ];
+  for(const k of guessKeys){
+    try{
+      const raw = localStorage.getItem(k);
+      if(!raw) continue;
+      const arr = JSON.parse(raw);
+      if(Array.isArray(arr)) return arr;
+    }catch(e){}
+  }
+  return null;
+}
+
 /* === UI BUILDERS === */
 function renderHome(){
   $("#scrTorneios").classList.add("active");
@@ -201,9 +285,7 @@ function renderHome(){
     return;
   }
 
-  // listar 8 primeiros ou todos se houver mais
-  const itens = state.torneios.slice(0, 8);
-  itens.forEach(t => {
+  state.torneios.forEach(t => {
     const card = el("div",{class:"card"});
     const row = el("div",{class:"row"});
     const img = el("img",{class:"logo", src: LOGOS[t.Nome] || LOGOS["FIFA"], alt:t.Nome});
@@ -213,37 +295,11 @@ function renderHome(){
       el("div",{class:"row"},[ el("span",{class:"badge",text:"🏆"}), el("div",{text:"Abrir grupos"}) ]),
       el("span",{class:"pill", text:"ver"})
     ]);
-    btn.addEventListener("click",()=>go(encodeURIComponent(t.Nome)));
+    btn.addEventListener("click",()=>go(t.Nome));
     card.appendChild(row);
     card.appendChild(btn);
     grid.appendChild(card);
   });
-}
-
-function extractTimesFromCampeonatos(torneioNome, grupoLetra){
-  // Os seus dados costumam ter chaves "Grupo 1", ... e não letras.
-  // Vamos mapear A->1, B->2, etc. e procurar um array em campeonatosTimes_{torneio}_{grupo}
-  // Primeiro: tentar uma store dedicada
-  const storeKey = `groups_plan_v1`;
-  try{
-    const raw = localStorage.getItem(storeKey);
-    if(raw){
-      const dict = JSON.parse(raw);
-      // tentar variantes de chave
-      const gKey1 = `${torneioNome}:Grupo ${grupoLetra}`;
-      const gKey2 = `${torneioNome}-Grupo ${grupoLetra}`;
-      if(Array.isArray(dict[gKey1])) return dict[gKey1];
-      if(Array.isArray(dict[gKey2])) return dict[gKey2];
-      if(dict[torneioNome] && Array.isArray(dict[torneioNome][grupoLetra])) return dict[torneioNome][grupoLetra];
-    }
-  }catch(e){}
-  // fallback: procurar no objeto do torneio pela contagem dos grupos com nomes
-  const t = state.torneios.find(x=>x.Nome===torneioNome);
-  const idx = "ABCDEFGH".indexOf(grupoLetra)+1;
-  if(t && t[`Grupo ${idx}`] && Array.isArray(t[`Grupo ${idx}`])){
-    return t[`Grupo ${idx}`];
-  }
-  return null;
 }
 
 function renderGrupos(torneioNome){
@@ -259,15 +315,16 @@ function renderGrupos(torneioNome){
   ]);
   wrap.appendChild(header);
 
-  // Mostrar botões A..H sempre; o que não tiver times avisamos
-  "ABCDEFGH".split("").forEach(letra=>{
+  const qtd = Math.max(1, Math.min(getGroupCount(torneioNome), 26)); // até Z por segurança
+  for(let i=0;i<qtd;i++){
+    const letra = ABC[i];
     const btn = el("div",{class:"item"},[
       el("div",{class:"row"},[el("span",{class:"badge",text:letra}),el("div",{text:`Grupo ${letra}`})]),
       el("span",{class:"pill",text:"abrir"})
     ]);
-    btn.addEventListener("click",()=>go(`${encodeURIComponent(torneioNome)}_Grupo-${letra}`));
+    btn.addEventListener("click",()=>go(`${torneioNome}_Grupo-${letra}`));
     wrap.appendChild(btn);
-  });
+  }
 }
 
 function renderGrupoView(torneioNome, grupoLetra){
@@ -279,6 +336,11 @@ function renderGrupoView(torneioNome, grupoLetra){
   $("#grupoHeader").appendChild(el("img",{class:"logo",src:LOGOS[torneioNome]||LOGOS["FIFA"],alt:torneioNome}));
   $("#grupoHeader").appendChild(el("div",{class:"section-title",text:`${torneioNome} • Grupo ${grupoLetra}` }));
 
+  $("#fasePill").textContent = "Fase de Grupos";
+
+  const tObj = state.torneios.find(x=>x.Nome===torneioNome) || {};
+  if(tObj.Formato) $("#fasePill").textContent = tObj.Formato;
+
   const times = extractTimesFromCampeonatos(torneioNome, grupoLetra) || [];
   state.grupoTimes = times;
   state.torneio = torneioNome;
@@ -289,7 +351,7 @@ function renderGrupoView(torneioNome, grupoLetra){
   contRes.innerHTML = "";
 
   if(times.length<2){
-    contRes.appendChild(el("div",{class:"warning",html:"Não encontrei os <b>times</b> deste grupo no seu armazenamento.<br/>Popule <code>groups_plan_v1</code> ou o objeto do torneio e recarregue."}));
+    contRes.appendChild(el("div",{class:"warning",html:"Não encontrei os <b>times</b> deste grupo no seu armazenamento.<br/>Popule <code>groups_plan_v1</code> (ou <code>groups_p1an_v1</code>) ou o objeto do torneio e recarregue."}));
   }else{
     // tenta carregar resultados reais
     const pares = gerarPares(times);
@@ -359,17 +421,44 @@ function renderGrupoView(torneioNome, grupoLetra){
   }else{
     contClass.appendChild(el("div",{class:"warning",text:"Sem times no grupo."}));
   }
+
+  // MATA-MATA (opcional)
+  const knockWrap = $("#knockout");
+  knockWrap.innerHTML = "";
+  const knockout = tryLoadKnockout(torneioNome);
+  if(!knockout){
+    knockWrap.appendChild(el("div",{class:"warning",text:"Nenhuma chave de mata‑mata encontrada para este torneio."}));
+  }else{
+    const list = el("div",{class:"list"});
+    knockout.forEach(match=>{
+      // match esperado: {fase:'Quartas', home:'X', away:'Y', gh:?, ga:?}
+      const linha = el("div",{class:"item"},[
+        el("div",{class:"row"},[
+          el("span",{class:"badge",text:match.fase?.[0]||'M'}),
+          el("div",{html:`<div>${match.fase||'Jogo'}</div><div class="muted">${match.home||'??'} × ${match.away||'??'} ${typeof match.gh==='number' && typeof match.ga==='number' ? `(${match.gh}–${match.ga})` : ''}</div>`})
+        ])
+      ]);
+      list.appendChild(linha);
+    });
+    knockWrap.appendChild(list);
+  }
 }
 
 /* === INIT / ROUTER === */
 function syncRoute(){
   const h = parseHash();
   if(h.scr==="home"){ renderHome(); }
-  else if(h.scr==="grupos"){ renderGrupos(decodeURIComponent(h.torneio)); }
-  else if(h.scr==="grupo"){ renderGrupoView(decodeURIComponent(h.torneio), h.grupo); }
+  else if(h.scr==="grupos"){ renderGrupos(h.torneio); }
+  else if(h.scr==="grupo"){ renderGrupoView(h.torneio, h.grupo); }
 }
 window.addEventListener("hashchange", syncRoute);
-window.addEventListener("load", syncRoute);
+window.addEventListener("load", ()=>{
+  syncRoute();
+  $("#btnVoltarCampeonato").addEventListener("click",()=>{
+    const h = parseHash();
+    go(h.torneio || "");
+  });
+});
 </script>
 </body>
 </html>
