@@ -1,283 +1,375 @@
-<!doctype html>
-<html lang="pt-BR">
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b3b22" />
-  <title>Copa English • Tabela</title>
-  <style>
-    :root{
-      --bg:#0b3b22;--bg2:#0e482a;--muted:#b4c8bd;--ink:#ecf7f0;--shadow:0 8px 24px rgba(0,0,0,.25)
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--ink);
-         font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    .app{max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
-    header.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:.75rem;
-      padding:.75rem 1rem;background:rgba(0,0,0,.25);backdrop-filter:blur(6px);
-      border-bottom:1px solid rgba(255,255,255,.08)}
-    .brand{display:flex;align-items:center;gap:.5rem}
-    .brand-title{font-size:1.1rem;margin:0}
-    .spacer{flex:1}
-    .back{border:0;background:transparent;color:var(--ink);font-size:1.25rem;cursor:pointer}
-    main{padding:1rem;flex:1}
-    footer{padding:.75rem 1rem;background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.08)}
-    footer a{color:var(--ink);text-decoration:none}
-
-    .panel{display:none}
-    .panel.active{display:block}
-
-    h2.title{margin:0 0 .75rem;font-size:1.25rem;letter-spacing:.04em}
-    p.muted{margin:.25rem 0 1rem;color:var(--muted);font-size:.95rem}
-
-    /* Torneios */
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
-    .card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
-      padding:1rem;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-      box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08);min-height:104px;cursor:pointer}
-    .card img{width:56px;height:56px;object-fit:contain}
-    .card .label{font-weight:600;text-align:center}
-    .card:active{transform:scale(.98)}
-
-    /* Grupos */
-    .groups{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
-    .pill{background:rgba(255,255,255,.08);padding:.75rem 0;border-radius:14px;text-align:center;
-      font-weight:700;border:1px solid rgba(255,255,255,.1);cursor:pointer}
-    .pill:active{transform:scale(.98)}
-    .brand-ghost{opacity:.7;margin-bottom:.5rem}
-
-    /* Grupo (lista simples de times – pode evoluir para tabela/partidas depois) */
-    .team-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;margin:6px 0}
-    .team-row .pos{width:22px;text-align:right;font-weight:800;color:#d9ece3}
-    .team-row .name{flex:1}
-    .empty{color:var(--muted);font-size:.95rem}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>Copa English • Tabela</title>
+<style>
+  :root{
+    --bg:#113a2f;
+    --panel:#0e2e26;
+    --panel-2:#0a261f;
+    --accent:#19c37d;
+    --soft:#ffffff0f;
+    --text:#eef6f3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#2b1f24;font-family:system-ui,Segoe UI,Roboto,Inter,Arial}
+  .app{max-width:360px;margin:0 auto;background:var(--bg);min-height:100dvh;color:var(--text);}
+  header{
+    display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;
+    background:linear-gradient(180deg, #0c2b23, #0b251f);
+    position:sticky;top:0;z-index:5;border-bottom:1px solid #ffffff10;
+  }
+  header .back{appearance:none;border:0;background:transparent;color:var(--text);font-size:20px;cursor:pointer;padding:.2rem .4rem;border-radius:.6rem}
+  header .back:hover{background:#ffffff13}
+  header h1{font-size:15px;margin:0;font-weight:700;opacity:.95}
+  .screen{padding:1rem 1rem 2rem;display:none}
+  .screen.active{display:block}
+  h2{font-size:15px;letter-spacing:.03em;margin:.6rem 0 1rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid #ffffff12;border-radius:14px;padding:.9rem;box-shadow:0 10px 24px #00000030;
+  }
+  .card h3{margin:.3rem 0 1rem;font-size:12px;opacity:.9;font-weight:700;letter-spacing:.06em}
+  .item{
+    background:radial-gradient(120px 60px at 50% -40px,#ffffff10,transparent 60%), #133e32;
+    border:1px solid #ffffff16;border-radius:14px;padding:1rem .9rem;
+    display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+  }
+  .item:hover{border-color:#ffffff30;transform:translateY(-1px)}
+  .badge{background:#ffffff14;border:1px solid #ffffff22;color:#fff;height:28px;width:28px;display:grid;place-items:center;border-radius:999px;font-size:13px;margin-right:.5rem}
+  .row{display:flex;align-items:center;gap:.6rem}
+  .muted{opacity:.6;font-size:12px;margin:.2rem 0 .8rem}
+  .list{display:grid;gap:.6rem}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:.35rem .4rem;text-align:center;border-bottom:1px dashed #ffffff18}
+  th{font-weight:700;opacity:.9}
+  .sub{font-size:11px;opacity:.9;margin:.5rem 0 .7rem}
+  .logo{height:28px;width:28px;object-fit:contain;border-radius:4px;background:#0d2922;padding:2px;border:1px solid #ffffff20;margin-right:.5rem}
+  .pill{font-size:11px;border:1px solid #ffffff20;border-radius:999px;padding:.15rem .5rem;opacity:.85}
+  .stack{display:grid;gap:.8rem}
+  .section-title{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin:.2rem 0 .6rem;opacity:.9}
+  .warning{background:#40251d;border:1px solid #c77b3a;padding:.6rem .7rem;border-radius:10px;color:#ffd7b1;font-size:12px}
+  a.btnlink{display:inline-block;margin-top:.8rem;padding:.55rem .8rem;border-radius:10px;border:1px solid #ffffff22;text-decoration:none;color:#fff;background:#0e2e26}
+</style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <button class="back" id="btn-back" title="Voltar" aria-label="Voltar">←</button>
-      <div class="brand"><span aria-hidden="true">⚽</span>
-        <h1 class="brand-title">Copa English • Tabela</h1></div>
-      <div class="spacer"></div>
-    </header>
+<div class="app" id="app">
+  <header>
+    <button class="back" id="btnBack" aria-label="Voltar">←</button>
+    <h1>⚽ Copa English • Tabela</h1>
+  </header>
 
-    <main>
-      <!-- 1) Seleção do campeonato -->
-      <section id="view-tournaments" class="panel active" aria-labelledby="tournaments-title">
-        <h2 id="tournaments-title" class="title">SELECIONE O TORNEIO</h2>
-        <p class="muted">Toque em um torneio para ver os grupos.</p>
-        <div id="tournaments-grid" class="grid" role="list"></div>
-      </section>
+  <!-- Nível 1: Seleção de Torneio -->
+  <section id="scrTorneios" class="screen active">
+    <h2>SELECIONE O TORNEIO</h2>
+    <p class="muted">Toque em um torneio para ver os grupos.</p>
+    <div class="grid" id="torneiosGrid"></div>
+  </section>
 
-      <!-- 2) Seleção do grupo -->
-      <section id="view-groups" class="panel" aria-labelledby="groups-title">
-        <h2 id="groups-title" class="title">SELECIONE O GRUPO</h2>
-        <div class="brand-ghost" id="groups-brand"></div>
-        <div id="groups-grid" class="groups" role="list"></div>
+  <!-- Nível 2: Seleção de Grupo -->
+  <section id="scrGrupos" class="screen">
+    <h2>SELECIONE O GRUPO</h2>
+    <div id="gruposWrap" class="stack"></div>
+  </section>
 
-        <div style="margin-top:1rem">
-          <h2 class="title" style="font-size:1.05rem">FASES DO MATA‑MATA</h2>
-          <div class="grid" style="grid-template-columns:1fr;gap:.5rem">
-            <button class="pill" data-stage="oitavas">OITAVAS</button>
-            <button class="pill" data-stage="quartas">QUARTAS</button>
-            <button class="pill" data-stage="semi">SEMI</button>
-            <button class="pill" data-stage="terceiro">3º LUGAR</button>
-            <button class="pill" data-stage="final">FINAL</button>
-          </div>
-        </div>
-      </section>
+  <!-- Nível 3: Grupo -> Resultados + Classificação -->
+  <section id="scrGrupoView" class="screen">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div id="grupoHeader" class="row"></div>
+      <span id="fasePill" class="pill">Fase de Grupos</span>
+    </div>
+    <div class="card" style="margin-top:.8rem">
+      <h3>Resultados</h3>
+      <div id="resultados"></div>
+    </div>
+    <div class="card" style="margin-top:.8rem">
+      <h3>Classificação</h3>
+      <div id="classificacao"></div>
+    </div>
+    <div id="msg" style="margin-top:.8rem"></div>
+    <a class="btnlink" id="btnVoltarCampeonato" href="campeonato.html">Voltar para Campeonato</a>
+  </section>
+</div>
 
-      <!-- 3) Grupo: times (simples) -->
-      <section id="view-group" class="panel" aria-labelledby="group-title">
-        <h2 id="group-title" class="title">GRUPO</h2>
-        <div id="group-teams"></div>
-      </section>
-    </main>
+<script>
+/* === UTIL === */
+const $ = sel => document.querySelector(sel);
+const el = (tag, attrs={}, children=[]) => {
+  const e = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(k==='text') e.textContent = v;
+    else if(k==='html') e.innerHTML = v;
+    else e.setAttribute(k,v);
+  });
+  (Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>e.appendChild(c));
+  return e;
+};
+const LOGOS = {
+  "AFC": "Logos/AFC.png",
+  "CAF": "Logos/CAF.png",
+  "CONCACAF": "Logos/CONCACAF.png",
+  "CONMEBOL": "Logos/CONMEBOL.svg",
+  "OFC": "Logos/OFC.png",
+  "UEFA": "Logos/UEFA.svg",
+  "FIFA": "Logos/Copa do mundo.png",
+  "Copa das Confederações": "Logos/Copa das confederações.png"
+};
 
-    <footer>
-      <a href="campeonato.html">⤴ Voltar para Campeonato</a>
-    </footer>
-  </div>
+/* === STATE/ROUTER === */
+let state = {
+  torneios: [],
+  torneio: null,
+  grupoKey: null,
+  grupoTimes: []
+};
 
-  <script>
-  ;(() => {
-    const $  = s => document.querySelector(s);
-    const $$ = s => Array.from(document.querySelectorAll(s));
+const rota = () => location.hash.slice(1) || '';
+const parseHash = () => {
+  // patterns: "", "TORNEIO", "TORNEIO_Grupo-A"
+  const h = rota();
+  if(!h) return {scr:"home"};
+  const mGrupo = h.match(/^([A-ZÁ-Úa-z\- ]+)_Grupo\-([A-H])$/);
+  if(mGrupo) return {scr:"grupo", torneio:mGrupo[1], grupo:mGrupo[2]};
+  return {scr:"grupos", torneio:h};
+};
+const go = (hash) => { location.hash = hash; };
 
-    const views = { tournaments: $('#view-tournaments'), groups: $('#view-groups'), group: $('#view-group') };
+$("#btnBack").addEventListener("click", () => {
+  const h = parseHash();
+  if(h.scr==="grupo") go(`${encodeURIComponent(h.torneio)}`);
+  else if(h.scr==="grupos") go("");
+  else history.back();
+});
 
-    // Mapa de logos (usando seus arquivos em /Logos)
-    const LOGOS = {
-      "AFC": "Logos/AFC.png",
-      "CAF": "Logos/CAF.png",
-      "CONCACAF": "Logos/CONCACAF.png",
-      "CONMEBOL": "Logos/CONMEBOL.svg",
-      "OFC": "Logos/OFC.png",
-      "UEFA": "Logos/UEFA.svg",
-      "Copa das Confederações": "Logos/Copa das confederações.png",
-      "Copa do Mundo": "Logos/Copa do mundo.png"
-    };
+/* === CARREGAR DADOS DO localStorage (compat) === */
+function loadTorneios(){
+  // Espera um array de objetos no localStorage.campeonatos
+  try{
+    const raw = localStorage.getItem("campeonatos");
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr)?arr:[];
+  }catch(e){ return []; }
+}
 
-    let DATA = null; // dicionário { Nome: objeto }
-
-    // ---------- Router por hash ----------
-    function parseHash(){
-      const raw = (location.hash||'').replace(/^#/,'').trim();
-      if(!raw) return { page:'tournaments' };
-      const [torneio, tail] = raw.split('_');
-      if(torneio && !tail) return { page:'groups', torneio };
-      if(torneio && tail && tail.startsWith('Grupo-')){
-        const letra = tail.split('-')[1] || 'A';
-        return { page:'group', torneio, grupo:letra };
-      }
-      return { page:'tournaments' };
+// Gera pares do turno único
+function gerarPares(times){
+  const n = times.length;
+  const pares = [];
+  for(let i=0;i<n;i++){
+    for(let j=i+1;j<n;j++){
+      pares.push({home:times[i], away:times[j]});
     }
-    function go(hash){ location.hash = hash.startsWith('#')? hash : '#'+hash; }
-    function show(page){
-      Object.entries(views).forEach(([k,el])=> el.classList.toggle('active', k===page));
-      $('#btn-back').style.visibility = (page==='tournaments') ? 'hidden' : 'visible';
+  }
+  return pares;
+}
+
+function tryLoadResultados(torneio, grupo){
+  // Várias chaves possíveis para compatibilidade
+  const keys = ["fixtures_results_v1","fixtures_plan_flat_v1","fixtures_group_results_v1"];
+  for(const k of keys){
+    try{
+      const raw = localStorage.getItem(k);
+      if(!raw) continue;
+      const data = JSON.parse(raw);
+      // suportar mapa por "TORNEIO:Grupo X" ou aninhado
+      const label1 = `${torneio}:Grupo ${grupo}`;
+      const label2 = `${torneio}-Grupo ${grupo}`;
+      if(Array.isArray(data[label1])) return data[label1];
+      if(Array.isArray(data[label2])) return data[label2];
+      if(data[torneio] && data[torneio][grupo]) return data[torneio][grupo];
+    }catch(e){}
+  }
+  return null;
+}
+
+/* === UI BUILDERS === */
+function renderHome(){
+  $("#scrTorneios").classList.add("active");
+  $("#scrGrupos").classList.remove("active");
+  $("#scrGrupoView").classList.remove("active");
+
+  const grid = $("#torneiosGrid");
+  grid.innerHTML = "";
+  state.torneios = loadTorneios();
+  if(!state.torneios.length){
+    grid.appendChild(el("div",{class:"warning", html:"Não encontrei <b>campeonatos</b> no seu <code>localStorage</code>.<br/>Abra o <b>campeonato.html</b> primeiro para popular os dados ou adicione manualmente."}));
+    return;
+  }
+
+  // listar 8 primeiros ou todos se houver mais
+  const itens = state.torneios.slice(0, 8);
+  itens.forEach(t => {
+    const card = el("div",{class:"card"});
+    const row = el("div",{class:"row"});
+    const img = el("img",{class:"logo", src: LOGOS[t.Nome] || LOGOS["FIFA"], alt:t.Nome});
+    row.appendChild(img);
+    row.appendChild(el("div",{html:`<div class="section-title" style="margin:0">${t.Nome}</div><div class="muted">Formato: ${t.Formato||"-"}</div>`}));
+    const btn = el("div",{class:"item", style:"margin-top:.6rem"}, [
+      el("div",{class:"row"},[ el("span",{class:"badge",text:"🏆"}), el("div",{text:"Abrir grupos"}) ]),
+      el("span",{class:"pill", text:"ver"})
+    ]);
+    btn.addEventListener("click",()=>go(encodeURIComponent(t.Nome)));
+    card.appendChild(row);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  });
+}
+
+function extractTimesFromCampeonatos(torneioNome, grupoLetra){
+  // Os seus dados costumam ter chaves "Grupo 1", ... e não letras.
+  // Vamos mapear A->1, B->2, etc. e procurar um array em campeonatosTimes_{torneio}_{grupo}
+  // Primeiro: tentar uma store dedicada
+  const storeKey = `groups_plan_v1`;
+  try{
+    const raw = localStorage.getItem(storeKey);
+    if(raw){
+      const dict = JSON.parse(raw);
+      // tentar variantes de chave
+      const gKey1 = `${torneioNome}:Grupo ${grupoLetra}`;
+      const gKey2 = `${torneioNome}-Grupo ${grupoLetra}`;
+      if(Array.isArray(dict[gKey1])) return dict[gKey1];
+      if(Array.isArray(dict[gKey2])) return dict[gKey2];
+      if(dict[torneioNome] && Array.isArray(dict[torneioNome][grupoLetra])) return dict[torneioNome][grupoLetra];
     }
-    $('#btn-back').addEventListener('click', () => {
-      const r = parseHash(); if(r.page==='group') go(r.torneio); else go('');
+  }catch(e){}
+  // fallback: procurar no objeto do torneio pela contagem dos grupos com nomes
+  const t = state.torneios.find(x=>x.Nome===torneioNome);
+  const idx = "ABCDEFGH".indexOf(grupoLetra)+1;
+  if(t && t[`Grupo ${idx}`] && Array.isArray(t[`Grupo ${idx}`])){
+    return t[`Grupo ${idx}`];
+  }
+  return null;
+}
+
+function renderGrupos(torneioNome){
+  $("#scrTorneios").classList.remove("active");
+  $("#scrGrupoView").classList.remove("active");
+  $("#scrGrupos").classList.add("active");
+
+  const wrap = $("#gruposWrap");
+  wrap.innerHTML = "";
+  const header = el("div",{class:"row"},[
+    el("img",{class:"logo",src:LOGOS[torneioNome]||LOGOS["FIFA"],alt:torneioNome}),
+    el("div",{class:"section-title",text:torneioNome})
+  ]);
+  wrap.appendChild(header);
+
+  // Mostrar botões A..H sempre; o que não tiver times avisamos
+  "ABCDEFGH".split("").forEach(letra=>{
+    const btn = el("div",{class:"item"},[
+      el("div",{class:"row"},[el("span",{class:"badge",text:letra}),el("div",{text:`Grupo ${letra}`})]),
+      el("span",{class:"pill",text:"abrir"})
+    ]);
+    btn.addEventListener("click",()=>go(`${encodeURIComponent(torneioNome)}_Grupo-${letra}`));
+    wrap.appendChild(btn);
+  });
+}
+
+function renderGrupoView(torneioNome, grupoLetra){
+  $("#scrTorneios").classList.remove("active");
+  $("#scrGrupos").classList.remove("active");
+  $("#scrGrupoView").classList.add("active");
+
+  $("#grupoHeader").innerHTML = "";
+  $("#grupoHeader").appendChild(el("img",{class:"logo",src:LOGOS[torneioNome]||LOGOS["FIFA"],alt:torneioNome}));
+  $("#grupoHeader").appendChild(el("div",{class:"section-title",text:`${torneioNome} • Grupo ${grupoLetra}` }));
+
+  const times = extractTimesFromCampeonatos(torneioNome, grupoLetra) || [];
+  state.grupoTimes = times;
+  state.torneio = torneioNome;
+  state.grupoKey = `Grupo ${grupoLetra}`;
+
+  // RESULTADOS
+  const contRes = $("#resultados");
+  contRes.innerHTML = "";
+
+  if(times.length<2){
+    contRes.appendChild(el("div",{class:"warning",html:"Não encontrei os <b>times</b> deste grupo no seu armazenamento.<br/>Popule <code>groups_plan_v1</code> ou o objeto do torneio e recarregue."}));
+  }else{
+    // tenta carregar resultados reais
+    const pares = gerarPares(times);
+    const resultados = tryLoadResultados(torneioNome, grupoLetra);
+    // indexar placares se existirem
+    const scoreMap = new Map();
+    if(Array.isArray(resultados)){
+      resultados.forEach(m=>{
+        const key = `${m.home}__${m.away}`;
+        scoreMap.set(key, {gh:Number(m.gh)||0, ga:Number(m.ga)||0});
+      });
+    }
+
+    const tbl = el("table");
+    tbl.appendChild(el("thead",{}, el("tr",{},[
+      el("th",{text:"Mandante"}),
+      el("th",{text:"Placar"}),
+      el("th",{text:"Visitante"})
+    ])));
+    const tb = el("tbody");
+    pares.forEach(p=>{
+      const s = scoreMap.get(`${p.home}__${p.away}`) || {gh:0,ga:0};
+      tb.appendChild(el("tr",{},[
+        el("td",{text:p.home}),
+        el("td",{text:`${s.gh} × ${s.ga}`}),
+        el("td",{text:p.away})
+      ]));
     });
-    window.addEventListener('hashchange', onRoute);
+    tbl.appendChild(tb);
+    contRes.appendChild(tbl);
+  }
 
-    // ---------- Dados ----------
-    function readLS(key, fb){ try{ const v = localStorage.getItem(key); return v?JSON.parse(v):fb; }catch{ return fb; } }
-    function toDict(ls){
-      // aceita array [{Nome:'CONMEBOL', ...}] OU objeto {CONMEBOL:{...}}
-      if(!ls) return {};
-      if(Array.isArray(ls)){
-        const dic={}; ls.forEach(it=>{ if(it && it.Nome) dic[it.Nome]=it; });
-        return dic;
-      }
-      return ls;
-    }
-    async function ensureData(){
-      if(DATA) return DATA;
-      const ls = readLS('campeonatos', null);
-      if (ls) { DATA = toDict(ls); return DATA; }
-      try{
-        const res = await fetch('campeonatos.json'); if(!res.ok) throw new Error(res.statusText);
-        const j = await res.json(); DATA = toDict(j);
-      }catch(e){
-        console.warn('Falha ao carregar campeonatos.json; usando vazio.', e);
-        DATA = {};
-      }
-      return DATA;
-    }
+  // CLASSIFICAÇÃO
+  const contClass = $("#classificacao");
+  contClass.innerHTML = "";
+  if(times.length){
+    const stats = new Map();
+    times.forEach(t=>stats.set(t,{J:0,V:0,E:0,D:0,GP:0,GC:0,SG:0,PTS:0,name:t}));
+    // compute a partir de resultados (se houver)
+    const resultados = tryLoadResultados(torneioNome, grupoLetra) || [];
+    resultados.forEach(m=>{
+      const gh = Number(m.gh)||0, ga = Number(m.ga)||0;
+      if(!stats.has(m.home)||!stats.has(m.away)) return;
+      const H = stats.get(m.home), A = stats.get(m.away);
+      H.J++; A.J++;
+      H.GP+=gh; H.GC+=ga; H.SG=H.GP-H.GC;
+      A.GP+=ga; A.GC+=gh; A.SG=A.GP-A.GC;
+      if(gh>ga){H.V++;A.D++;H.PTS+=3;}
+      else if(gh<ga){A.V++;H.D++;A.PTS+=3;}
+      else {H.E++;A.E++;H.PTS+=1;A.PTS+=1;}
+    });
+    const arr = [...stats.values()].sort((a,b)=> b.PTS-a.PTS || b.SG-a.SG || b.GP-a.GP || a.name.localeCompare(b.name));
+    const tbl = el("table");
+    tbl.appendChild(el("thead",{}, el("tr",{},[
+      el("th",{text:"Seleção"}), el("th",{text:"J"}), el("th",{text:"V"}), el("th",{text:"E"}), el("th",{text:"D"}),
+      el("th",{text:"GP"}), el("th",{text:"GC"}), el("th",{text:"SG"}), el("th",{text:"PTS"})
+    ])));
+    const tb = el("tbody");
+    arr.forEach(t=>{
+      tb.appendChild(el("tr",{},[
+        el("td",{text:t.name}), el("td",{text:t.J}), el("td",{text:t.V}), el("td",{text:t.E}), el("td",{text:t.D}),
+        el("td",{text:t.GP}), el("td",{text:t.GC}), el("td",{text:t.SG}), el("td",{text:t.PTS})
+      ]));
+    });
+    tbl.appendChild(tb);
+    contClass.appendChild(tbl);
+  }else{
+    contClass.appendChild(el("div",{class:"warning",text:"Sem times no grupo."}));
+  }
+}
 
-    // ---------- Render: Torneios ----------
-    function renderTournaments(){
-      const wrap = $('#tournaments-grid'); wrap.innerHTML = '';
-      const nomes = Object.keys(DATA);
-      if(!nomes.length){
-        wrap.outerHTML = '<p class="muted">Nenhum torneio encontrado. Preencha <code>localStorage.campeonatos</code> (array com objetos contendo <b>Nome</b> e <b>Grupo 1..8</b>).</p>';
-        return;
-      }
-      nomes.forEach(nome => {
-        const logo = LOGOS[nome] || LOGOS['Copa do Mundo'] || '';
-        const card = document.createElement('button');
-        card.className = 'card';
-        card.innerHTML = `${logo?`<img alt="${nome}" src="${logo}">`:'<div style="font-size:28px">🏆</div>'}
-                          <div class="label">${nome}</div>`;
-        card.addEventListener('click', () => go(nome)); // #CONMEBOL
-        wrap.appendChild(card);
-      });
-    }
-
-    // ---------- Render: Seleção de Grupos ----------
-    function renderGroups(torneioNome){
-      const t = DATA[torneioNome]; if(!t){ go(''); return; }
-      $('#groups-brand').textContent = torneioNome;
-
-      // se tiver "grupos" (A,B,C...) usa; senão gera pelas chaves "Grupo 1..8"
-      let letters = [];
-      if (t.grupos && typeof t.grupos === 'object') letters = Object.keys(t.grupos).sort();
-      else {
-        const nums = [];
-        for (let i=1;i<=8;i++){ if (typeof t[`Grupo ${i}`] === 'number' && t[`Grupo ${i}`] > 0) nums.push(i); }
-        letters = nums.map((_,idx)=> String.fromCharCode(65+idx)); // A,B,C...
-      }
-
-      const grid = $('#groups-grid'); grid.innerHTML='';
-      letters.forEach(letra => {
-        const b = document.createElement('button');
-        b.className='pill'; b.textContent=letra;
-        b.addEventListener('click', () => go(`${torneioNome}_Grupo-${letra}`));
-        grid.appendChild(b);
-      });
-
-      // fases KO (placeholder – prontos para ligar)
-      $$('#view-groups [data-stage]').forEach(btn=>{
-        btn.onclick = () => alert('Tela de mata-mata ainda não ligada neste arquivo.');
-      });
-    }
-
-    // ---------- Render: Grupo (lista simples de times) ----------
-    function renderGroup(torneioNome, letra){
-      const t = DATA[torneioNome]; if(!t){ go(''); return; }
-      $('#group-title').textContent = `${torneioNome} • Grupo ${letra}`;
-      const box = $('#group-teams'); box.innerHTML='';
-
-      let teams = null;
-      // 1) se existir t.grupos[letra] como array, usa
-      if (t.grupos && Array.isArray(t.grupos[letra])) teams = t.grupos[letra];
-      // 2) se existir groups_plan_v1 no LS, tenta achar
-      if (!teams){
-        const gp = readLS('groups_plan_v1', {});
-        let bloco = gp[torneioNome];
-        if(!bloco){
-          const key = Object.keys(gp||{}).find(k=> k.toLowerCase().includes(String(torneioNome).toLowerCase()));
-          if(key) bloco = gp[key];
-        }
-        if (bloco){
-          const byLetter = bloco[letra] || bloco['Grupo '+letra];
-          if (Array.isArray(byLetter)) teams = byLetter;
-          else {
-            const idx = letra.charCodeAt(0)-64; // A->1
-            const byIdx = bloco['Grupo '+idx];
-            if (Array.isArray(byIdx)) teams = byIdx;
-          }
-          if (!teams && bloco.grupos){
-            teams = bloco.grupos[letra] || bloco.grupos['Grupo '+letra] || bloco.grupos['Grupo '+(letra.charCodeAt(0)-64)];
-          }
-        }
-      }
-      // 3) fallback: mostra quantidade pelo valor numérico do torneio ("Grupo 1..8")
-      if (!teams){
-        const idx = letra.charCodeAt(0)-64; // A->1
-        const qtd = t['Grupo '+idx] || 0;
-        if (qtd>0) teams = Array.from({length:qtd}, (_,i)=> `Time ${i+1}`);
-      }
-
-      if (!teams || !teams.length){
-        box.innerHTML = '<p class="empty">Não encontrei os times deste grupo. Verifique <code>groups_plan_v1</code> ou adicione t.grupos["A","B",...] no objeto do torneio.</p>';
-        return;
-      }
-
-      teams.forEach((nm, i) => {
-        const row = document.createElement('div');
-        row.className = 'team-row';
-        row.innerHTML = `<div class="pos">${i+1}</div><div class="name">${typeof nm==='string'?nm:(nm?.Nome||nm?.name||'Equipe')}</div>`;
-        box.appendChild(row);
-      });
-    }
-
-    // ---------- Boot ----------
-    async function onRoute(){
-      const r = parseHash();
-      if(!DATA) await ensureData();
-      if(r.page==='tournaments') renderTournaments();
-      if(r.page==='groups') renderGroups(r.torneio);
-      if(r.page==='group') renderGroup(r.torneio, r.grupo);
-      show(r.page);
-    }
-    onRoute();
-  })();
-  </script>
+/* === INIT / ROUTER === */
+function syncRoute(){
+  const h = parseHash();
+  if(h.scr==="home"){ renderHome(); }
+  else if(h.scr==="grupos"){ renderGrupos(decodeURIComponent(h.torneio)); }
+  else if(h.scr==="grupo"){ renderGrupoView(decodeURIComponent(h.torneio), h.grupo); }
+}
+window.addEventListener("hashchange", syncRoute);
+window.addEventListener("load", syncRoute);
+</script>
 </body>
 </html>
