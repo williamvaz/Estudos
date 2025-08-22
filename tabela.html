@@ -147,11 +147,9 @@ const parseHash = () => {
 const go = (hash) => { location.hash = encodeURIComponent(hash).replace(/%20/g,' '); };
 
 $("#btnBack").addEventListener("click", () => {
-  const h = parseHash();
-  if(h.scr==="grupo") go(h.torneio);
-  else if(h.scr==="grupos") go("");
-  else history.back();
+  window.location.href = "campeonato.html";
 });
+
 $("#tabGrupos").addEventListener("click",()=>{
   $("#tabGrupos").classList.add("active");$("#tabMata").classList.remove("active");
   $("#viewGrupos").style.display="block";$("#viewMata").style.display="none";
