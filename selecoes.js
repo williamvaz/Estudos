@@ -1323,41 +1323,54 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// === Botão Adicionar Títulos ===
-const titleBtn = document.getElementById('title-btn');
-const popup = document.getElementById('title-popup');
-const closePopup = document.getElementById('title-close');
+window.addEventListener('DOMContentLoaded', () => {
+  const titleBtn = document.getElementById('title-btn');
+  const popup = document.getElementById('title-popup');
+  const closePopup = document.getElementById('title-close');
+  const rankChoices = document.getElementById('rank-choices');
 
-if (titleBtn) {
-  titleBtn.addEventListener('click', () => {
-    if (!currentTeamCode) return;
-    popup.style.display = "flex";
+  let currentLevel = null; // regional/conf/mundial
+
+  if (titleBtn && popup) {
+    titleBtn.addEventListener('click', () => {
+      if (!currentTeamCode) return;
+      popup.style.display = "flex";
+      currentLevel = null;
+      rankChoices.style.display = "none";
+    });
+  }
+
+  if (closePopup && popup) {
+    closePopup.addEventListener('click', () => popup.style.display = "none");
+  }
+
+  // clique no nível (primeira etapa)
+  document.querySelectorAll('.title-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLevel = btn.dataset.medal; // "regional", "conf", "mundial"
+      rankChoices.style.display = "flex"; // mostra os botões de posição
+    });
   });
-}
-if (closePopup) {
-  closePopup.addEventListener('click', () => popup.style.display = "none");
-}
 
-// clique nas opções do popup
-document.querySelectorAll('.title-choice').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const medal = btn.dataset.medal; // "regional", "confederacoes", "mundial"
-    const team = selecoes.find(s => s.code === currentTeamCode);
-    if (!team) return;
-    const st = team.state;
+  // clique na posição (segunda etapa)
+  document.querySelectorAll('.rank-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!currentLevel) return;
+      const rank = btn.dataset.rank; // ouro / prata / bronze
+      const team = selecoes.find(s => s.code === currentTeamCode);
+      if (!team) return;
+      const st = team.state;
 
-    // mapeia o nível para o campo de ouro (pode mudar para bronze/prata conforme tua lógica)
-    const key = medal === "regional" ? "regional_ouro"
-              : medal === "confederacoes" ? "conf_ouro"
-              : "mundial_ouro";
+      const key = currentLevel + "_" + rank; // ex: "regional_ouro"
+      st[key] = clamp((st[key]||0)+1, 0, 999);
 
-    st[key] = clamp((st[key]||0)+1, 0, 999);
-
-    saveState(state);
-    refreshRightBox(currentTeamCode);
-    popup.style.display = "none";
+      saveState(state);
+      refreshRightBox(currentTeamCode);
+      popup.style.display = "none";
+    });
   });
 });
+
 
   // === Radar Chart (atk, dfs, mei, vel, ent) ===
 let radarChart;

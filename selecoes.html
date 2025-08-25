@@ -141,11 +141,30 @@
   <div style="background:#1a2d1f; padding:20px; border-radius:12px; width:280px; text-align:center; color:#fff">
     <h3>Gerenciar Títulos</h3>
     <p>Selecione o nível:</p>
+<div id="title-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center;">
+  <div style="background:#1a2d1f; padding:20px; border-radius:12px; width:280px; text-align:center; color:#fff">
+    <h3>Gerenciar Títulos</h3>
+    <p>Selecione o nível:</p>
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px">
       <button class="title-choice btn" data-medal="regional">Regional</button>
-      <button class="title-choice btn" data-medal="confederacoes">Confederações</button>
+      <button class="title-choice btn" data-medal="conf">Confederações</button>
       <button class="title-choice btn" data-medal="mundial">Mundial</button>
     </div>
+
+    <!-- NOVO: etapa para escolher posição -->
+    <div id="rank-choices" style="display:none; flex-direction:column; gap:10px; margin-top:12px">
+      <p>Selecione a posição:</p>
+      <button class="rank-choice btn" data-rank="ouro">🥇 Ouro</button>
+      <button class="rank-choice btn" data-rank="prata">🥈 Prata</button>
+      <button class="rank-choice btn" data-rank="bronze">🥉 Bronze</button>
+    </div>
+
+    <div style="margin-top:16px">
+      <button id="title-close" class="btn" style="background:#444">Fechar</button>
+    </div>
+  </div>
+</div>
+
     <div style="margin-top:16px">
       <button id="title-close" class="btn" style="background:#444">Fechar</button>
     </div>
