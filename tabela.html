@@ -369,7 +369,11 @@ function renderHome(){
 
   state.torneios.forEach(t=>{
     const card = el("div",{class:"card"});
-    card.appendChild(el("div",{class:"row", html:`<div style="font-weight:800;letter-spacing:.04em">${t.Nome}</div>`}));
+    const row = el("div",{class:"row"});
+const img = el("img",{class:"logo", alt:t.Nome, src:getConfLogo(t.Nome)});
+const title = el("div",{text:t.Nome, style:"font-weight:800;letter-spacing:.04em"});
+row.append(img,title);
+card.appendChild(row);
     const btn = el("div",{class:"item", style:"margin-top:.6rem"},[
       el("div",{class:"row"},[el("span",{class:"badge",text:"🏆"}), el("div",{text:"Abrir grupos"})]),
       el("span",{class:"pill",text:"ver"})
@@ -507,6 +511,21 @@ document.addEventListener("DOMContentLoaded", mount);
 
 /* helper */
 function escapeRegExp(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function getConfLogo(nome){
+  const map = {
+    "CONCACAF":"assets/logos/concacaf.png",
+    "CONMEBOL":"assets/logos/conmebol.svg",
+    "UEFA":"assets/logos/uefa.svg",
+    "AFC":"assets/logos/afc.png",
+    "CAF":"assets/logos/caf.png",
+    "OFC":"assets/logos/ofc.png",
+    "Copa do Mundo":"assets/logos/worldcup.png",
+    "Copa das Confederações":"assets/logos/confed.png"
+  };
+  return map[nome] || "assets/logos/conf/default.png";
+}
+
 </script>
 
 </body>
