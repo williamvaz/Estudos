@@ -1286,6 +1286,43 @@ if (editBtn) {
   });
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+  const titleBtn = document.getElementById('title-btn');
+  const popup = document.getElementById('title-popup');
+  const closePopup = document.getElementById('title-close');
+
+  if (titleBtn && popup) {
+    titleBtn.addEventListener('click', () => {
+      if (!currentTeamCode) return;
+      popup.style.display = "flex";
+    });
+  }
+
+  if (closePopup && popup) {
+    closePopup.addEventListener('click', () => popup.style.display = "none");
+  }
+
+  document.querySelectorAll('.title-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const medal = btn.dataset.medal;
+      const team = selecoes.find(s => s.code === currentTeamCode);
+      if (!team) return;
+      const st = team.state;
+
+      const key = medal === "regional" ? "regional_ouro"
+                : medal === "confederacoes" ? "conf_ouro"
+                : "mundial_ouro";
+
+      st[key] = clamp((st[key]||0)+1, 0, 999);
+
+      saveState(state);
+      refreshRightBox(currentTeamCode);
+      popup.style.display = "none";
+    });
+  });
+});
+
+
 // === Botão Adicionar Títulos ===
 const titleBtn = document.getElementById('title-btn');
 const popup = document.getElementById('title-popup');
