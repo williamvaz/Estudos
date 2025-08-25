@@ -1286,6 +1286,42 @@ if (editBtn) {
   });
 }
 
+// === Botão Adicionar Títulos ===
+const titleBtn = document.getElementById('title-btn');
+const popup = document.getElementById('title-popup');
+const closePopup = document.getElementById('title-close');
+
+if (titleBtn) {
+  titleBtn.addEventListener('click', () => {
+    if (!currentTeamCode) return;
+    popup.style.display = "flex";
+  });
+}
+if (closePopup) {
+  closePopup.addEventListener('click', () => popup.style.display = "none");
+}
+
+// clique nas opções do popup
+document.querySelectorAll('.title-choice').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const medal = btn.dataset.medal; // "regional", "confederacoes", "mundial"
+    const team = selecoes.find(s => s.code === currentTeamCode);
+    if (!team) return;
+    const st = team.state;
+
+    // mapeia o nível para o campo de ouro (pode mudar para bronze/prata conforme tua lógica)
+    const key = medal === "regional" ? "regional_ouro"
+              : medal === "confederacoes" ? "conf_ouro"
+              : "mundial_ouro";
+
+    st[key] = clamp((st[key]||0)+1, 0, 999);
+
+    saveState(state);
+    refreshRightBox(currentTeamCode);
+    popup.style.display = "none";
+  });
+});
+
   // === Radar Chart (atk, dfs, mei, vel, ent) ===
 let radarChart;
 

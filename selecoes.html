@@ -123,6 +123,7 @@
   <div class="edit-box">
   <input id="edit-input" type="number" placeholder="+10 ou -5" style="width:120px; margin-top:8px; padding:6px; border-radius:6px; border:1px solid #284b34; background:#0c1224; color:#fff">
   <button id="edit-btn" class="btn" style="margin-top:6px">Aplicar</button>
+  <button id="title-btn" class="btn" style="margin-top:6px;background:#2856a3">Adicionar Títulos</button>
   </div>
 
 
@@ -135,6 +136,22 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   <script src="selecoes.js"></script>
+
+  <div id="title-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center;">
+  <div style="background:#1a2d1f; padding:20px; border-radius:12px; width:280px; text-align:center; color:#fff">
+    <h3>Gerenciar Títulos</h3>
+    <p>Selecione o nível:</p>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px">
+      <button class="title-choice btn" data-medal="regional">Regional</button>
+      <button class="title-choice btn" data-medal="confederacoes">Confederações</button>
+      <button class="title-choice btn" data-medal="mundial">Mundial</button>
+    </div>
+    <div style="margin-top:16px">
+      <button id="title-close" class="btn" style="background:#444">Fechar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 
 </html>
