@@ -1404,28 +1404,29 @@ renderTable(); // << força a tabela a mostrar o novo Score
     });
   });
 
-  function bindRowClick() {
-    const rows = document.querySelectorAll('#sel-tbody tr');
-    rows.forEach(row => {
-row.addEventListener('click', () => {
-  const code = row.getAttribute('data-code');
-  const data = selecoes.find(s => s.code === code);
-  if (!data) return;
+function bindRowClick() {
+  const rows = document.querySelectorAll('#sel-tbody tr');
+  rows.forEach(row => {
+    row.addEventListener('click', () => {
+      const code = row.getAttribute('data-code');
+      const data = selecoes.find(s => s.code === code);
+      if (!data) return;
 
-  currentTeamCode = code; // <<< GUARDA O SELECIONADO
+      currentTeamCode = code; // <<< garante quem está selecionado
 
-  document.getElementById('box-name').textContent = data.name;
-  document.getElementById('box-tournament').textContent = data.tournament;
-  document.getElementById('box-score').textContent = data.state.score;
-  const flagEl = document.getElementById('box-flag');
-  flagEl.src = data.flag;
-  flagEl.alt = data.name;
-  const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
-  updateRadar({ atk, dfs, mei, vel, ent });
-  renderMedalBoard(data, '#medal-board');
-});
+      document.getElementById('box-name').textContent = data.name;
+      document.getElementById('box-tournament').textContent = data.tournament;
+      document.getElementById('box-score').textContent = data.state.score;
+      const flagEl = document.getElementById('box-flag');
+      flagEl.src = data.flag;
+      flagEl.alt = data.name;
+      const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
+      updateRadar({ atk, dfs, mei, vel, ent });
+      renderMedalBoard(data, '#medal-board');
     });
-  }
+  });
+}
+
 
   // usa o <base> se existir; senão, força /Estudos/
 const BASE = document.querySelector('base')?.getAttribute('href') || '/Estudos/';
