@@ -1,88 +1,43 @@
 <!doctype html>
 <html lang="pt-BR">
 
-  <!-- Ícones -->
-  <link rel="icon" type="image/webp" href="icone.webp" />
-  <link rel="apple-touch-icon" href="icone.webp" />
-  
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <base href="/Estudos/"><!-- ancora TODOS os caminhos relativos -->
+  <!-- Ajuste a base se seu GitHub Pages usa /Estudos/ -->
+  <base href="/Estudos/">
   <title>Estudos Futebol • Seleções</title>
+
+  <!-- Ícones (coloque icone.webp em /Estudos/) -->
+  <link rel="icon" type="image/webp" href="icone.webp" />
+  <link rel="apple-touch-icon" href="icone.webp" />
+
+  <!-- CSS do projeto -->
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="selecoes.css">
+
+  <!-- Estilos utilitários desta página -->
   <style>
-    .container {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 12px;
-    }
+    .container{max-width:980px;margin:0 auto;padding:12px}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:10px 12px;text-align:left;font-weight:700}
+    tbody td{padding:10px 12px;border-top:1px solid rgba(255,255,255,.08)}
+    .right{text-align:right}
+    .flag{width:32px;height:22px;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset}
 
-    .table-wrap {
-      overflow-x: auto;
-    }
+    .callout{background:#1a2d1f;border:1px solid #284b34;padding:10px 12px;border-radius:12px;margin:12px 0}
+    .warn{background:#391a1a;border-color:#6a3333;color:#ffdede}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    .btn{padding:10px 14px;border-radius:10px;background:#1f8b4c;color:#fff;border:none;cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{background:#444}
 
-    thead th {
-      text-align: left;
-      font-weight: 700;
-      padding: 10px 12px;
-    }
-
-    tbody td {
-      padding: 10px 12px;
-      border-top: 1px solid rgba(255, 255, 255, .08);
-    }
-
-    .right {
-      text-align: right;
-    }
-
-    .flag {
-      width: 32px;
-      height: 22px;
-      object-fit: cover;
-      border-radius: 4px;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, .2) inset;
-    }
-
-    .callout {
-      background: #1a2d1f;
-      border: 1px solid #284b34;
-      padding: 10px 12px;
-      border-radius: 12px;
-      margin: 12px 0;
-    }
-
-    .warn {
-      background: #391a1a;
-      border-color: #6a3333;
-      color: #ffdede;
-    }
-
-    .btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: #1f8b4c;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn:active {
-      transform: translateY(1px);
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    /* Modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:2000}
+    .modal-card{background:#1a2d1f;border:1px solid #284b34;color:#fff;padding:20px;border-radius:12px;width:320px;max-width:90%}
+    .modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .hidden{display:none !important}
   </style>
 </head>
 
@@ -95,6 +50,7 @@
     </div>
   </header>
 
+  <main class="container">
     <div id="erro" class="callout warn" style="display:none"></div>
 
     <div class="table-wrap card">
@@ -111,65 +67,60 @@
     </div>
   </main>
 
-<!-- Painel fixo (box + radar) -->
-<div class="country-wrap">
-  <div id="country-box" class="country-box">
-    <h3 id="box-name">Selecione um país</h3>
-    <p><strong>Torneio:</strong> <span id="box-tournament">-</span></p>
-    <p><strong>Score:</strong> <span id="box-score">-</span></p>
-    <img id="box-flag" src="" alt="Bandeira" class="flag-box">
-    <!-- Quadro de medalhas -->
-  <div id="medal-board"></div>
-  <div class="edit-box">
-  <input id="edit-input" type="number" placeholder="+10 ou -5" style="width:120px; margin-top:8px; padding:6px; border-radius:6px; border:1px solid #284b34; background:#0c1224; color:#fff">
-  <button id="edit-btn" class="btn" style="margin-top:6px">Aplicar</button>
-  <button id="title-btn" class="btn" style="margin-top:6px;background:#2856a3">Adicionar Títulos</button>
+  <!-- Painel fixo (box + radar) -->
+  <div class="country-wrap">
+    <div id="country-box" class="country-box">
+      <h3 id="box-name">Selecione um país</h3>
+      <p><strong>Torneio:</strong> <span id="box-tournament">-</span></p>
+      <p><strong>Score:</strong> <span id="box-score">-</span></p>
+      <img id="box-flag" src="" alt="Bandeira" class="flag-box">
+
+      <!-- Quadro de medalhas é gerado pelo JS -->
+      <div id="medal-board"></div>
+
+      <div class="edit-box">
+        <input id="edit-input" type="number" placeholder="+10 ou -5"
+               style="width:120px;margin-top:8px;padding:6px;border-radius:6px;border:1px solid #284b34;background:#0c1224;color:#fff">
+        <button id="edit-btn" class="btn" style="margin-top:6px">Aplicar</button>
+        <button id="title-btn" class="btn" style="margin-top:6px;background:#2856a3">Adicionar Títulos</button>
+      </div>
+    </div>
+
+    <div class="radar-box">
+      <canvas id="radarChart" width="260" height="220" aria-label="Atributos"></canvas>
+    </div>
   </div>
 
+  <!-- Modal: Gerenciar Títulos (2 etapas) -->
+  <div id="title-popup" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="title-popup-h3">
+      <h3 id="title-popup-h3">Gerenciar Títulos</h3>
 
+      <!-- ETAPA 1: selecionar nível -->
+      <p>Selecione o nível:</p>
+      <div id="level-choices" class="modal-actions">
+        <button class="title-choice btn" data-medal="regional">Regional</button>
+        <button class="title-choice btn" data-medal="conf">Confederações</button>
+        <button class="title-choice btn" data-medal="mundial">Mundial</button>
+      </div>
+
+      <!-- ETAPA 2: selecionar posição (mostra após escolher o nível) -->
+      <div id="rank-choices" class="modal-actions hidden">
+        <p>Selecione a posição:</p>
+        <button class="rank-choice btn" data-rank="ouro">🥇 Ouro</button>
+        <button class="rank-choice btn" data-rank="prata">🥈 Prata</button>
+        <button class="rank-choice btn" data-rank="bronze">🥉 Bronze</button>
+      </div>
+
+      <div style="margin-top:16px;text-align:right">
+        <button id="title-close" class="btn secondary">Fechar</button>
+      </div>
+    </div>
   </div>
 
-  <div class="radar-box">
-    <canvas id="radarChart" width="260" height="220" aria-label="Atributos"></canvas>
-  </div>
-</div>
-
+  <!-- Libs e JS da página -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   <script src="selecoes.js"></script>
-
-  <div id="title-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center;">
-  <div style="background:#1a2d1f; padding:20px; border-radius:12px; width:280px; text-align:center; color:#fff">
-    <h3>Gerenciar Títulos</h3>
-    <p>Selecione o nível:</p>
-<div id="title-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000; align-items:center; justify-content:center;">
-  <div style="background:#1a2d1f; padding:20px; border-radius:12px; width:280px; text-align:center; color:#fff">
-    <h3>Gerenciar Títulos</h3>
-    <p>Selecione o nível:</p>
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px">
-      <button class="title-choice btn" data-medal="regional">Regional</button>
-      <button class="title-choice btn" data-medal="conf">Confederações</button>
-      <button class="title-choice btn" data-medal="mundial">Mundial</button>
-    </div>
-
-    <!-- NOVO: etapa para escolher posição -->
-    <div id="rank-choices" style="display:none; flex-direction:column; gap:10px; margin-top:12px">
-      <p>Selecione a posição:</p>
-      <button class="rank-choice btn" data-rank="ouro">🥇 Ouro</button>
-      <button class="rank-choice btn" data-rank="prata">🥈 Prata</button>
-      <button class="rank-choice btn" data-rank="bronze">🥉 Bronze</button>
-    </div>
-
-    <div style="margin-top:16px">
-      <button id="title-close" class="btn" style="background:#444">Fechar</button>
-    </div>
-  </div>
-</div>
-
-    <div style="margin-top:16px">
-      <button id="title-close" class="btn" style="background:#444">Fechar</button>
-    </div>
-  </div>
-</div>
 
 </body>
 
