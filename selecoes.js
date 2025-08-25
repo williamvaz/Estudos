@@ -1291,8 +1291,8 @@ setupRadar();
       .join("");
 
     bindRowClick();
-    
   }
+
   function editarSelecao(team, delta) {
   const keys = ['atk','dfs','mei','vel','ent'];
   let pontos = Math.abs(delta);
@@ -1354,40 +1354,6 @@ setupRadar();
       });
     });
   }
-
-  document.getElementById('edit-btn').addEventListener('click', () => {
-  const val = parseInt(document.getElementById('edit-input').value, 10);
-  if (isNaN(val) || val === 0) return;
-  const name = document.getElementById('box-name').textContent;
-  const team = selecoes.find(s => s.name === name);
-  if (team) editarSelecao(team, val);
-});
-
-
-  function editarSelecao(team, delta) {
-  const keys = ['atk','dfs','mei','vel','ent'];
-  let pontos = Math.abs(delta);
-  const sinal = delta > 0 ? 1 : -1;
-
-  while (pontos > 0) {
-    const k = keys[Math.floor(Math.random() * keys.length)];
-    if (sinal < 0 && team.state[k] <= 0) continue; // não deixa negativo
-    team.state[k] += sinal;
-    pontos--;
-  }
-
-  team.state.score = keys.reduce((s, k) => s + team.state[k], 0);
-
-  // salva no localStorage
-  const st = loadState();
-  st[team.code] = team.state;
-  saveState(st);
-
-  // atualiza UI
-  document.getElementById('box-score').textContent = team.state.score;
-  updateRadar(team.state);
-}
-
 
   // usa o <base> se existir; senão, força /Estudos/
 const BASE = document.querySelector('base')?.getAttribute('href') || '/Estudos/';
