@@ -1297,6 +1297,10 @@ setupRadar();
   const keys = ['atk','dfs','mei','vel','ent'];
   let pontos = Math.abs(delta);
   const sinal = delta > 0 ? 1 : -1;
+document.getElementById('box-score').textContent = team.state.score;
+updateRadar(team.state);
+renderTable(); // << força a tabela a mostrar o novo Score
+
 
   while (pontos > 0) {
     const k = keys[Math.floor(Math.random() * keys.length)];
