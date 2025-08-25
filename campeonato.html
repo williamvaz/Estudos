@@ -1,670 +1,278 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Estudos Futebol • Campeonato</title>
-  <base href="/Estudos/">
-  <meta name="theme-color" content="#0b3b22" />
-  <link rel="stylesheet" href="home.css" />
-  <style>
-    :root { color-scheme: dark; }
-    body { color:#fff; }
-
-    .container{ max-width:980px; margin:0 auto; padding:12px; display:flex; flex-direction:column; gap:12px; }
-    .card{ background:rgba(0,0,0,.15); border:1px solid rgba(255,255,255,.08);
-           border-radius:14px; padding:12px; }
-    .row{ display:grid; gap:12px; }
-    @media (min-width: 860px){ .row{ grid-template-columns: 1fr 1fr; } }
-
-    .team-card{ display:flex; flex-direction:column; gap:10px; align-items:center; }
-    .flag{ width:120px; height:80px; object-fit:cover; border-radius:10px;
-           box-shadow:0 0 0 1px rgba(0,0,0,.3) inset, 0 8px 22px rgba(0,0,0,.4); }
-    .team-name{ font-weight:800; font-size:1.05rem; text-align:center; }
-    .score{ font-size:1.25rem; font-weight:800; background:#102618; border:1px solid #284b34;
-            padding:6px 12px; border-radius:999px; }
-
-    .radar{ width:260px; height:220px; }
-    .legend{ display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:center; font-size:.85rem; opacity:.85 }
-    .badge{ padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); }
-
-    .footer-actions{
-      position: fixed; left:0; right:0; bottom:0; z-index: 1000;
-      padding: 10px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-right));
-      background: rgba(10,18,12,.85); backdrop-filter: blur(6px);
-      border-top:1px solid rgba(255,255,255,.08);
-      display:flex; gap:10px;
-    }
-    .btn{ flex:1; text-align:center; padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
-          color:#fff; text-decoration:none; font-weight:800; }
-    .btn-primary{ background:#22c55e; color:#092015; border-color:#22c55e; }
-    .btn-secondary{ background:#0f1f15; }
-    .muted{ opacity:.8; }
-    .warn{ background:#2a1c1c; border-color:#553a3a; color:#ffd0d0; padding:12px; border-radius:10px; }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Copa English • Calculadora</title>
+<style>
+  :root{--bg:#0b3b22;--panel:#0f2f25;--ink:#e9f7f1;--muted:#9bc9ba;--acc:#1bd27a;--bad:#ff6b6b;--ok:#ffd166;}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  .top{display:flex;align-items:center;gap:.75rem;padding:.9rem 1rem;background:linear-gradient(180deg,#0f3d2b,#0b3b22)}
+  .top h1{font-size:1.1rem;margin:0}
+  .wrap{padding:12px;display:grid;gap:12px}
+  .card{background:var(--panel);border-radius:16px;padding:12px;box-shadow:0 6px 20px #0003}
+  .row{display:grid;gap:8px}
+  .grid{display:grid;gap:8px}
+  .grid.cols-2{grid-template-columns:1fr 1fr}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  label{font-size:.8rem;color:var(--muted)}
+  input,select,button{width:100%;padding:10px;border-radius:12px;border:1px solid #1a4a3c;background:#0c2c23;color:var(--ink)}
+  button.primary{background:var(--acc);border:none;color:#062217;font-weight:700}
+  .tabs{display:flex;gap:8px}
+  .tab{flex:1;text-align:center;padding:10px;border-radius:12px;background:#0c2c23;border:1px solid #1a4a3c;cursor:pointer}
+  .tab.active{background:#115a41}
+  .hide{display:none}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{padding:8px;border-bottom:1px solid #16513f}
+  th{color:#aee1cf;text-align:left}
+  .badge{font-size:.7rem;padding:2px 8px;border-radius:999px;background:#0c2c23;border:1px solid #1a4a3c;color:#cfeee2}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .kpi{background:#0c2c23;border:1px solid #1a4a3c;border-radius:12px;padding:10px;text-align:center}
+  .kpi .v{font-size:1.1rem;font-weight:700}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;background:#124a3a;color:#cfeee2;border:1px solid #1a4a3c}
+</style>
 </head>
-<body class="is-mobile">
-  <header class="topbar">
-    <div class="brand">
-      <span class="ball">🏆</span>
-      <h1>Campeonato</h1>
-      <a class="back small" href="index.html" style="margin-left:auto">← Início</a>
-    </div>
+<body>
+  <header class="top">
+    <div style="font-size:1.3rem">🏆</div>
+    <h1>Calculadora de Campeonato</h1>
   </header>
 
-  <main class="container">
-    <div id="status" class="muted small"></div>
-    <section class="card">
-      <div id="fixture-info" class="small muted" style="margin-bottom:6px">Próximo confronto</div>
-      <div class="row" id="match">
-        <div class="team-card" id="t1">
-          <img class="flag" id="t1-flag" alt="">
-          <div class="team-name" id="t1-name">—</div>
-          <div class="score">Score: <span id="t1-score">—</span></div>
-          <svg class="radar" id="t1-radar" viewBox="0 0 260 220" aria-hidden="true"></svg>
-          <div class="legend">
-            <span class="badge">ATK</span><span class="badge">DFS</span><span class="badge">MEI</span><span class="badge">VEL</span><span class="badge">ENT</span>
-          </div>
+  <main class="wrap">
+    <div class="tabs">
+      <button class="tab active" data-tab="cadastro">Cadastrar Partida</button>
+      <button class="tab" data-tab="grupos">Tabelas de Grupos</button>
+      <button class="tab" data-tab="mata">Mata‑mata</button>
+      <button class="tab" data-tab="dados">Dados</button>
+    </div>
+
+    <!-- KPIs -->
+    <section class="card kpis">
+      <div class="kpi"><div class="t">Partidas</div><div class="v" id="kpi-games">0</div></div>
+      <div class="kpi"><div class="t">Gols</div><div class="v" id="kpi-goals">0</div></div>
+      <div class="kpi"><div class="t">Times</div><div class="v" id="kpi-teams">0</div></div>
+    </section>
+
+    <!-- Cadastro -->
+    <section class="card" id="view-cadastro">
+      <div class="grid cols-3">
+        <div><label>Fase</label>
+          <select id="fase">
+            <option value="Grupos">Grupos</option>
+            <option value="Oitavas">Oitavas</option>
+            <option value="Quartas">Quartas</option>
+            <option value="Semifinal">Semifinal</option>
+            <option value="3º Lugar">3º Lugar</option>
+            <option value="Final">Final</option>
+            <option value="Outro">Outro</option>
+          </select>
         </div>
-        <div class="team-card" id="t2">
-          <img class="flag" id="t2-flag" alt="">
-          <div class="team-name" id="t2-name">—</div>
-          <div class="score">Score: <span id="t2-score">—</span></div>
-          <svg class="radar" id="t2-radar" viewBox="0 0 260 220" aria-hidden="true"></svg>
-          <div class="legend">
-            <span class="badge">ATK</span><span class="badge">DFS</span><span class="badge">MEI</span><span class="badge">VEL</span><span class="badge">ENT</span>
-          </div>
+        <div><label>Grupo (opcional)</label>
+          <input id="grupo" placeholder="A, B, C..."/>
+        </div>
+        <div><label>Rodada (opcional)</label>
+          <input id="rodada" type="number" min="1" placeholder="1"/>
         </div>
       </div>
+
+      <div class="grid cols-2" style="margin-top:8px">
+        <div class="row">
+          <label>Time A</label>
+          <input id="timeA" placeholder="ex.: Brasil"/>
+        </div>
+        <div class="row">
+          <label>Time B</label>
+          <input id="timeB" placeholder="ex.: Argentina"/>
+        </div>
+      </div>
+
+      <div class="grid cols-3" style="margin-top:8px">
+        <div class="row">
+          <label>Gols A</label>
+          <input id="golsA" type="number" min="0" value="0"/>
+        </div>
+        <div class="row">
+          <label>Gols B</label>
+          <input id="golsB" type="number" min="0" value="0"/>
+        </div>
+        <div class="row">
+          <label>Data (opcional)</label>
+          <input id="data" type="date"/>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:10px">
+        <button class="primary" id="btn-add">Salvar partida</button>
+        <button id="btn-clear">Limpar tudo</button>
+      </div>
+    </section>
+
+    <!-- Grupos -->
+    <section class="card hide" id="view-grupos">
+      <div class="grid cols-3">
+        <div><span class="pill">Grupo A</span></div>
+        <div><span class="pill">Grupo B</span></div>
+        <div><span class="pill">Grupo C</span></div>
+      </div>
+      <div id="grids" class="row" style="margin-top:10px"></div>
+    </section>
+
+    <!-- Mata-mata (manual por enquanto) -->
+    <section class="card hide" id="view-mata">
+      <p class="muted">Alimente as partidas de mata‑mata na aba “Cadastrar Partida”. Quando a fase for “Oitavas”, “Quartas”, etc., elas aparecem aqui.</p>
+      <div id="lista-mata"></div>
+    </section>
+
+    <!-- Dados -->
+    <section class="card hide" id="view-dados">
+      <div class="grid cols-2">
+        <button id="btn-export">Exportar JSON</button>
+        <input id="import-file" type="file" accept="application/json"/>
+      </div>
+      <pre id="dump" style="white-space:pre-wrap;background:#0c2c23;border:1px solid #1a4a3c;border-radius:12px;padding:10px;margin-top:8px"></pre>
     </section>
   </main>
 
-  <div class="footer-actions">
-    <a class="btn btn-primary" href="jogar.html">Jogar</a>
-    <a class="btn btn-secondary" href="tabela.html">Ver tabelas</a>
-  </div>
+<script>
+(function(){
+  const $ = s=>document.querySelector(s);
+  const $$ = s=>Array.from(document.querySelectorAll(s));
+  const KEY='calc_games_v1';
+  let games = load();
 
-  <script>
-  const CHAMP = 'CONCACAF';
-  const CHAMPS = ['CONMEBOL','CONCACAF','CAF','AFC','OFC','UEFA','CONFEDERACOES','COPA DO MUNDO'];
-  const LKEY_INIT = 'iniciado';
-  const LKEY_STATE_V3 = 'team_state_v3';
-  const LKEY_NEXT1 = 'Nextvs1';
-  const LKEY_NEXT2 = 'Nextvs2';
-  const LKEY_PLAN    = 'fixtures_plan_flat_v1';
-  const LKEY_RESULTS = 'fixtures_results_v1';
-  const LKEY_SLOTS   = 'bracket_slots_v1';
-  const LKEY_KODEF   = 'knockout_def_v1';
-  const LKEY_GROUPS  = 'groups_plan_v1';
-
-  const jget = (k, fb) => { try { const v = JSON.parse(localStorage.getItem(k) || ''); return v ?? fb; } catch { return fb; } };
-  const jset = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-  const clamp = (n,a,b) => Math.max(a, Math.min(b, Number(n)||0));
-
-  function loadTeams(){
-    if (Array.isArray(window.SELECOES)) return window.SELECOES;
-    if (Array.isArray(window.TEAMS)) return window.TEAMS;
-    const ls = jget('teams', []);
-    if (Array.isArray(ls) && ls.length) return ls;
-    return [];
-  }
-  function normTeam(t){
-    const conf = (t.conf || t.confederacao || t.region || t.regiao || t.campeonato || '').toString().toUpperCase().trim();
-    const code = (t.code || t.cod || t.sigla || t.id || '').toString().toUpperCase().trim();
-    const name = (t.name || t.nome || t.country || t.pais || '').toString().trim();
-    let flag = (t.flag || t.bandeira || '').toString().trim();
-    if (!flag && name) flag = `Flags/${name}.jpg`;
-    return { code, name, conf, flag };
-  }
-  function indexTeams(raw){
-    const all = raw.map(normTeam).filter(x => (x.code || x.name) && x.conf);
-    const byKey = {};
-    const byChamp = {};
-    for (const c of CHAMPS) byChamp[c] = [];
-    for (const t of all){
-      if (t.code) byKey[t.code] = t;
-      if (t.name) byKey[t.name] = t;
-      if (CHAMPS.includes(t.conf)) byChamp[t.conf].push(t);
-    }
-    return { all, byKey, byChamp };
-  }
-
-  function loadStateV3(){ return jget(LKEY_STATE_V3, {}); }
-  function saveStateV3(s){ jset(LKEY_STATE_V3, s); }
-  function ensureTeamBaseline(s, id){
-    if (!s[id]) s[id] = {};
-    const st = s[id];
-    st.score = clamp(st.score ?? 250, 1, 9999);
-    st.atk = clamp(st.atk ?? 50, 1, 100);
-    st.dfs = clamp(st.dfs ?? 50, 1, 100);
-    st.mei = clamp(st.mei ?? 50, 1, 100);
-    st.vel = clamp(st.vel ?? 50, 1, 100);
-    st.ent = clamp(st.ent ?? 50, 1, 100);
-    if (!st.sequencia_reg || typeof st.sequencia_reg !== 'object') st.sequencia_reg = {};
-    return st;
-  }
-  function shuffled1toN(n){
-    const arr = Array.from({length:n}, (_,i)=>i+1);
-    for (let i=arr.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
-    }
-    return arr;
-  }
-  function firstRunInit(byChamp){
-    const state = loadStateV3();
-    for (const champ of CHAMPS){
-      const list = byChamp[champ] || [];
-      if (!list.length) continue;
-      const seq = shuffled1toN(list.length);
-      list.forEach((t, idx) => {
-        const id = t.name || t.code;
-        const st = ensureTeamBaseline(state, id);
-        st.sequencia_reg[champ] = seq[idx];
+  // Tabs
+  $$('.tab').forEach(t=>{
+    t.onclick = ()=>{
+      $$('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const id = t.dataset.tab;
+      ['cadastro','grupos','mata','dados'].forEach(v=>{
+        $('#view-'+v).classList.toggle('hide', v!==id);
       });
-    }
-    saveStateV3(state);
-    localStorage.setItem(LKEY_INIT, '1');
-  }
-  function findBySeq(champ, seq){
-    const state = loadStateV3();
-    for (const id in state){
-      const st = state[id];
-      if (st?.sequencia_reg?.[champ] === Number(seq)) return id;
-    }
-    return null;
-  }
+      if(id==='grupos') renderGroups();
+      if(id==='mata') renderKnockout();
+      if(id==='dados') renderDump();
+    };
+  });
 
-  function loadPlan(){ return jget(LKEY_PLAN, []); }
-  function loadResults(){ return jget(LKEY_RESULTS, {}); }
-  function loadSlots(){ return jget(LKEY_SLOTS, {}); }
-  function loadKoDef(){ return jget(LKEY_KODEF, {}); }
+  // Botões
+  $('#btn-add').onclick = ()=>{
+    const rec = {
+      id: crypto.randomUUID(),
+      fase: $('#fase').value.trim() || 'Outro',
+      grupo: ($('#grupo').value||'').trim().toUpperCase(),
+      rodada: Number($('#rodada').value||0),
+      A: ($('#timeA').value||'').trim(),
+      B: ($('#timeB').value||'').trim(),
+      gA: Number($('#golsA').value||0),
+      gB: Number($('#golsB').value||0),
+      data: $('#data').value || null,
+      ts: Date.now()
+    };
+    if(!rec.A || !rec.B){ alert('Informe os dois times.'); return; }
+    games.push(rec);
+    save(); resetForm(); updateKPIs();
+  };
 
-  function resolveRef(ref){
-    if (!ref) return null;
-    const type = String(ref.type||'').toLowerCase();
-    if (type === 'seed'){
-      const { champ, seq } = ref;
-      return findBySeq((champ||'').toUpperCase(), Number(seq));
-    }
-    if (type === 'slot'){
-      const { comp_id, slot } = ref;
-      const slots = loadSlots();
-      const name = slots?.[comp_id]?.[slot] || null;
-      return name || null;
-    }
-    if (type === 'name') return ref.name || null;
-    if (type === 'code') return ref.code || null;
-    return null;
-  }
-  function getNextFixture(){
-    const plan = loadPlan();
-    const results = loadResults();
-    if (!Array.isArray(plan) || plan.length === 0) return null;
-    for (const item of plan){
-      const jid = String(item.JOGO);
-      if (!results || !results.hasOwnProperty(jid)) return item;
-    }
-    return null;
-  }
+  $('#btn-clear').onclick = ()=>{
+    if(confirm('Apagar todas as partidas?')){ games=[]; save(); updateKPIs(); renderGroups(); renderKnockout(); renderDump(); }
+  };
 
-  function ensureNextMatchFallback(champ){
-    let n1 = jget(LKEY_NEXT1, null);
-    let n2 = jget(LKEY_NEXT2, null);
-    if (!n1 || !n1.id){
-      const id1 = findBySeq(champ, 1);
-      if (id1) n1 = { id: id1, champ }; else n1 = null;
-      if (n1) jset(LKEY_NEXT1, n1);
-    }
-    if (!n2 || !n2.id){
-      const id2 = findBySeq(champ, 2);
-      if (id2) n2 = { id: id2, champ }; else n2 = null;
-      if (n2) jset(LKEY_NEXT2, n2);
-    }
-    return { n1, n2 };
+  $('#btn-export').onclick = ()=>{
+    const blob = new Blob([JSON.stringify(games,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'partidas.json';
+    a.click();
+  };
+  $('#import-file').onchange = (e)=>{
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { try{ games = JSON.parse(rd.result); save(); updateKPIs(); alert('Importado!'); }catch(err){ alert('JSON inválido'); } };
+    rd.readAsText(f);
+  };
+
+  // Helpers persistência
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||[] }catch{ return [] } }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(games)); renderGroups(); renderKnockout(); renderDump(); }
+  function resetForm(){ ['timeA','timeB','golsA','golsB'].forEach(id=>{ const el=$('#'+id); el.value = (id.startsWith('gols')?0:''); }); }
+
+  // KPIs
+  function updateKPIs(){
+    $('#kpi-games').textContent = games.length;
+    $('#kpi-goals').textContent = games.reduce((s,g)=>s+g.gA+g.gB,0);
+    const teams = new Set(); games.forEach(g=>{teams.add(g.A);teams.add(g.B);});
+    $('#kpi-teams').textContent = teams.size;
   }
 
-  function drawRadar(svg, stats){
-    const W=260, H=220, cx=130, cy=110, R=85;
-    const axes = ['atk','dfs','mei','vel','ent'];
-    const angles = axes.map((_,i)=> -Math.PI/2 + i*(2*Math.PI/axes.length));
-    svg.innerHTML='';
-    const g = 4;
-    for (let r=R/g; r<=R; r+=R/g){
-      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r);
-      c.setAttribute('fill','none'); c.setAttribute('stroke','rgba(255,255,255,.12)'); c.setAttribute('stroke-width','1');
-      svg.appendChild(c);
-    }
-    for (const ang of angles){
-      const x = cx + Math.cos(ang)*R;
-      const y = cy + Math.sin(ang)*R;
-      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('x1',cx); line.setAttribute('y1',cy);
-      line.setAttribute('x2',x);  line.setAttribute('y2',y);
-      line.setAttribute('stroke','rgba(255,255,255,.15)');
-      line.setAttribute('stroke-width','1');
-      svg.appendChild(line);
-    }
-    const pts = angles.map((ang,i)=>{
-      const key = axes[i];
-      const v = clamp(stats[key]||0, 0, 100) / 100;
-      const x = cx + Math.cos(ang)*R*v;
-      const y = cy + Math.sin(ang)*R*v;
-      return `${x},${y}`;
-    }).join(' ');
-    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    poly.setAttribute('points', pts);
-    poly.setAttribute('fill','rgba(56,189,248,.25)');
-    poly.setAttribute('stroke','rgba(56,189,248,.9)');
-    poly.setAttribute('stroke-width','2');
-    svg.appendChild(poly);
-  }
-  function renderTeam(slotId, team, state){
-    const nameEl   = document.getElementById(`${slotId}-name`);
-    const flagEl   = document.getElementById(`${slotId}-flag`);
-    const scoreEl  = document.getElementById(`${slotId}-score`);
-    const radarEl  = document.getElementById(`${slotId}-radar`);
-    if (!team){
-      nameEl.textContent = '—';
-      flagEl.removeAttribute('src');
-      scoreEl.textContent = '—';
-      radarEl.innerHTML = '';
-      return;
-    }
-    nameEl.textContent = team.name || team.code || '—';
-    flagEl.src = team.flag || '';
-    scoreEl.textContent = state.score ?? '—';
-    drawRadar(radarEl, { atk: state.atk, dfs: state.dfs, mei: state.mei, vel: state.vel, ent: state.ent });
-  }
-  function showStatus(msg){
-    const el = document.getElementById('status');
-    if (!el) return;
-    el.innerHTML = msg || '';
-  }
-  function setFixtureInfo(text){
-    const el = document.getElementById('fixture-info');
-    if (el) el.textContent = text || 'Próximo confronto';
+  // Tabelas de grupo
+  function renderGroups(){
+    const byGroup = {};
+    games.filter(g=>g.fase==='Grupos' && g.grupo).forEach(g=>{
+      byGroup[g.grupo] ??= [];
+      byGroup[g.grupo].push(g);
+    });
+    const container = $('#grids');
+    container.innerHTML = '';
+    Object.keys(byGroup).sort().forEach(gr=>{
+      const tbl = buildTable(byGroup[gr]);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <strong>Grupo ${gr}</strong><span class="badge">${byGroup[gr].length} jogos</span></div>`;
+      card.appendChild(tbl);
+      container.appendChild(card);
+    });
+    updateKPIs();
   }
 
-  async function getCampConfig(camp){
-    const cache = jget('campeonatos', null);
-    if (cache && (Array.isArray(cache) || typeof cache==='object')) {
-      const obj = Array.isArray(cache) ? cache.find(x=> (x.Nome||'').toUpperCase()===camp) : cache[camp];
-      if (obj) return obj;
-    }
-    try{
-      const res = await fetch('campeonatos.json', { cache:'no-store' });
-      if (res.ok){
-        const data = await res.json();
-        jset('campeonatos', data);
-        if (Array.isArray(data)) return data.find(x=> (x.Nome||'').toUpperCase()===camp) || null;
-        return data[camp] || null;
-      }
-    }catch{}
-    return null;
-  }
-  function ensureGroupsPlanFromSeeds(camp, campCfg){
-    const groupsPlan = jget(LKEY_GROUPS, {});
-    if (groupsPlan[camp] && Object.keys(groupsPlan[camp]).length) return groupsPlan[camp];
-    const state = jget(LKEY_STATE_V3, {});
-    const seeded = Object.entries(state)
-      .map(([name,st]) => ({ name, seq: st?.sequencia_reg?.[camp] }))
-      .filter(x => Number.isFinite(x.seq))
-      .sort((a,b)=> a.seq - b.seq);
-    if (!seeded.length || !campCfg) return null;
-    const entries = Object.entries(campCfg).filter(([k,v]) => /^Grupo\\s+\\d+$/i.test(k) && Number(v)>0)
-      .sort((a,b)=> parseInt(a[0].match(/\\d+/)[0],10) - parseInt(b[0].match(/\\d+/)[0],10));
-    const plan = {};
-    let idx = 0;
-    for (const [gName, gSize] of entries){
-      const size = Number(gSize)||0;
-      const slice = seeded.slice(idx, idx+size).map(x=>x.name);
-      plan[gName] = slice;
-      idx += size;
-    }
-    groupsPlan[camp] = plan;
-    jset(LKEY_GROUPS, groupsPlan);
-    return plan;
-  }
-  function computeGroupTablesFromResults(camp, groupsPlan){
-    const plan = loadPlan();
-    const results = loadResults();
-    if (!groupsPlan) return null;
-    const teamGroup = {};
-    for (const [gName, list] of Object.entries(groupsPlan)){ for (const nm of list){ teamGroup[nm] = gName; } }
-    const table = {};
-    for (const gName of Object.keys(groupsPlan)){
-      table[gName] = {};
-      for (const nm of groupsPlan[gName]){
-        table[gName][nm] = { pts:0, gp:0, gc:0, sg:0, v:0, e:0, d:0, j:0 };
-      }
-    }
-    for (const fx of plan){
-      const jid = String(fx.JOGO);
-      const r = results[jid];
-      if (!r) continue;
-      const isSeed1 = fx.Nextvs1 && fx.Nextvs1.type==='seed' && (fx.Nextvs1.champ||'').toUpperCase()===camp;
-      const isSeed2 = fx.Nextvs2 && fx.Nextvs2.type==='seed' && (fx.Nextvs2.champ||'').toUpperCase()===camp;
-      if (!(isSeed1 && isSeed2)) continue;
-      const home = r.home; const away = r.away;
-      const gHome = teamGroup[home]; const gAway = teamGroup[away];
-      if (!gHome || !gAway || gHome!==gAway) continue;
-      const sh = Number(r?.score?.home||0);
-      const sa = Number(r?.score?.away||0);
-      const th = table[gHome][home]; const ta = table[gAway][away];
-      if (!th || !ta) continue;
-      th.j++; ta.j++;
-      th.gp += sh; th.gc += sa; th.sg = th.gp - th.gc;
-      ta.gp += sa; ta.gc += sh; ta.sg = ta.gp - ta.gc;
-      if (sh>sa){ th.v++; th.pts+=3; ta.d++; }
-      else if (sh<sa){ ta.v++; ta.pts+=3; th.d++; }
-      else { th.e++; ta.e++; th.pts++; ta.pts++; }
-    }
-    const sorted = {};
-    for (const [gName, rows] of Object.entries(table)){
-      sorted[gName] = Object.entries(rows)
-        .map(([name,stat]) => ({ name, ...stat }))
-        .sort((a,b)=>{
-          if (b.pts!==a.pts) return b.pts-a.pts;
-          if (b.sg!==a.sg)   return b.sg-a.sg;
-          if (b.gp!==a.gp)   return b.gp-a.gp;
-          return a.name.localeCompare(b.name,'pt');
-        });
-    }
-    return sorted;
-  }
-  function groupsCompleted(camp){
-    const plan = loadPlan();
-    const results = loadResults();
-    for (const fx of plan){
-      const isSeed1 = fx.Nextvs1 && fx.Nextvs1.type==='seed' && (fx.Nextvs1.champ||'').toUpperCase()===camp;
-      const isSeed2 = fx.Nextvs2 && fx.Nextvs2.type==='seed' && (fx.Nextvs2.champ||'').toUpperCase()===camp;
-      if (isSeed1 && isSeed2){
-        const jid = String(fx.JOGO);
-        if (!results[jid]) return false;
-      }
-    }
-    return true;
-  }
-
-  // ---- Novo: seeding KO dinâmico por 'Classificados por grupo' ----
-  function seedKnockoutDynamic(camp, campCfg, tables){
-    const compId = `${camp}-KO`;
-    const adv = Number(campCfg?.['Classificados por grupo'] ?? 2);
-    const groupOrder = Object.keys(tables)
-      .sort((a,b)=> parseInt(a.match(/\\d+/)?.[0]||0,10) - parseInt(b.match(/\\d+/)?.[0]||0,10));
-    const qualifiers = [];
-    for (const gName of groupOrder){
-      const list = tables[gName] || [];
-      for (let i=0;i<Math.min(adv, list.length); i++){
-        qualifiers.push({ group:gName, pos:i+1, name:list[i]?.name||null });
-      }
-    }
-    const total = qualifiers.filter(q=>q.name).length;
-    // Decide round inicial
-    let round = 'OITAVAS';
-    if (total <= 2) round = 'FINAL';
-    else if (total <= 4) round = 'SEMIS';
-    else if (total <= 8) round = 'QUARTAS';
-    else round = 'OITAVAS';
-
-    // Cria slots rotulados por grupo/posição: A1.., A2.., etc.
-    const slotsObj = {};
-    for (const q of qualifiers){
-      const label = `${q.group.replace(/^Grupo\\s+/i,'').toUpperCase()}${q.pos}`; // ex: A1
-      if (q.name) slotsObj[label] = q.name;
-    }
-
-    // Constrói chaveamento padrão alternando 1º vs 4º e 2º vs 3º entre grupos pareados
-    function pairByGroups(gLabels){
-      const pairs = [];
-      for (let i=0;i<gLabels.length;i+=2){
-        const A = gLabels[i], B = gLabels[i+1];
-        if (!B) break;
-        pairs.push([`${A}1`, `${B}4`]);
-        pairs.push([`${B}1`, `${A}4`]);
-        pairs.push([`${A}2`, `${B}3`]);
-        pairs.push([`${B}2`, `${A}3`]);
-      }
-      return pairs;
-    }
-
-    const gLabels = groupOrder.map(g=>g.replace(/^Grupo\\s+/i,'').toUpperCase());
-    const slotsAll = jget(LKEY_SLOTS, {});
-    slotsAll[compId] = Object.assign(slotsAll[compId]||{}, slotsObj);
-    jset(LKEY_SLOTS, slotsAll);
-
-    const def = { matches:[], order:[] };
-    const addMs = (ids) => { def.order.push(...ids); };
-
-    // Define ids fixos por rodada (usaremos conforme 'round')
-    const O = ['O1','O2','O3','O4','O5','O6','O7','O8'];
-    const Q = ['Q1','Q2','Q3','Q4'];
-    const L = ['L1','L2'];
-    const T = ['T1'];
-    const W = ['W1'];
-
-    // Monta as partidas da primeira rodada existente
-    if (round === 'OITAVAS'){
-      const pairs = pairByGroups(gLabels).slice(0,8); // até 8 jogos
-      pairs.forEach((p,idx)=>{
-        def.matches.push({ id:O[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:O[idx]} });
-      });
-      addMs(O);
-    } else if (round === 'QUARTAS'){
-      // usa 8 times => 4 jogos: A1 vs B2, B1 vs A2, C1 vs D2, D1 vs C2
-      const pairs = [];
-      for (let i=0;i<gLabels.length;i+=2){
-        const A=gLabels[i], B=gLabels[i+1]; if(!B) break;
-        pairs.push([`${A}1`, `${B}2`]);
-        pairs.push([`${B}1`, `${A}2`]);
-      }
-      pairs.slice(0,4).forEach((p,idx)=>{
-        def.matches.push({ id:Q[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:Q[idx]} });
-      });
-      addMs(Q);
-    } else if (round === 'SEMIS'){
-      // 4 times => 2 jogos: A1 vs B1, C1 vs D1
-      const pairs = [];
-      for (let i=0;i<gLabels.length;i+=2){
-        const A=gLabels[i], B=gLabels[i+1]; if(!B) break;
-        pairs.push([`${A}1`, `${B}1`]);
-      }
-      pairs.slice(0,2).forEach((p,idx)=>{
-        def.matches.push({ id:L[idx], left:{slot:p[0]}, right:{slot:p[1]}, winTo:{slot:L[idx]}, loseTo:{slot:T[0], side: idx===0?'left':'right'} });
-      });
-      addMs(L);
-    } else {
-      // FINAL (2 times) => A1 vs B1
-      def.matches.push({ id:W[0], left:{slot:`${gLabels[0]}1`}, right:{slot:`${gLabels[1]}1`}, winTo:{slot:W[0]} });
-      addMs(W);
-    }
-
-    // conectividade para as fases seguintes (independente do round inicial)
-    def.matches.push({ id:'Q1', left:{slot:'O1'}, right:{slot:'O2'}, winTo:{slot:'Q1'} });
-    def.matches.push({ id:'Q2', left:{slot:'O3'}, right:{slot:'O4'}, winTo:{slot:'Q2'} });
-    def.matches.push({ id:'Q3', left:{slot:'O5'}, right:{slot:'O6'}, winTo:{slot:'Q3'} });
-    def.matches.push({ id:'Q4', left:{slot:'O7'}, right:{slot:'O8'}, winTo:{slot:'Q4'} });
-
-    def.matches.push({ id:'L1', left:{slot:'Q1'}, right:{slot:'Q2'}, winTo:{slot:'L1'}, loseTo:{slot:'T1', side:'left'} });
-    def.matches.push({ id:'L2', left:{slot:'Q3'}, right:{slot:'Q4'}, winTo:{slot:'L2'}, loseTo:{slot:'T1', side:'right'} });
-
-    def.matches.push({ id:'W1', left:{slot:'L1'}, right:{slot:'L2'}, winTo:{slot:'W1'} });
-    def.matches.push({ id:'T1', left:{slot:'L1*'}, right:{slot:'L2*'}, winTo:{slot:'T1'} });
-
-    const defAll = jget(LKEY_KODEF, {});
-    defAll[compId] = def;
-    jset(LKEY_KODEF, defAll);
-
-    return { compId, def, round };
-  }
-
-  function appendKORound(compId, def, ids){
-    const plan = jget(LKEY_PLAN, []);
-    const hasM = new Set(plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId).map(p=>p.M));
-    const need = ids.filter(id=>!hasM.has(id));
-    if (!need.length) return;
-    let nextId = plan.length ? Math.max(...plan.map(x=> Number(x.JOGO)||0)) + 1 : 1;
-    const toAdd = [];
-    for (const id of need){
-      const m = def.matches.find(x=> x.id===id);
-      if (!m) continue;
-      toAdd.push({
-        JOGO: nextId++,
-        M: id,
-        Nextvs1: { type:'slot', comp_id: compId, slot: m.left.slot },
-        Nextvs2: { type:'slot', comp_id: compId, slot: m.right.slot }
-      });
-    }
-    if (toAdd.length){
-      plan.push(...toAdd);
-      localStorage.setItem(LKEY_PLAN, JSON.stringify(plan));
-    }
-  }
-  function koRoundResultsDone(compId, ids){
-    const plan = jget(LKEY_PLAN, []);
-    const results = jget(LKEY_RESULTS, {});
-    const id2jogo = Object.fromEntries(
-      plan.filter(p => p.M && p.Nextvs1?.type==='slot' && p.Nextvs1.comp_id===compId)
-          .map(p => [p.M, String(p.JOGO)])
+  function buildTable(matches){
+    const stats = {};
+    function team(t){ return stats[t] ??= {time:t, PJ:0,V:0,E:0,D:0,GP:0,GC:0,SG:0,PTS:0}; }
+    matches.forEach(m=>{
+      team(m.A); team(m.B);
+      team(m.A).PJ++; team(m.B).PJ++;
+      team(m.A).GP+=m.gA; team(m.A).GC+=m.gB;
+      team(m.B).GP+=m.gB; team(m.B).GC+=m.gA;
+      if(m.gA>m.gB){ team(m.A).V++; team(m.B).D++; team(m.A).PTS+=3; }
+      else if(m.gA<m.gB){ team(m.B).V++; team(m.A).D++; team(m.B).PTS+=3; }
+      else { team(m.A).E++; team(m.B).E++; team(m.A).PTS++; team(m.B).PTS++; }
+    });
+    Object.values(stats).forEach(s=>s.SG = s.GP - s.GC);
+    const rows = Object.values(stats).sort((a,b)=>
+      b.PTS - a.PTS || b.SG - a.SG || b.GP - a.GP || a.time.localeCompare(b.time)
     );
-    return ids.every(id => results[id2jogo[id]]);
-  }
-  async function unlockFrom(round, compId, def){
-    const O = ['O1','O2','O3','O4','O5','O6','O7','O8'];
-    const Q = ['Q1','Q2','Q3','Q4'];
-    const L = ['L1','L2'];
-    const T = ['T1'];
-    const W = ['W1'];
-
-    if (round==='OITAVAS'){
-      appendKORound(compId, def, O);
-      if (koRoundResultsDone(compId, O)) appendKORound(compId, def, Q);
-    }
-    if (round==='QUARTAS'){
-      appendKORound(compId, def, Q);
-    }
-    if (koRoundResultsDone(compId, Q)){
-      appendKORound(compId, def, L);
-    }
-    if (koRoundResultsDone(compId, L)){
-      appendKORound(compId, def, T);
-      appendKORound(compId, def, W);
-    }
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr>
+      <th>#</th><th>Time</th><th>PJ</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>PTS</th>
+    </tr></thead><tbody></tbody>`;
+    const tb = table.querySelector('tbody');
+    rows.forEach((s,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${i+1}</td><td>${s.time}</td><td>${s.PJ}</td><td>${s.V}</td><td>${s.E}</td><td>${s.D}</td><td>${s.GP}</td><td>${s.GC}</td><td>${s.SG}</td><td><strong>${s.PTS}</strong></td>`;
+      tb.appendChild(tr);
+    });
+    return table;
   }
 
-  async function ensureKOPhaseIfReady(camp){
-    const cfg = await getCampConfig(camp);
-    const groups = ensureGroupsPlanFromSeeds(camp, cfg);
-    if (!groups) return;
-    if (!groupsCompleted(camp)) return;
-    const tables = computeGroupTablesFromResults(camp, groups);
-    const { compId, def, round } = seedKnockoutDynamic(camp, cfg, tables);
-    await unlockFrom(round, compId, def);
+  // Mata‑mata (lista simples por fase)
+  function renderKnockout(){
+    const fases = ['Oitavas','Quartas','Semifinal','3º Lugar','Final','Outro'];
+    const out = fases.map(f=>{
+      const list = games.filter(g=>g.fase===f);
+      if(!list.length) return '';
+      const items = list.map(g=>`<li>${g.A} ${g.gA} × ${g.gB} ${g.B}${g.grupo?` <span class="badge">${g.grupo}</span>`:''}</li>`).join('');
+      return `<div class="card"><strong>${f}</strong><ul>${items}</ul></div>`;
+    }).join('');
+    $('#lista-mata').innerHTML = out || '<p class="muted">Sem partidas de mata‑mata ainda.</p>';
   }
 
-  (async function init(){
-    const teamsRaw = loadTeams();
-    const { byKey, byChamp } = indexTeams(teamsRaw);
+  // Dados (debug)
+  function renderDump(){ $('#dump').textContent = JSON.stringify(games, null, 2); }
 
-    if (!Object.keys(byChamp).length){
-      showStatus('<div class="warn">Nenhuma seleção encontrada. Carregue a lista de seleções (window.SELECOES / window.TEAMS ou localStorage \"teams\").</div>');
-      return;
-    }
-
-    const iniciado = Number(localStorage.getItem(LKEY_INIT) || 0);
-    if (!iniciado){
-      firstRunInit(byChamp);
-    }
-
-    await ensureKOPhaseIfReady('CONMEBOL');
-    await ensureKOPhaseIfReady('CONCACAF');
-    await ensureKOPhaseIfReady('CAF');
-    await ensureKOPhaseIfReady('AFC');
-    await ensureKOPhaseIfReady('OFC');
-    await ensureKOPhaseIfReady('UEFA');
-
-    const fixture = getNextFixture();
-
-    let id1=null, id2=null, info='Próximo confronto';
-    if (fixture){
-      id1 = resolveRef(fixture.Nextvs1);
-      id2 = resolveRef(fixture.Nextvs2);
-      const sideDesc = (ref)=>{
-        if (!ref) return '—';
-        const t = String(ref.type||'').toLowerCase();
-        if (t==='seed') return `${ref.champ} #${ref.seq}`;
-        if (t==='slot') return `${ref.comp_id}:${ref.slot}`;
-        if (t==='name') return `${ref.name}`;
-        if (t==='code') return `${ref.code}`;
-        return '—';
-      };
-      info = `Jogo ${fixture.JOGO} — ${sideDesc(fixture.Nextvs1)} vs ${sideDesc(fixture.Nextvs2)}`;
-      setFixtureInfo(info);
-    }
-
-    if (!id1 || !id2){
-      const fb = ensureNextMatchFallback(CHAMP);
-      id1 = id1 || fb.n1?.id || null;
-      id2 = id2 || fb.n2?.id || null;
-      if (!fixture) setFixtureInfo(`Próximo confronto (${CHAMP})`);
-    }
-
-    const st = loadStateV3();
-    if (id1){ ensureTeamBaseline(st, id1); }
-    if (id2){ ensureTeamBaseline(st, id2); }
-    saveStateV3(st);
-
-    const t1 = id1 ? (byKey[id1] || { name:id1, flag:`Flags/${id1}.jpg` }) : null;
-    const t2 = id2 ? (byKey[id2] || { name:id2, flag:`Flags/${id2}.jpg` }) : null;
-
-    if (!t1 || !t2){
-      showStatus('<div class="warn">Não foi possível montar o próximo confronto. Verifique o plano ou as sequências.</div>');
-    } else {
-      showStatus('');
-    }
-
-    renderTeam('t1', t1, id1 ? st[id1] : {} );
-    renderTeam('t2', t2, id2 ? st[id2] : {} );
-  })();
-  </script>
-
-  <style>
-    :root{
-      --flag-w: 88px;
-      --flag-h: 58px;
-      --radar-w: 180px;
-      --radar-h: 150px;
-      --name-fs: .95rem;
-      --score-fs: 1rem;
-      --gap: 8px;
-    }
-    .card{ padding:10px; }
-    .row{ gap:10px; }
-    .team-card{ gap: var(--gap); }
-    .flag{ width: var(--flag-w); height: var(--flag-h); border-radius: 8px; }
-    .team-name{ font-size: var(--name-fs); }
-    .score{ font-size: var(--score-fs); padding: 4px 10px; border-radius: 999px; }
-    .radar{ width: var(--radar-w); height: var(--radar-h); }
-    .legend{ gap:6px 8px; font-size:.78rem; }
-    .badge{ padding:2px 6px; }
-    .footer-actions{
-      padding:8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
-    }
-    .btn{ padding:10px 12px; border-radius:10px; font-weight:700; }
-    @media (max-width: 410px){
-      :root{
-        --flag-w: 80px;
-        --flag-h: 52px;
-        --radar-w: 160px;
-        --radar-h: 130px;
-        --name-fs: .9rem;
-        --score-fs: .95rem;
-        --gap: 6px;
-      }
-      .legend{ font-size:.72rem; }
-    }
-  </style>
+  // init
+  updateKPIs(); renderGroups(); renderKnockout(); renderDump();
+})();
+</script>
 </body>
 </html>
