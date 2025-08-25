@@ -1218,6 +1218,73 @@ localStorage.setItem('teams', JSON.stringify(
       sortDir = 1;
 
   const tbody = document.getElementById("sel-tbody");
+let currentTeamCode = null;
+
+const editInput = document.getElementById('edit-input');
+const editBtn   = document.getElementById('edit-btn');
+
+function applyDeltaToTeam(code, delta) {
+  const team = selecoes.find(s => s.code === code);
+  if (!team) return;
+
+  // garante estado do time
+  ensureTeamState(state, team);
+  const st = team.state;
+
+  const keys = ['atk','dfs','mei','vel','ent'];
+  let remaining = Math.abs(delta);
+  const sign = Math.sign(delta);
+
+  // distribui 1 ponto por vez aleatoriamente, respeitando 1..100
+  // (com limite de iterações pra evitar loop infinito)
+  let guard = 5000;
+  while (remaining > 0 && guard-- > 0) {
+    const k = keys[Math.floor(Math.random() * keys.length)];
+    const next = (st[k] || 0) + (sign > 0 ? 1 : -1);
+    if (next >= 1 && next <= 100) {
+      st[k] = next;
+      remaining--;
+    }
+  }
+
+  // recalcula score = soma dos 5
+  st.score = clamp(
+    (st.atk||0) + (st.dfs||0) + (st.mei||0) + (st.vel||0) + (st.ent||0),
+    1, 500
+  );
+
+  // persiste
+  saveState(state);
+}
+
+function refreshRightBox(code){
+  const data = selecoes.find(s => s.code === code);
+  if (!data) return;
+  document.getElementById('box-name').textContent = data.name;
+  document.getElementById('box-tournament').textContent = data.tournament;
+  document.getElementById('box-score').textContent = data.state.score;
+  const flagEl = document.getElementById('box-flag');
+  flagEl.src = data.flag;
+  flagEl.alt = data.name;
+  const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
+  updateRadar({ atk, dfs, mei, vel, ent });
+  renderMedalBoard(data, '#medal-board');
+}
+
+// clique no botão Aplicar
+if (editBtn) {
+  editBtn.addEventListener('click', () => {
+    if (!currentTeamCode) return; // nada selecionado
+    const raw = (editInput?.value || '').trim().replace(',', '.');
+    const delta = Number(raw);
+    if (!Number.isFinite(delta) || delta === 0) return;
+
+    applyDeltaToTeam(currentTeamCode, delta);
+    // atualiza UI (box + tabela para refletir novo score/sorting)
+    refreshRightBox(currentTeamCode);
+    renderTable();
+  });
+}
 
   // === Radar Chart (atk, dfs, mei, vel, ent) ===
 let radarChart;
@@ -1340,22 +1407,23 @@ renderTable(); // << força a tabela a mostrar o novo Score
   function bindRowClick() {
     const rows = document.querySelectorAll('#sel-tbody tr');
     rows.forEach(row => {
-      row.addEventListener('click', () => {
-        const code = row.getAttribute('data-code');
-        const data = selecoes.find(s => s.code === code);
-        if (!data) return;
+row.addEventListener('click', () => {
+  const code = row.getAttribute('data-code');
+  const data = selecoes.find(s => s.code === code);
+  if (!data) return;
 
-        document.getElementById('box-name').textContent = data.name;
-        document.getElementById('box-tournament').textContent = data.tournament;
-        document.getElementById('box-score').textContent = data.state.score;
-        const flagEl = document.getElementById('box-flag');
-        flagEl.src = data.flag;
-        flagEl.alt = data.name;
-        const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
-        updateRadar({ atk, dfs, mei, vel, ent });
-        renderMedalBoard(data, '#medal-board');
+  currentTeamCode = code; // <<< GUARDA O SELECIONADO
 
-      });
+  document.getElementById('box-name').textContent = data.name;
+  document.getElementById('box-tournament').textContent = data.tournament;
+  document.getElementById('box-score').textContent = data.state.score;
+  const flagEl = document.getElementById('box-flag');
+  flagEl.src = data.flag;
+  flagEl.alt = data.name;
+  const { atk = 50, dfs = 50, mei = 50, vel = 50, ent = 50 } = (data.state || {});
+  updateRadar({ atk, dfs, mei, vel, ent });
+  renderMedalBoard(data, '#medal-board');
+});
     });
   }
 
