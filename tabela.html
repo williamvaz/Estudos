@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-  <title>Copa English • Tabela</title>
+  <title>Copa English • Tabela (v2)</title>
   <style>
     :root{
       --bg:#0e2b25;
@@ -12,9 +12,8 @@
       --text:#e7fff6;
       --muted:#a7c9bf;
       --accent:#07c28e;
-      --accent-2:#35d0a1;
       --chip:#0a201b;
-      --danger:#f06543;
+      --line:#1a3f35;
       --shadow:0 8px 22px rgba(0,0,0,.28);
       --radius:18px;
     }
@@ -28,145 +27,80 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-    }
+    .app{min-height:100%; display:flex; flex-direction:column}
     /* Topbar */
-    .topbar{
-      position:sticky; top:0; z-index:20;
-      background:linear-gradient(180deg, rgba(14,43,37,.95), rgba(14,43,37,.85));
-      backdrop-filter:saturate(140%) blur(8px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .topbar-inner{
-      max-width:980px; margin:0 auto; padding:12px 16px;
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-    }
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
-    .brand .ball{width:22px;height:22px;border-radius:50%;background:conic-gradient(from 0deg at 50% 50%, #fff 0 50%, #111 0 100%);box-shadow:inset 0 0 0 2px #0b201b, 0 2px 10px rgba(0,0,0,.25)}
-    .nav-tabs{
-      display:flex; gap:8px; align-items:center;
-      background:var(--chip); padding:6px; border-radius:999px;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
-    }
-    .tab{
-      border:0; padding:8px 14px; border-radius:999px; color:var(--muted);
-      background:transparent; font-weight:600; letter-spacing:.2px;
-    }
+    .topbar{position:sticky; top:0; z-index:20; background:linear-gradient(180deg, rgba(14,43,37,.95), rgba(14,43,37,.85)); border-bottom:1px solid #ffffff14; backdrop-filter:saturate(140%) blur(8px);}
+    .topbar-inner{max-width:980px; margin:0 auto; padding:10px 12px; display:flex; gap:10px; align-items:center; justify-content:space-between}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800}
+    .brand .logo{width:22px;height:22px;border-radius:6px; background:#0b201b; display:grid;place-items:center; font-weight:900}
+    .nav-tabs{display:flex; gap:8px; align-items:center; background:var(--chip); padding:6px; border-radius:999px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+    .tab{border:0; padding:8px 14px; border-radius:999px; color:var(--muted); background:transparent; font-weight:700}
     .tab.active{background:var(--accent); color:#073228; box-shadow:var(--shadow)}
     .content{flex:1; display:flex; justify-content:center}
-    .container{width:100%; max-width:980px; padding:18px 16px 28px}
+    .container{width:100%; max-width:980px; padding:16px 12px 28px}
     .section-title{opacity:.9; letter-spacing:.3px; margin:6px 0 14px 2px; font-weight:700}
     /* Cards grid */
-    .grid{
-      display:grid; gap:14px;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-    }
+    .grid{display:grid; gap:14px; grid-template-columns:repeat(2,minmax(0,1fr));}
     @media(min-width:520px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
     @media(min-width:840px){ .grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
-    .card{
-      background:linear-gradient(180deg, var(--card), #133b32);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--radius);
-      padding:14px;
-      box-shadow:var(--shadow);
-      display:flex; flex-direction:column; gap:12px;
-      transition:transform .06s ease;
-    }
+    .card{background:linear-gradient(180deg, var(--card), #133b32); border:1px solid #ffffff12; border-radius:var(--radius); padding:13px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px; transition:transform .06s ease}
     .card:active{transform:scale(.98)}
-    .card-head{
-      display:flex; align-items:center; gap:10px;
-    }
-    .badge{
-      width:34px;height:34px;border-radius:50%;
-      display:grid;place-items:center;
-      background:radial-gradient(circle at 30% 30%, #ffd66e, #ffad0e);
-      color:#09372c; font-weight:900;
-      box-shadow:inset 0 0 0 2px rgba(0,0,0,.15);
-      user-select:none;
-    }
+    .card-head{display:flex; align-items:center; gap:10px}
+    .conf-logo{width:34px;height:34px;border-radius:10px;background:#0e2e26;border:1px solid #ffffff18; object-fit:contain}
+    .fallback-badge{width:34px;height:34px;border-radius:50%; display:grid; place-items:center; background:#1b3a33; color:#9ddacb; font-weight:900}
     .card-title{font-weight:800}
     .card-actions{display:flex; gap:10px; align-items:center; margin-top:auto}
-    .btn{
-      padding:10px 12px; border-radius:12px; border:0; font-weight:700;
-      background:var(--accent); color:#073228; box-shadow:var(--shadow);
-    }
-    .btn.secondary{
-      background:transparent; color:var(--muted);
-      box-shadow:none; border:1px solid rgba(255,255,255,.08);
-    }
+    .btn{padding:10px 12px; border-radius:12px; border:0; font-weight:700; background:var(--accent); color:#073228; box-shadow:var(--shadow)}
+    .btn.secondary{background:transparent; color:var(--muted); box-shadow:none; border:1px solid rgba(255,255,255,.12)}
     .btn.small{padding:8px 10px; font-size:.9rem}
     .muted{color:var(--muted)}
     /* List buttons */
-    .list{
-      display:flex; flex-direction:column; gap:10px;
-    }
-    .item{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:12px 14px; border-radius:14px;
-      background:linear-gradient(180deg, #143e34, #12362f);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:var(--shadow);
-    }
+    .list{display:flex; flex-direction:column; gap:10px}
+    .item{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-radius:14px; background:linear-gradient(180deg, #143e34, #12362f); border:1px solid #ffffff12; box-shadow:var(--shadow)}
     .item-left{display:flex; align-items:center; gap:12px; min-width:0}
-    .circle{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--chip); color:var(--muted); font-weight:800}
+    .circle{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#102821; color:#86c8b5; font-weight:900}
     .item-title{font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    /* Table */
+    /* Panel */
+    .panel{background:linear-gradient(180deg, var(--bg-soft), #0f2f28); border:1px solid #ffffff12; border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); min-height:62vh}
+    /* Matches table */
     .table{width:100%; border-collapse:separate; border-spacing:0 10px}
-    .row{
-      background:linear-gradient(180deg, #143e34, #12362f);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:var(--shadow);
-    }
+    .row{background:linear-gradient(180deg, #143e34, #12362f); border:1px solid #ffffff10; box-shadow:var(--shadow)}
     .row td{padding:10px 12px}
     .row td:first-child{border-top-left-radius:12px;border-bottom-left-radius:12px}
     .row td:last-child{border-top-right-radius:12px;border-bottom-right-radius:12px}
     .country{display:flex; align-items:center; gap:8px}
-    .flag{
-      width:18px;height:12px;border-radius:2px;
-      background:#ddd; box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);
-      overflow:hidden; position:relative;
-    }
-    /* Placeholder stripes for flags */
-    .flag::before,.flag::after{content:""; position:absolute; inset:0}
-    .flag.tricolor::before{background:linear-gradient(90deg,#0b5,#fff,#e00)}
-    .flag.blue::before{background:#1976d2}
-    .flag.yellow::before{background:#ffc107}
+    .flag{width:18px;height:12px;border-radius:2px; object-fit:cover; background:#ddd; box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
     .score{text-align:center; font-weight:800; letter-spacing:.5px}
-    /* Toolbar (breadcrumbs + view switch) */
-    .toolbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px}
-    .crumbs{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-    .crumbs a{color:var(--muted); text-decoration:none}
-    .chip{padding:6px 8px; border-radius:999px; background:var(--chip); color:var(--muted); font-weight:700; border:1px solid rgba(255,255,255,.06)}
-    .hidden{display:none !important}
-    /* Full height content cards */
-    .panel{
-      background:linear-gradient(180deg, var(--bg-soft), #0f2f28);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--radius);
-      padding:14px;
-      box-shadow:var(--shadow);
-      min-height:62vh;
-    }
-    /* Knockout bracket (simple list layout for mobile) */
+    /* Ranking table */
+    .table-class{width:100%; border-collapse:collapse}
+    .table-class th, .table-class td{padding:8px 10px; border-bottom:1px dashed #ffffff16; text-align:center}
+    .table-class th:first-child, .table-class td:first-child{text-align:left}
+    .warning{background:#40251d;border:1px solid #c77b3a;padding:.6rem .7rem;border-radius:10px;color:#ffd7b1;font-size:12px}
+    /* Bracket */
     .bracket{display:grid; gap:12px}
-    .bracket-round{background:linear-gradient(180deg, #143e34, #12362f); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:12px}
-    .bracket-round h4{margin:0 0 10px 0}
-    .match{display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-radius:10px; background:rgba(0,0,0,.12)}
+    .round{background:linear-gradient(180deg, #143e34, #12362f); border:1px solid #ffffff12; border-radius:14px; padding:12px}
+    .round h4{margin:0 0 10px 0}
+    .pair{display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(0,0,0,.12); padding:8px 10px; border-radius:10px}
     .team{display:flex; align-items:center; gap:8px; min-width:0}
     .team .name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    .vs{font-weight:900; opacity:.9}
+    .vs{opacity:.8; font-weight:900}
     /* Footer */
+    .toolbar{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+    .crumbs{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+    .crumbs a{color:var(--muted); text-decoration:none}
+    .chip{padding:6px 8px; border-radius:999px; background:#0f2d26; color:var(--muted); font-weight:700; border:1px solid #ffffff14}
     .footer{opacity:.6; font-size:.85rem; padding:14px 16px; text-align:center}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
   <div class="app">
     <header class="topbar">
       <div class="topbar-inner">
-        <div class="brand"><div class="ball"></div> Copa English • Tabela</div>
+        <div class="brand">
+          <div class="logo">⚽</div>
+          Copa English • Tabela
+        </div>
         <nav class="nav-tabs">
           <button class="tab active" data-tab="tournaments">Torneios</button>
           <button class="tab" data-tab="knockout">Mata‑mata</button>
@@ -176,20 +110,18 @@
 
     <main class="content">
       <div class="container">
-        <!-- TOURNAMENTS SCREEN -->
+        <!-- TORNEIOS -->
         <section id="screen-tournaments">
           <h3 class="section-title">Selecione o torneio</h3>
-          <div class="grid" id="tournamentsGrid">
-            <!-- Cards rendered by JS -->
-          </div>
+          <div class="grid" id="tournamentsGrid"></div>
         </section>
 
-        <!-- GROUPS LIST SCREEN -->
+        <!-- GRUPOS DO TORNEIO -->
         <section id="screen-groups" class="hidden">
           <div class="toolbar">
             <div class="crumbs">
-              <a href="#" id="backToTournaments">← Torneios</a>
-              <span class="chip" id="chosenConf">CONMEBOL</span>
+              <a href="campeonatos.html" id="backToHome">← Voltar</a>
+              <span class="chip" id="confName"></span>
             </div>
           </div>
           <div class="panel">
@@ -198,8 +130,8 @@
           </div>
         </section>
 
-        <!-- GROUP DETAILS SCREEN -->
-        <section id="screen-group-details" class="hidden">
+        <!-- DETALHES DO GRUPO (SEM ABA LOCAL DE MATA-MATA) -->
+        <section id="screen-group" class="hidden">
           <div class="toolbar">
             <div class="crumbs">
               <a href="#" id="backToGroups">← Grupos</a>
@@ -210,193 +142,312 @@
           <div class="panel">
             <h3 class="section-title" id="groupTitle">Resultados</h3>
             <div style="overflow:auto">
-              <table class="table" id="matchesTable">
-                <!-- Rows by JS -->
-              </table>
+              <table class="table" id="matchesTable"></table>
             </div>
           </div>
+          <div class="panel" style="margin-top:12px">
+            <h3 class="section-title">Classificação</h3>
+            <div style="overflow:auto">
+              <table class="table-class" id="rankingTable"></table>
+            </div>
+          </div>
+          <div class="footer"><a href="campeonatos.html" class="muted">Voltar para Campeonatos</a></div>
         </section>
 
-        <!-- GLOBAL KNOCKOUT SCREEN -->
+        <!-- MATA-MATA GLOBAL DO TORNEIO -->
         <section id="screen-knockout" class="hidden">
           <div class="toolbar">
             <div class="crumbs">
               <span class="chip">Mata‑mata</span>
-              <span class="muted">Fora dos grupos — fase final</span>
+              <span class="muted">Fase final (fora dos grupos)</span>
             </div>
           </div>
           <div class="panel">
-            <div class="bracket" id="bracket">
-              <!-- Rounds by JS -->
-            </div>
+            <div class="bracket" id="bracket"></div>
           </div>
         </section>
       </div>
     </main>
 
-    <div class="footer">Design otimizado para Android (S23). Placeholders de bandeiras/logos incluídos.</div>
+    <div class="footer">Layout mobile (S23). Logos/bandeiras reais via mapeamento + fallback.</div>
   </div>
 
   <script>
-    // --- DATA (exemplo; integre seus dados reais aqui) ---
-    const TOURNAMENTS = [
-      {code:'CONCACAF', name:'CONCACAF'},
-      {code:'CONMEBOL', name:'CONMEBOL'},
-      {code:'OFC', name:'OFC'},
-      {code:'AFC', name:'AFC'},
-      {code:'CAF', name:'CAF'},
-      {code:'UEFA', name:'UEFA'},
-      {code:'WC', name:'Copa do Mundo'},
-      {code:'CONFED', name:'Copa das Confederações'},
-    ];
+    // ====== CONFIGURAÇÕES DE LOGOS ======
+    // Ajuste o caminho conforme seu projeto. Se a imagem falhar, cai no badge.
+    const CONF_LOGOS = {
+      CONCACAF: "assets/logos/conf/concacaf.png",
+      CONMEBOL: "assets/logos/conf/conmebol.png",
+      OFC: "assets/logos/conf/ofc.png",
+      AFC: "assets/logos/conf/afc.png",
+      CAF: "assets/logos/conf/caf.png",
+      UEFA: "assets/logos/conf/uefa.png",
+      WC: "assets/logos/conf/worldcup.png",
+      CONFED: "assets/logos/conf/confederations.png"
+    };
 
-    const GROUPS = ['A','B','C','D','E','F','G','H'];
-
-    // Exemplo de partidas (substitua pelo seu JSON)
-    function sampleMatches(conf, group){
-      const teams = ['Irlanda do Norte','Moldávia','Grécia','Israel','Ucrânia','Dinamarca','Bielorrússia','Islândia'];
-      const rows = [];
-      for(let i=0;i<8;i++){
-        const home = teams[i%teams.length];
-        const away = teams[(i+1)%teams.length];
-        rows.push({home, away, score:'–'});
-      }
-      return rows;
+    // ====== DADOS (serão lidos do localStorage; abaixo há mock só se vazio) ======
+    function loadTorneios(){
+      try{
+        const raw = localStorage.getItem("campeonatos");
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr)? arr : [];
+      }catch{ return []; }
     }
 
-    // Exemplo de mata-mata global
-    const BRACKET = [
-      {title:'Oitavas de final', matches:[
-        ['Brasil','Uruguai'],['Argentina','França'],['Alemanha','Espanha'],['Portugal','Inglaterra'],
-        ['Holanda','Itália'],['Croácia','Bélgica'],['Colômbia','México'],['EUA','Japão'],
-      ]},
-      {title:'Quartas de final', matches:[
-        ['Brasil','França'],['Alemanha','Portugal'],['Holanda','Bélgica'],['Colômbia','Japão'],
-      ]},
-      {title:'Semifinal', matches:[
-        ['França','Alemanha'],['Holanda','Japão'],
-      ]},
-      {title:'Final', matches:[
-        ['Alemanha','Holanda'],
-      ]},
-    ];
+    const GROUPS = "ABCDEFGH".split("");
 
-    // --- DOM HELPERS ---
-    const $ = (sel)=>document.querySelector(sel);
-    const el = (tag, cls, html)=>{ const x=document.createElement(tag); if(cls) x.className=cls; if(html!==undefined) x.innerHTML=html; return x; };
+    // TEAMS INDEX para bandeiras reais
+    const TEAMS_INDEX = (()=>{
+      try{
+        const arr = JSON.parse(localStorage.getItem("teams")||"[]");
+        const idx = Object.create(null);
+        arr.forEach(t => { idx[String((t.name||t.Team||"").toLowerCase())] = t; });
+        return idx;
+      }catch{ return {}; }
+    })();
 
-    // Render tournaments
+    function teamMeta(name){
+      const key = String(name||"").toLowerCase();
+      const t = TEAMS_INDEX[key];
+      const flag = t?.Path || t?.path || `Flags/${name}.jpg`;
+      return {name: t?.name || t?.Team || name, flag};
+    }
+
+    function countryCell(name){
+      const wrap = document.createElement("div");
+      wrap.className = "country";
+      const img = document.createElement("img");
+      img.className = "flag";
+      img.alt = name;
+      img.src = teamMeta(name).flag;
+      img.onerror = () => { img.style.display = "none"; };
+      const span = document.createElement("span");
+      span.textContent = teamMeta(name).name;
+      wrap.append(img, span);
+      return wrap;
+    }
+
+    function detectGroupsFor(tName){
+      const letras = new Set();
+      // procurar dentro de campeonatos Grupo 1..
+      const tor = App.state.torneios.find(t=>t.Nome===tName);
+      if(tor){
+        Object.keys(tor).forEach(k=>{
+          const m = /^Grupo\\s*(\\d+)$/i.exec(k);
+          if(m){
+            const pos = Number(m[1])-1;
+            if(pos>=0 && pos<26) letras.add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[pos]);
+          }
+        });
+      }
+      // fallback A..H
+      if(!letras.size) "ABCDEFGH".split("").forEach(L=>letras.add(L));
+      return Array.from(letras);
+    }
+
+    function extractTimes(tName, L){
+      const tries = [];
+      const gNum = `Grupo ${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(L)+1}`;
+      const tor = App.state.torneios.find(t=>t.Nome===tName);
+      if(tor){
+        if(Array.isArray(tor[gNum])) tries.push(tor[gNum]);
+      }
+      // outras stores
+      ["groups_plan_v1","groups_p1an_v1"].forEach(sk=>{
+        try{
+          const dict = JSON.parse(localStorage.getItem(sk)||"null");
+          if(!dict) return;
+          const k1 = `${tName}:Grupo ${L}`; const k2 = `${tName}-Grupo ${L}`;
+          const k3 = `${tName}:${gNum}`;     const k4 = `${tName}-${gNum}`;
+          [dict[k1],dict[k2],dict[k3],dict[k4]].forEach(v=>Array.isArray(v)&&tries.push(v));
+          if(dict[tName]){
+            const d = dict[tName];
+            [d[`Grupo ${L}`], d[gNum]].forEach(v=>Array.isArray(v)&&tries.push(v));
+          }
+        }catch{}
+      });
+      return tries.find(a=>Array.isArray(a)&&a.length) || [];
+    }
+
+    // Knockout real do storage: localStorage["knockout:<torneio>"] = { rounds:[{name, matches:[{home,away,score}]}] }
+    function loadKnockout(tName){
+      try{
+        const raw = localStorage.getItem(`knockout:${tName}`);
+        const obj = raw? JSON.parse(raw) : null;
+        return obj && Array.isArray(obj.rounds) ? obj.rounds : [];
+      }catch{ return []; }
+    }
+
+    // ====== RENDER ======
+    const App = {
+      state:{ torneios:[], torneo:null, group:null },
+      els:{
+        tournamentsGrid: document.getElementById("tournamentsGrid"),
+        screenTournaments: document.getElementById("screen-tournaments"),
+        screenGroups: document.getElementById("screen-groups"),
+        screenGroup: document.getElementById("screen-group"),
+        screenKnockout: document.getElementById("screen-knockout"),
+        groupsList: document.getElementById("groupsList"),
+        confName: document.getElementById("confName"),
+        groupPath: document.getElementById("groupPath"),
+        groupTitle: document.getElementById("groupTitle"),
+        matchesTable: document.getElementById("matchesTable"),
+        rankingTable: document.getElementById("rankingTable"),
+        bracket: document.getElementById("bracket"),
+      }
+    };
+
+    function showScreen(id){
+      const S = App.els;
+      S.screenTournaments.classList.add("hidden");
+      S.screenGroups.classList.add("hidden");
+      S.screenGroup.classList.add("hidden");
+      S.screenKnockout.classList.add("hidden");
+      document.getElementById(id).classList.remove("hidden");
+      window.scrollTo({top:0, behavior:"smooth"});
+      // tabs highlight
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+      if(id==="screen-knockout") document.querySelector('.tab[data-tab="knockout"]').classList.add("active");
+      else document.querySelector('.tab[data-tab="tournaments"]').classList.add("active");
+    }
+
     function renderTournaments(){
-      const grid = $('#tournamentsGrid');
-      grid.innerHTML = '';
-      TOURNAMENTS.forEach(t=>{
-        const card = el('div','card');
-        const head = el('div','card-head');
-        const badge = el('div','badge', t.name[0]);
-        const title = el('div','card-title', t.name);
-        head.append(badge,title);
-        const actions = el('div','card-actions');
-        const open = el('button','btn small','Abrir grupos');
-        open.addEventListener('click',()=>openGroups(t));
-        const view = el('button','btn small secondary','ver');
-        view.addEventListener('click',()=>openGroups(t));
+      const grid = App.els.tournamentsGrid;
+      grid.innerHTML = "";
+      App.state.torneios = loadTorneios();
+      if(!App.state.torneios.length){
+        const w = document.createElement("div");
+        w.className = "warning";
+        w.innerHTML = "Não encontrei <b>campeonatos</b> no seu <code>localStorage</code>. Abra o <b>campeonatos.html</b> para popular ou adicione manualmente.";
+        grid.appendChild(w);
+        return;
+      }
+      App.state.torneios.forEach(t=>{
+        const card = document.createElement("div"); card.className="card";
+        const head = document.createElement("div"); head.className="card-head";
+        const img = document.createElement("img"); img.className="conf-logo"; img.alt=t.Nome; img.src = CONF_LOGOS[t.Codigo||t.Nome] || "";
+        img.onerror = ()=>{ img.replaceWith(Object.assign(document.createElement("div"),{className:"fallback-badge",textContent:(t.Nome||'?')[0]})); };
+        const title = Object.assign(document.createElement("div"),{className:"card-title", textContent:t.Nome});
+        head.append(img,title);
+        const actions = Object.assign(document.createElement("div"),{className:"card-actions"});
+        const open = Object.assign(document.createElement("button"),{className:"btn small", textContent:"Abrir grupos"});
+        open.addEventListener("click",()=>openGroups(t));
+        const view = Object.assign(document.createElement("button"),{className:"btn small secondary", textContent:"ver"});
+        view.addEventListener("click",()=>openGroups(t));
         actions.append(open,view);
-        card.append(head, el('div','muted','Toque para ver os grupos.'), actions);
+        card.append(head, Object.assign(document.createElement("div"),{className:"muted", textContent:"Toque para ver os grupos."}), actions);
         grid.append(card);
       });
     }
 
-    // Open groups of a tournament
     function openGroups(t){
-      current.conf = t.code;
-      $('#chosenConf').textContent = t.name;
-      // list groups
-      const list = $('#groupsList'); list.innerHTML='';
-      GROUPS.forEach((g,i)=>{
-        const row = el('div','item');
-        const left = el('div','item-left');
-        left.append(el('div','circle',g), el('div','item-title','Grupo '+g));
-        const btn = el('button','btn small','abrir');
-        btn.addEventListener('click',()=>openGroupDetails(t, g));
+      App.state.torneo = t.Nome;
+      App.els.confName.textContent = t.Nome;
+      const list = App.els.groupsList; list.innerHTML="";
+      detectGroupsFor(t.Nome).forEach(L=>{
+        const row = document.createElement("div"); row.className="item";
+        const left = document.createElement("div"); left.className="item-left";
+        left.append(Object.assign(document.createElement("div"),{className:"circle", textContent:L}), Object.assign(document.createElement("div"),{className:"item-title", textContent:`Grupo ${L}`}));
+        const btn = Object.assign(document.createElement("button"),{className:"btn small", textContent:"abrir"});
+        btn.addEventListener("click",()=>openGroup(L));
         row.append(left, btn);
         list.append(row);
       });
-      showScreen('groups');
+      showScreen("screen-groups");
     }
 
-    // Open specific group details
-    function openGroupDetails(t, group){
-      current.group = group;
-      $('#groupPath').textContent = t.name + ' • Grupo ' + group;
-      $('#groupTitle').textContent = 'Resultados — ' + t.name + ' • Grupo ' + group;
-      const table = $('#matchesTable'); table.innerHTML='';
-      sampleMatches(t.code, group).forEach(row=>{
-        const tr = el('tr','row');
-        const tdHome = el('td');
-        tdHome.append(countryCell(row.home));
-        const tdScore = el('td','score', row.score);
-        const tdAway = el('td');
-        tdAway.append(countryCell(row.away));
-        tr.append(tdHome, tdScore, tdAway);
-        table.append(tr);
-      });
-      showScreen('group-details');
-    }
-
-    // Country cell with placeholder flag/logo
-    function countryCell(name){
-      const wrap = el('div','country');
-      const flag = el('div','flag tricolor');
-      const title = el('div',null,name);
-      wrap.append(flag,title);
-      return wrap;
-    }
-
-    // Render knockout
-    function renderKnockout(){
-      const box = $('#bracket'); box.innerHTML='';
-      BRACKET.forEach(round=>{
-        const r = el('div','bracket-round');
-        r.append(el('h4',null,round.title));
-        round.matches.forEach(([a,b])=>{
-          const m = el('div','match');
-          const left = el('div','team'); left.append(el('div','flag tricolor'), el('span','name',a));
-          const right = el('div','team'); right.append(el('div','flag tricolor'), el('span','name',b));
-          const vs = el('div','vs','—');
-          m.append(left, vs, right);
-          r.append(m);
+    function openGroup(L){
+      App.state.group = L;
+      App.els.groupPath.textContent = `${App.state.torneo} • Grupo ${L}`;
+      App.els.groupTitle.textContent = `Resultados — ${App.state.torneo} • Grupo ${L}`;
+      // Matches
+      const tbl = App.els.matchesTable; tbl.innerHTML="";
+      const times = extractTimes(App.state.torneo, L);
+      if(times.length<2){
+        const w = document.createElement("div"); w.className="warning";
+        w.innerHTML = "Não encontrei os <b>times</b> deste grupo. Popule <code>groups_plan_v1</code> (ou <code>groups_p1an_v1</code>) ou o objeto do torneio.";
+        tbl.replaceWith(Object.assign(document.createElement("div"), {className:"warning", innerHTML:w.innerHTML}));
+      }else{
+        const thead = document.createElement("thead");
+        const trh = document.createElement("tr"); trh.className="row";
+        ['Mandante','Placar','Visitante'].forEach(h=>{
+          const th = document.createElement("th"); th.textContent=h; thead.append(th);
         });
-        box.append(r);
+        const tbody = document.createElement("tbody");
+        for(let i=0;i<times.length;i++){
+          for(let j=i+1;j<times.length;j++){
+            const tr = document.createElement("tr"); tr.className="row";
+            const td1 = document.createElement("td"); td1.append(countryCell(times[i]));
+            const td2 = Object.assign(document.createElement("td"),{className:"score", textContent:"–"});
+            const td3 = document.createElement("td"); td3.append(countryCell(times[j]));
+            tr.append(td1,td2,td3); tbody.append(tr);
+          }
+        }
+        tbl.append(thead, tbody);
+      }
+      // Ranking (zerado se não há placares)
+      const rtbl = App.els.rankingTable; rtbl.innerHTML="";
+      if(times && times.length){
+        const thead = document.createElement("thead");
+        const trh = document.createElement("tr");
+        ['Time','J','V','E','D','GP','GC','SG','PTS'].forEach(h=>{
+          const th = document.createElement("th"); th.textContent=h; thead.append(th);
+        });
+        const tbody = document.createElement("tbody");
+        times.forEach(tn=>{
+          const tr = document.createElement("tr");
+          const tdTeam = document.createElement("td"); tdTeam.append(countryCell(tn));
+          ['0','0','0','0','0','0','0','0'].forEach(v=>{
+            const td = document.createElement("td"); td.textContent=v; tr.append(td);
+          });
+          tr.prepend(tdTeam);
+          tbody.append(tr);
+        });
+        rtbl.append(thead, tbody);
+      }
+      showScreen("screen-group");
+    }
+
+    function renderKnockout(){
+      const box = App.els.bracket; box.innerHTML="";
+      const rounds = loadKnockout(App.state.torneo||"GLOBAL");
+      if(!rounds.length){
+        const w = document.createElement("div"); w.className="warning";
+        w.innerHTML = "Nenhum <b>mata‑mata</b> encontrado. Grave em <code>localStorage['knockout:&lt;Torneio&gt;']</code> como: { rounds:[{name:'Oitavas', matches:[{home:'Brasil',away:'Uruguai',score:'2–1'}]}] }";
+        box.append(w); return;
+      }
+      rounds.forEach(r=>{
+        const R = document.createElement("div"); R.className="round";
+        const h = document.createElement("h4"); h.textContent = r.name || 'Fase'; R.append(h);
+        (r.matches||[]).forEach(m=>{
+          const pair = document.createElement("div"); pair.className="pair";
+          const A = document.createElement("div"); A.className="team";
+          const Aimg = Object.assign(document.createElement("img"),{className:"flag", alt:m.home, src:teamMeta(m.home).flag}); Aimg.onerror=()=>Aimg.style.display='none';
+          const Aname = Object.assign(document.createElement("span"),{className:"name", textContent:teamMeta(m.home).name});
+          A.append(Aimg, Aname);
+          const B = document.createElement("div"); B.className="team";
+          const Bimg = Object.assign(document.createElement("img"),{className:"flag", alt:m.away, src:teamMeta(m.away).flag}); Bimg.onerror=()=>Bimg.style.display='none';
+          const Bname = Object.assign(document.createElement("span"),{className:"name", textContent:teamMeta(m.away).name});
+          B.append(Bimg, Bname);
+          const vs = Object.assign(document.createElement("div"),{className:"vs", textContent:m.score||'—'});
+          pair.append(A, vs, B);
+          R.append(pair);
+        });
+        box.append(R);
       });
     }
 
-    // Screen handling
-    const screens = ['tournaments','groups','group-details','knockout'];
-    function showScreen(which){
-      screens.forEach(s=>$('#screen-'+s.replace('-','-')).classList.add('hidden'));
-      $('#screen-'+which).classList.remove('hidden');
-      // Highlight tabs
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      if(which==='knockout') document.querySelector('.tab[data-tab="knockout"]').classList.add('active');
-      else document.querySelector('.tab[data-tab="tournaments"]').classList.add('active');
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
-
-    // State
-    const current = {conf:null, group:null};
-
-    // Events
-    $('#backToTournaments').addEventListener('click', (e)=>{e.preventDefault(); showScreen('tournaments');});
-    $('#backToGroups').addEventListener('click', (e)=>{e.preventDefault(); showScreen('groups');});
+    // ====== EVENTS ======
     document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
       const target = btn.getAttribute('data-tab');
-      if(target==='knockout'){ renderKnockout(); showScreen('knockout'); }
-      else showScreen('tournaments');
+      if(target==='knockout'){ renderKnockout(); showScreen('screen-knockout'); }
+      else showScreen('screen-tournaments');
     }));
+    document.getElementById("backToGroups").addEventListener("click",(e)=>{ e.preventDefault(); showScreen("screen-groups"); });
 
-    // Init
+    // ====== INIT ======
     renderTournaments();
-    renderKnockout();
   </script>
 </body>
 </html>
